@@ -48,7 +48,7 @@ MiPAのCoreとなるライブラリです
 準備中
 
 <p align="center">
-    <a href="https://yupix.github.io/Mi.py/en">Documentation</a>
+    <a href="">Documentation</a>
     *
     <a href="https://discord.gg/CcT997U">Discord Server</a>
 </p>
