@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Any, List, Optional, TYPE_CHECKING, TypedDict
+
+from typing import TYPE_CHECKING, Any, List, Optional, TypedDict
 
 if TYPE_CHECKING:
     from mipac.types import PropertiesPayload, UserPayload

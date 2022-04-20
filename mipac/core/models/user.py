@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
 
-
 __all__ = ('RawUserDetails', 'RawUser')
 
 from mipac.core.models.instance import RawInstance

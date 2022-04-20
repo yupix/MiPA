@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import List
 
+from mipac.types import ChatPayload
 
 from .user import RawUser
-from mipac.types import ChatPayload
 
 
 class RawChat:

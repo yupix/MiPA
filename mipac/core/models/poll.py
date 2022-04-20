@@ -1,6 +1,5 @@
 from typing import List, Optional
 
-
 __all__ = ['RawPollChoices', 'RawPoll']
 
 from mipac.types import PollPayload

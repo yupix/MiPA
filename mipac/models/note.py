@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
 
 from mipac.core import RawUser
 from mipac.core.models.note import RawNote, RawReaction, RawRenote
@@ -11,10 +11,10 @@ from mipac.exception import NotExistRequiredData
 from mipac.models.user import User
 
 if TYPE_CHECKING:
+    from mipac.actions.note import NoteActions
+    from mipac.manager.client import ClientActions
     from mipac.models.drive import File
     from mipac.models.emoji import Emoji
-    from mipac.manager.client import ClientActions
-    from mipac.actions.note import NoteActions
 
 __all__ = (
     'Note',

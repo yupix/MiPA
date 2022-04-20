@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
+
+from typing import TYPE_CHECKING, Optional
 
 from mipac.http import HTTPClient, Route
 from mipac.manager.ad import AdminAdvertisingManager

@@ -16,7 +16,11 @@ with open("requirements.txt", "r") as f:
 
 extras_require = {
     'dev': [
-        'pysen[lint]'
+        'axblack'
+    ],
+    'ci': [
+        'flake8',
+        'mypy'
     ]
 }
 

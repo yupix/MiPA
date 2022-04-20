@@ -7,12 +7,8 @@ __all__ = (
 
 from typing import List
 
-from mipac.types import (
-    ActiveUsersChartPayload,
-    DriveChartPayload,
-    DriveLocalChartPayload,
-    DriveRemoteChartPayload,
-)
+from mipac.types import (ActiveUsersChartPayload, DriveChartPayload,
+                         DriveLocalChartPayload, DriveRemoteChartPayload)
 
 
 class RawActiveUsersChart:

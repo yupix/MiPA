@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import List, Optional, TYPE_CHECKING
+
+from typing import TYPE_CHECKING, List, Optional
 
 from aiocache import Cache, cached
 
@@ -10,7 +11,8 @@ from mipac.http import HTTPClient, Route
 from mipac.manager.note import NoteManager
 from mipac.models.note import Note
 from mipac.models.user import User
-from mipac.util import check_multi_arg, get_cache_key, key_builder, remove_dict_empty
+from mipac.util import (check_multi_arg, get_cache_key, key_builder,
+                        remove_dict_empty)
 
 __all__ = ['UserActions']
 

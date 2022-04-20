@@ -1,6 +1,6 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Any, Dict, Optional, TypedDict
 
+from typing import TYPE_CHECKING, Any, Dict, Optional, TypedDict
 
 if TYPE_CHECKING:
     from mipac.types.user import UserPayload

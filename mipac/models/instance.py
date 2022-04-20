@@ -8,8 +8,8 @@ from mipac.models.emoji import Emoji
 from mipac.types import MetaPayload
 
 if TYPE_CHECKING:
-    from mipac.models.user import User
     from mipac.client import ClientActions
+    from mipac.models.user import User
 
 
 class InstanceMeta:
