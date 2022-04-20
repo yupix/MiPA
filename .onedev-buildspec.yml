@@ -14,8 +14,7 @@ jobs:
     image: python:3.10.4-slim
     interpreter: !DefaultInterpreter
       commands:
-      - pip install setup.py
-      - pip install .[ci]
+      - pip install . .[ci]
       - mypy mipac
       - flake8 mipac
     useTTY: true
