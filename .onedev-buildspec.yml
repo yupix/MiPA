@@ -11,7 +11,7 @@ jobs:
   - !CommandStep
     name: check error
     runInContainer: true
-    image: 3.10.4-slim
+    image: python:3.10.4-slim
     interpreter: !DefaultInterpreter
       commands:
       - pip install setup.py
