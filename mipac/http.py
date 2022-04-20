@@ -43,7 +43,9 @@ class Route:
 class HTTPClient:
     def __init__(self, url: str, token: str) -> None:
         user_agent = 'Misskey Bot (https://github.com/yupix/Mi.py {0}) Python/{1[0]}.{1[1]} aiohttp/{2}'
-        self.user_agent = user_agent.format(__version__, sys.version_info, aiohttp.__version__)
+        self.user_agent = user_agent.format(
+            __version__, sys.version_info, aiohttp.__version__
+        )
         self.__session: aiohttp.ClientSession = MISSING
         self.__url: str = url
         self.__token: str = token
@@ -69,7 +71,9 @@ class HTTPClient:
             if kwargs.get(i):
                 kwargs[i] = remove_dict_empty(kwargs[i])
 
-        async with self.__session.request(route.method, self.__url + route.path, **kwargs) as res:
+        async with self.__session.request(
+            route.method, self.__url + route.path, **kwargs
+        ) as res:
             data = await json_or_text(res)
             if is_lower:
                 if isinstance(data, list):

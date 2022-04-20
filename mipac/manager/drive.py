@@ -16,7 +16,13 @@ __all__ = ['FolderManager', 'FileManager', 'DriveManager']
 
 
 class FileManager:
-    def __init__(self, file_id: Optional[str] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self,
+        file_id: Optional[str] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
+    ):
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
         self.__file_id = file_id
@@ -38,8 +44,13 @@ class FileManager:
             ファイルの情報
         """
 
-        data = remove_dict_empty({"fileId": file_id, "url": url})
-        res = await self.__session.request(Route('POST', '/api/admin/drive/show-file'), json=data, auth=True, lower=True)
+        data = remove_dict_empty({'fileId': file_id, 'url': url})
+        res = await self.__session.request(
+            Route('POST', '/api/admin/drive/show-file'),
+            json=data,
+            auth=True,
+            lower=True,
+        )
         return File(RawFile(res), client=self.__client)
 
     async def remove_file(self, file_id: Optional[str] = None) -> bool:
@@ -59,15 +70,20 @@ class FileManager:
 
         file_id = file_id or self.__file_id
         return bool(
-            await self.__session.request(Route('POST', '/api/drive/files/delete'), json={'fileId': file_id}, auth=True))
+            await self.__session.request(
+                Route('POST', '/api/drive/files/delete'),
+                json={'fileId': file_id},
+                auth=True,
+            )
+        )
 
     async def get_files(
-            self,
-            limit: int = 10,
-            since_id: Optional[str] = None,
-            until_id: Optional[str] = None,
-            folder_id: Optional[str] = None,
-            file_type: Optional[str] = None
+        self,
+        limit: int = 10,
+        since_id: Optional[str] = None,
+        until_id: Optional[str] = None,
+        folder_id: Optional[str] = None,
+        file_type: Optional[str] = None,
     ) -> List[File]:
         """
         ファイルを取得します
@@ -88,14 +104,27 @@ class FileManager:
         if limit > 100:
             raise ParameterError('limit must be less than 100')
 
-        data = {'limit': limit, 'sinceId': since_id, 'untilId': until_id, 'folderId': folder_id, 'Type': file_type}
-        res = await self.__session.request(Route('POST', '/api/drive/files'), json=data, auth=True, lower=True)
+        data = {
+            'limit': limit,
+            'sinceId': since_id,
+            'untilId': until_id,
+            'folderId': folder_id,
+            'Type': file_type,
+        }
+        res = await self.__session.request(
+            Route('POST', '/api/drive/files'), json=data, auth=True, lower=True
+        )
         return [File(RawFile(i), client=self.__client) for i in res]
 
 
 class FolderManager(AbstractManager):
-
-    def __init__(self, folder_id: Optional[str] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self,
+        folder_id: Optional[str] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
+    ):
         self.__folder_id = folder_id
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
@@ -120,7 +149,14 @@ class FolderManager(AbstractManager):
         parent_id = parent_id or self.__folder_id
 
         data = {'name': name, 'parent_id': parent_id}
-        return bool(await self.__session.request(Route('POST', '/api/drive/folders/create'), json=data, lower=True, auth=True))
+        return bool(
+            await self.__session.request(
+                Route('POST', '/api/drive/folders/create'),
+                json=data,
+                lower=True,
+                auth=True,
+            )
+        )
 
     async def delete(self, folder_id: Optional[str] = None) -> bool:
         """
@@ -137,10 +173,23 @@ class FolderManager(AbstractManager):
 
         folder_id = folder_id or self.__folder_id
         data = {'folderId': folder_id}
-        return bool(await self.__session.request(Route('POST', '/api/drive/folders/delete'), json=data, lower=True, auth=True))
+        return bool(
+            await self.__session.request(
+                Route('POST', '/api/drive/folders/delete'),
+                json=data,
+                lower=True,
+                auth=True,
+            )
+        )
 
-    async def get_files(self, limit: int = 10, since_id: Optional[str] = None, until_id: Optional[str] = None,
-                        folder_id: Optional[str] = None, file_type: Optional[str] = None) -> List[File]:
+    async def get_files(
+        self,
+        limit: int = 10,
+        since_id: Optional[str] = None,
+        until_id: Optional[str] = None,
+        folder_id: Optional[str] = None,
+        file_type: Optional[str] = None,
+    ) -> List[File]:
         """
         ファイルを取得します
 
@@ -161,8 +210,16 @@ class FolderManager(AbstractManager):
             raise ParameterError('limit must be less than 100')
 
         folder_id = folder_id or self.__folder_id
-        data = {'limit': limit, 'sinceId': since_id, 'untilId': until_id, 'folderId': folder_id, 'Type': file_type}
-        res = await self.__session.request(Route('POST', '/api/drive/files'), json=data, auth=True, lower=True)
+        data = {
+            'limit': limit,
+            'sinceId': since_id,
+            'untilId': until_id,
+            'folderId': folder_id,
+            'Type': file_type,
+        }
+        res = await self.__session.request(
+            Route('POST', '/api/drive/files'), json=data, auth=True, lower=True
+        )
         return [File(RawFile(i), client=self.__client) for i in res]
 
 
@@ -171,8 +228,13 @@ class DriveManager(AbstractManager):
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
 
-    async def get_folders(self, limit: int = 100, since_id: Optional[str] = None, until_id: Optional[str] = None,
-                          folder_id: Optional[str] = None) -> List[Folder]:
+    async def get_folders(
+        self,
+        limit: int = 100,
+        since_id: Optional[str] = None,
+        until_id: Optional[str] = None,
+        folder_id: Optional[str] = None,
+    ) -> List[Folder]:
         """
         フォルダーの一覧を取得します
 
@@ -192,7 +254,9 @@ class DriveManager(AbstractManager):
             'limit': limit,
             'sinceId': since_id,
             'untilId': until_id,
-            'folderId': folder_id
+            'folderId': folder_id,
         }
-        data = await self.__session.request(Route('POST', '/api/drive/folders'), json=data, lower=True, auth=True)
+        data = await self.__session.request(
+            Route('POST', '/api/drive/folders'), json=data, lower=True, auth=True
+        )
         return [Folder(RawFolder(i)) for i in data]

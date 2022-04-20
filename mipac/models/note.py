@@ -16,14 +16,24 @@ if TYPE_CHECKING:
     from mipac.manager.client import ClientActions
     from mipac.actions.note import NoteActions
 
-__all__ = ('Note', 'Poll', 'Reaction', 'Follow', 'Header', 'File', 'Renote', 'NoteReaction')
+__all__ = (
+    'Note',
+    'Poll',
+    'Reaction',
+    'Follow',
+    'Header',
+    'File',
+    'Renote',
+    'NoteReaction',
+)
 
 
 class Follow:
     def __init__(self, data):
         self.id: Optional[str] = data.get('id')
-        self.created_at: Optional[datetime] = datetime.strptime(data["created_at"], '%Y-%m-%dT%H:%M:%S.%fZ') if data.get(
-            "created_at") else None
+        self.created_at: Optional[datetime] = datetime.strptime(
+            data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'
+        ) if data.get('created_at') else None
         self.type: Optional[str] = data.get('type')
         self.user: Optional[User] = data.get('user')
 
@@ -64,8 +74,8 @@ class Follow:
 
 class Header:
     def __init__(self, data):
-        self.id = data.get("id")
-        self.type = data.get("type")
+        self.id = data.get('id')
+        self.type = data.get('type')
 
 
 class Poll:
@@ -210,11 +220,19 @@ class Reaction:
 
     @property
     def user(self) -> Optional[User]:
-        return User(self.__raw_data.user, client=self.__client) if self.__raw_data.user else None
+        return (
+            User(self.__raw_data.user, client=self.__client)
+            if self.__raw_data.user
+            else None
+        )
 
     @property
     def note(self) -> Optional[Note]:
-        return Note(self.__raw_data.note, client=self.__client) if self.__raw_data.note else None
+        return (
+            Note(self.__raw_data.note, client=self.__client)
+            if self.__raw_data.note
+            else None
+        )
 
     @property
     def reaction(self) -> str:
@@ -339,7 +357,7 @@ class Note:
         return self.__raw_data.media_ids
 
     @property
-    def field(self) -> Optional[Dict]:
+    def field(self) -> Optional[Dict[Any, Any]]:  # TODO: any
         return self.__raw_data.field
 
     @property
@@ -362,15 +380,16 @@ class Note:
         return self.__client._create_note_instance(self.id).action
 
     async def reply(
-            self, content: Optional[str],
-            cw: Optional[str] = None,
-            extract_mentions: bool = True,
-            extract_hashtags: bool = True,
-            extract_emojis: bool = True,
-            renote_id: Optional[str] = None,
-            channel_id: Optional[str] = None,
-            file_ids=None,
-            poll: Optional[Poll] = None
+        self,
+        content: Optional[str],
+        cw: Optional[str] = None,
+        extract_mentions: bool = True,
+        extract_hashtags: bool = True,
+        extract_emojis: bool = True,
+        renote_id: Optional[str] = None,
+        channel_id: Optional[str] = None,
+        file_ids=None,
+        poll: Optional[Poll] = None,
     ) -> Note:
         """
         ノートに対して返信を送信します
@@ -411,5 +430,5 @@ class Note:
             renote_id=renote_id,
             channel_id=channel_id,
             file_ids=file_ids,
-            poll=poll
+            poll=poll,
         )

@@ -13,7 +13,16 @@ class AdminAdvertisingManager(AbstractManager):
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
 
-    async def create(self, url: str, memo: str, place: str, priority: str, ratio: str, expires_at: int, image_url: str):
+    async def create(
+        self,
+        url: str,
+        memo: str,
+        place: str,
+        priority: str,
+        ratio: str,
+        expires_at: int,
+        image_url: str,
+    ):
         data = {
             'url': url,
             'memo': memo,
@@ -21,6 +30,8 @@ class AdminAdvertisingManager(AbstractManager):
             'priority': priority,
             'ratio': ratio,
             'expires_at': expires_at,
-            'image_url': image_url
+            'image_url': image_url,
         }
-        return await self.__session.request(Route('POST', '/api/ad/create'), json=data, auth=True, lower=True)
+        return await self.__session.request(
+            Route('POST', '/api/ad/create'), json=data, auth=True, lower=True
+        )

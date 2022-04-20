@@ -10,8 +10,13 @@ if TYPE_CHECKING:
 
 
 class FavoriteManager(AbstractManager):
-
-    def __init__(self, note_id: Optional[str] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self,
+        note_id: Optional[str] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
+    ):
         self.__note_id = note_id
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
@@ -19,9 +24,17 @@ class FavoriteManager(AbstractManager):
     async def add(self, note_id: Optional[str] = None) -> bool:
         note_id = note_id or self.__note_id
         data = {'noteId': note_id}
-        return bool(await self.__session.request(Route('POST', '/api/notes/favorites/create'), json=data, auth=True))
+        return bool(
+            await self.__session.request(
+                Route('POST', '/api/notes/favorites/create'), json=data, auth=True
+            )
+        )
 
     async def remove(self, note_id: Optional[str] = None) -> bool:
         note_id = note_id or self.__note_id
         data = {'noteId': note_id}
-        return bool(await self.__session.request(Route('POST', '/api/notes/favorites/delete'), json=data, auth=True))
+        return bool(
+            await self.__session.request(
+                Route('POST', '/api/notes/favorites/delete'), json=data, auth=True
+            )
+        )

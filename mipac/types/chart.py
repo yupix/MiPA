@@ -1,4 +1,9 @@
-__all__ = ('ActiveUsersChartPayload', 'DriveLocalChartPayload', 'DriveRemoteChartPayload', 'DriveChartPayload')
+__all__ = (
+    'ActiveUsersChartPayload',
+    'DriveLocalChartPayload',
+    'DriveRemoteChartPayload',
+    'DriveChartPayload',
+)
 
 from typing import List, TypedDict, Union
 

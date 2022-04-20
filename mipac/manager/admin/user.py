@@ -11,7 +11,13 @@ if TYPE_CHECKING:
 
 
 class AdminUserManager:
-    def __init__(self, user_id: Optional[str] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self,
+        user_id: Optional[str] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
+    ):
         self.__user_id = user_id
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
@@ -34,9 +40,14 @@ class AdminUserManager:
         """
 
         if config.is_ayuskey:
-            raise NotSupportedError("Ayuskeyではサポートされていません")
+            raise NotSupportedError('Ayuskeyではサポートされていません')
         data = {'username': username, 'password': password}
-        res = await self.__session.request(Route('POST', '/api/admin/accounts/create'), json=data, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/admin/accounts/create'),
+            json=data,
+            auth=True,
+            lower=True,
+        )
         return User(RawUser(res), client=self.__client)
 
     async def delete_account(self, user_id: Optional[str] = None) -> bool:
@@ -56,7 +67,12 @@ class AdminUserManager:
         user_id = user_id or self.__user_id
 
         data = {'userId': user_id}
-        res = await self.__session.request(Route('POST', '/api/admin/accounts/delete'), json=data, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/admin/accounts/delete'),
+            json=data,
+            auth=True,
+            lower=True,
+        )
         return bool(res)
 
     async def show_user(self, user_id: Optional[str] = None) -> User:
@@ -75,7 +91,9 @@ class AdminUserManager:
 
         user_id = user_id or self.__user_id
         data = {'userId': user_id}
-        res = await self.__session.request(Route('GET', '/api/admin/show-user'), json=data, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('GET', '/api/admin/show-user'), json=data, auth=True, lower=True
+        )
         return User(RawUser(res), client=self.__client)
 
     async def suspend(self, user_id: Optional[str] = None) -> bool:
@@ -95,7 +113,9 @@ class AdminUserManager:
 
         user_id = user_id or self.__user_id
         data = {'userId': user_id}
-        res = await self.__session.request(Route('POST', '/api/admin/suspend-user'), json=data, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/admin/suspend-user'), json=data, auth=True, lower=True
+        )
         return bool(res)
 
     async def unsuspend(self, user_id: Optional[str] = None) -> bool:
@@ -115,5 +135,7 @@ class AdminUserManager:
 
         user_id = user_id or self.__user_id
         data = {'userId': user_id}
-        res = await self.__session.request(Route('POST', '/api/admin/unsuspend-user'), json=data, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/admin/unsuspend-user'), json=data, auth=True, lower=True
+        )
         return bool(res)

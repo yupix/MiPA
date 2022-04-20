@@ -46,7 +46,9 @@ class RawFolder:
 
     def __init__(self, data: FolderPayload):
         self.id: str = data['id']
-        self.created_at: datetime = datetime.strptime(data["created_at"], '%Y-%m-%dT%H:%M:%S.%fZ')
+        self.created_at: datetime = datetime.strptime(
+            data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'
+        )
         self.name: str = data['name']
         self.folders_count: Optional[int] = data.get('folders_count', 0)
         self.parent_id: str = data['parent_id']
@@ -93,24 +95,44 @@ class RawFile:
     """
 
     __slots__ = (
-        'id', 'created_at', 'name', 'type', 'md5', 'size', 'is_sensitive', 'blurhash', 'properties', 'url', 'thumbnail_url',
-        'comment', 'folder_id', 'folder', 'user_id', 'user'
+        'id',
+        'created_at',
+        'name',
+        'type',
+        'md5',
+        'size',
+        'is_sensitive',
+        'blurhash',
+        'properties',
+        'url',
+        'thumbnail_url',
+        'comment',
+        'folder_id',
+        'folder',
+        'user_id',
+        'user',
     )
 
     def __init__(self, data: FilePayload):
         self.id: str = data['id']
-        self.created_at: datetime = datetime.strptime(data["created_at"], '%Y-%m-%dT%H:%M:%S.%fZ')
+        self.created_at: datetime = datetime.strptime(
+            data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'
+        )
         self.name: str = data['name']
         self.type: str = data['type']
         self.md5: str = data['md5']
         self.size: int = data['size']
         self.is_sensitive: bool = data['is_sensitive']
         self.blurhash: str = data['blurhash']
-        self.properties: Optional[RawProperties] = RawProperties(data['properties']) if len(data.get('properties')) else None
+        self.properties: Optional[RawProperties] = RawProperties(
+            data['properties']
+        ) if len(data.get('properties')) else None
         self.url: str = data['url']
         self.thumbnail_url: str = data['thumbnail_url']
         self.comment: str = data['comment']
         self.folder_id: str = data['folder_id']
-        self.folder: Optional[RawFolder] = RawFolder(data['folder']) if data.get('folder') else None
+        self.folder: Optional[RawFolder] = RawFolder(data['folder']) if data.get(
+            'folder'
+        ) else None
         self.user_id: str = data['user_id']
         self.user: Dict[str, Any] = data['user']

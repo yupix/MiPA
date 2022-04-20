@@ -1,8 +1,18 @@
-__all__ = ('RawActiveUsersChart', 'RawDriveRemoteChart', 'RawDriveLocalChart','RawDriveChart')
+__all__ = (
+    'RawActiveUsersChart',
+    'RawDriveRemoteChart',
+    'RawDriveLocalChart',
+    'RawDriveChart',
+)
 
 from typing import List
 
-from mipac.types import ActiveUsersChartPayload, DriveChartPayload, DriveLocalChartPayload, DriveRemoteChartPayload
+from mipac.types import (
+    ActiveUsersChartPayload,
+    DriveChartPayload,
+    DriveLocalChartPayload,
+    DriveRemoteChartPayload,
+)
 
 
 class RawActiveUsersChart:
@@ -37,7 +47,7 @@ class RawDriveLocalChart:
         'inc_count',
         'inc_size',
         'dec_count',
-        'dec_size'
+        'dec_size',
     )
 
     def __init__(self, data: DriveLocalChartPayload):
@@ -56,7 +66,7 @@ class RawDriveRemoteChart:
         'inc_count',
         'inc_size',
         'dec_count',
-        'dec_size'
+        'dec_size',
     )
 
     def __init__(self, data: DriveRemoteChartPayload):

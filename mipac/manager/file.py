@@ -5,6 +5,7 @@ from mipac.http import Route
 
 # __all__ = ('MiFile', 'check_upload', 'get_file_ids')
 
+
 class MiFile:
     __slots__ = (
         'path',
@@ -13,17 +14,19 @@ class MiFile:
         'folder_id',
         'comment',
         'is_sensitive',
-        'force'
+        'force',
     )
 
-    def __init__(self, path: Optional[str] = None,
-                 file_id: Optional[str] = None,
-                 name: Optional[str] = None,
-                 folder_id: Optional[str] = None,
-                 comment: Optional[str] = None,
-                 is_sensitive: bool = False,
-                 force: bool = False
-                 ):
+    def __init__(
+        self,
+        path: Optional[str] = None,
+        file_id: Optional[str] = None,
+        name: Optional[str] = None,
+        folder_id: Optional[str] = None,
+        comment: Optional[str] = None,
+        is_sensitive: bool = False,
+        force: bool = False,
+    ):
         """
         Parameters
         ----------

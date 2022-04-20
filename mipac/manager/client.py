@@ -20,10 +20,18 @@ class ClientActions:
         self.note: NoteManager = NoteManager(session=session, client=self)
         self.chat: ChatManager = ChatManager(session=session, client=self)
         self.user: UserManager = UserManager(session=session, client=self)
-        self.admin: AdminActions = AdminActions(session=session, client=self)  # TODO: 作る
-        self.drive: DriveManager = DriveManager(session=session, client=self)  # TODO: 作る
-        self.reaction: ReactionManager = ReactionManager(session=session, client=self)  # TODO: 作る
-        self.chart: ChartManager = ChartManager(session=session, client=self)  # TODO: 作る
+        self.admin: AdminActions = AdminActions(
+            session=session, client=self
+        )  # TODO: 作る
+        self.drive: DriveManager = DriveManager(
+            session=session, client=self
+        )  # TODO: 作る
+        self.reaction: ReactionManager = ReactionManager(
+            session=session, client=self
+        )  # TODO: 作る
+        self.chart: ChartManager = ChartManager(
+            session=session, client=self
+        )  # TODO: 作る
 
     def _create_user_instance(self, user: User) -> UserManager:
         return UserManager(session=self.__session, client=self, user=user)

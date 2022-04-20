@@ -9,7 +9,13 @@ if TYPE_CHECKING:
 
 
 class AdminModeratorManager(AbstractManager):
-    def __init__(self, user_id: Optional[str] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self,
+        user_id: Optional[str] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
+    ):
         self.__user_id: Optional[str] = user_id
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
@@ -31,7 +37,9 @@ class AdminModeratorManager(AbstractManager):
 
         user_id = user_id or self.__user_id
         data = {'userId': user_id}
-        res = await self.__session.request(Route('POST', '/api/moderators/add'), json=data, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/moderators/add'), json=data, auth=True, lower=True
+        )
         return bool(res)
 
     async def remove(self, user_id: Optional[str] = None) -> bool:
@@ -50,5 +58,7 @@ class AdminModeratorManager(AbstractManager):
         """
         user_id = user_id or self.__user_id
         data = {'userId': user_id}
-        res = await self.__session.request(Route('POST', '/api/moderators/remove'), json=data, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/moderators/remove'), json=data, auth=True, lower=True
+        )
         return bool(res)

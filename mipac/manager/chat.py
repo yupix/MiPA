@@ -12,8 +12,13 @@ if TYPE_CHECKING:
 
 
 class ChatManager:
-    def __init__(self, session: HTTPClient, client: ClientActions, user_id: Optional[str] = None,
-                 message_id: Optional[str] = None):
+    def __init__(
+        self,
+        session: HTTPClient,
+        client: ClientActions,
+        user_id: Optional[str] = None,
+        message_id: Optional[str] = None,
+    ):
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
         self.__user_id = user_id
@@ -40,16 +45,18 @@ class ChatManager:
             raise ParameterError('limit must be greater than 100')
 
         args = {'limit': limit, 'group': group}
-        data = await self.__session.request(Route('POST', '/api/messaging/history'), json=args, auth=True)
+        data = await self.__session.request(
+            Route('POST', '/api/messaging/history'), json=args, auth=True
+        )
         return [Chat(RawChat(d)) for d in data]
 
     async def send(
-            self,
-            text: Optional[str] = None,
-            *,
-            file_id: Optional[str] = None,
-            user_id: Optional[str] = None,
-            group_id: Optional[str] = None
+        self,
+        text: Optional[str] = None,
+        *,
+        file_id: Optional[str] = None,
+        user_id: Optional[str] = None,
+        group_id: Optional[str] = None,
     ) -> Chat:
         """
         Send chat.
@@ -67,7 +74,12 @@ class ChatManager:
         """
         user_id = user_id or self.__user_id
         data = {'userId': user_id, 'groupId': group_id, 'text': text, 'fileId': file_id}
-        res = await self.__session.request(Route('POST', '/api/messaging/messages/create'), json=data, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/messaging/messages/create'),
+            json=data,
+            auth=True,
+            lower=True,
+        )
         return Chat(RawChat(res))
 
     async def delete(self, message_id: str) -> bool:
@@ -87,5 +99,7 @@ class ChatManager:
 
         message_id = message_id or self.__message_id
         args = {'messageId': f'{message_id}'}
-        data = await self.__session.request(Route('POST', '/api/messaging/messages/delete'), json=args, auth=True)
+        data = await self.__session.request(
+            Route('POST', '/api/messaging/messages/delete'), json=args, auth=True
+        )
         return bool(data)

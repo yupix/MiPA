@@ -18,7 +18,13 @@ if TYPE_CHECKING:
 
 
 class NoteActions:
-    def __init__(self, note_id: Optional[str] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self,
+        note_id: Optional[str] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
+    ):
         self.__note_id: Optional[str] = note_id
         self.favorite = FavoriteManager(note_id=note_id, session=session, client=client)
         self.reaction = ReactionManager(note_id=note_id, session=session, client=client)
@@ -47,23 +53,28 @@ class NoteActions:
         note_id = note_id or self.__note_id
 
         data = {'noteId': note_id, 'clipId': clip_id}
-        return bool(await self.__session.request(Route('POST', '/api/clips/add-note'), json=data, auth=True))
+        return bool(
+            await self.__session.request(
+                Route('POST', '/api/clips/add-note'), json=data, auth=True
+            )
+        )
 
-    async def send(self,
-                   content: Optional[str] = None,
-                   visibility: str = "public",
-                   visible_user_ids: Optional[List[str]] = None,
-                   cw: Optional[str] = None,
-                   local_only: bool = False,
-                   extract_mentions: bool = True,
-                   extract_hashtags: bool = True,
-                   extract_emojis: bool = True,
-                   reply_id: Optional[str] = None,
-                   renote_id: Optional[str] = None,
-                   channel_id: Optional[str] = None,
-                   files: Optional[List[MiFile]] = None,
-                   poll: Optional[Poll] = None
-                   ) -> Note:
+    async def send(
+        self,
+        content: Optional[str] = None,
+        visibility: str = 'public',
+        visible_user_ids: Optional[List[str]] = None,
+        cw: Optional[str] = None,
+        local_only: bool = False,
+        extract_mentions: bool = True,
+        extract_hashtags: bool = True,
+        extract_emojis: bool = True,
+        reply_id: Optional[str] = None,
+        renote_id: Optional[str] = None,
+        channel_id: Optional[str] = None,
+        files: Optional[List[MiFile]] = None,
+        poll: Optional[Poll] = None,
+    ) -> Note:
         """
         ノートを投稿します。
 
@@ -108,35 +119,41 @@ class NoteActions:
         """
 
         field = {
-            "visibility": visibility,
-            "visibleUserIds": visible_user_ids,
-            "text": content,
-            "cw": cw,
-            "localOnly": local_only,
-            "noExtractMentions": not extract_mentions,
-            "noExtractHashtags": not extract_hashtags,
-            "noExtractEmojis": not extract_emojis,
-            "replyId": reply_id,
-            "renoteId": renote_id,
-            "channelId": channel_id
+            'visibility': visibility,
+            'visibleUserIds': visible_user_ids,
+            'text': content,
+            'cw': cw,
+            'localOnly': local_only,
+            'noExtractMentions': not extract_mentions,
+            'noExtractHashtags': not extract_hashtags,
+            'noExtractEmojis': not extract_emojis,
+            'replyId': reply_id,
+            'renoteId': renote_id,
+            'channelId': channel_id,
         }
         if not check_multi_arg(content, files, renote_id, poll):
-            raise ParameterError("ノートの送信にはcontent, file_ids, renote_id またはpollのいずれか1つが無くてはいけません")
+            raise ParameterError(
+                'ノートの送信にはcontent, file_ids, renote_id またはpollのいずれか1つが無くてはいけません'
+            )
 
         if poll and type(Poll):
-            poll_data = remove_dict_empty({
-                'choices': poll.choices,
-                'multiple': poll.multiple,
-                'expiresAt': poll.expires_at,
-                'expiredAfter': poll.expired_after
-            })
-            field["poll"] = poll_data
+            poll_data = remove_dict_empty(
+                {
+                    'choices': poll.choices,
+                    'multiple': poll.multiple,
+                    'expiresAt': poll.expires_at,
+                    'expiredAfter': poll.expired_after,
+                }
+            )
+            field['poll'] = poll_data
 
         # if files:  # TODO: get_file_idsを直さないと使えない
-            # field['fileIds'] = await get_file_ids(files=files)
+        # field['fileIds'] = await get_file_ids(files=files)
         field = remove_dict_empty(field)
-        res = await self.__session.request(Route('POST', '/api/notes/create'), json=field, auth=True, lower=True)
-        return Note(RawNote(res["created_note"]), client=self.__client)
+        res = await self.__session.request(
+            Route('POST', '/api/notes/create'), json=field, auth=True, lower=True
+        )
+        return Note(RawNote(res['created_note']), client=self.__client)
 
     async def delete(self, note_id: Optional[str] = None) -> bool:
         """
@@ -155,8 +172,10 @@ class NoteActions:
 
         note_id = note_id or self.__note_id
 
-        data = {"noteId": note_id}
-        res = await self.__session.request(Route('POST', '/api/notes/delete'), json=data, auth=True)
+        data = {'noteId': note_id}
+        res = await self.__session.request(
+            Route('POST', '/api/notes/delete'), json=data, auth=True
+        )
         return bool(res)
 
     async def create_renote(self, note_id: Optional[str] = None) -> Note:
@@ -177,18 +196,18 @@ class NoteActions:
         return await self.send(renote_id=note_id)
 
     async def create_quote(
-            self,
-            content: Optional[str] = None,
-            visibility: str = 'public',
-            visible_user_ids: Optional[List[str]] = None,
-            cw: Optional[str] = None,
-            local_only: bool = False,
-            extract_mentions: bool = True,
-            extract_hashtags: bool = True,
-            extract_emojis: bool = True,
-            file_ids: Optional[List[str]] = None,
-            poll: Optional[Poll] = None,
-            note_id: Optional[str] = None,
+        self,
+        content: Optional[str] = None,
+        visibility: str = 'public',
+        visible_user_ids: Optional[List[str]] = None,
+        cw: Optional[str] = None,
+        local_only: bool = False,
+        extract_mentions: bool = True,
+        extract_hashtags: bool = True,
+        extract_emojis: bool = True,
+        file_ids: Optional[List[str]] = None,
+        poll: Optional[Poll] = None,
+        note_id: Optional[str] = None,
     ) -> Note:
         """
         Create a note quote.
@@ -221,10 +240,18 @@ class NoteActions:
 
         note_id = note_id or self.__note_id
 
-        return await self.send(content=content, visibility=visibility, visible_user_ids=visible_user_ids, cw=cw,
-                               local_only=local_only, extract_mentions=extract_mentions,
-                               extract_hashtags=extract_hashtags,
-                               extract_emojis=extract_emojis, renote_id=note_id, poll=poll)  # TODO: filesを受け取るように
+        return await self.send(
+            content=content,
+            visibility=visibility,
+            visible_user_ids=visible_user_ids,
+            cw=cw,
+            local_only=local_only,
+            extract_mentions=extract_mentions,
+            extract_hashtags=extract_hashtags,
+            extract_emojis=extract_emojis,
+            renote_id=note_id,
+            poll=poll,
+        )  # TODO: filesを受け取るように
 
     async def get_note(self, note_id: Optional[str] = None) -> Note:
         """
@@ -241,15 +268,20 @@ class NoteActions:
             取得したノートID
         """
         note_id = note_id or self.__note_id
-        res = await self.__session.request(Route('POST', '/api/notes/show'), json={"noteId": note_id}, auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/notes/show'),
+            json={'noteId': note_id},
+            auth=True,
+            lower=True,
+        )
         return Note(RawNote(res), client=self.__client)
 
     async def get_replies(
-            self,
-            since_id: Optional[str] = None,
-            until_id: Optional[str] = None,
-            limit: int = 10,
-            note_id: Optional[str] = None
+        self,
+        since_id: Optional[str] = None,
+        until_id: Optional[str] = None,
+        limit: int = 10,
+        note_id: Optional[str] = None,
     ) -> List[Note]:
         """
         ノートに対する返信を取得します
@@ -271,12 +303,22 @@ class NoteActions:
             返信のリスト
         """
         note_id = note_id or self.__note_id
-        res = await self.__session.request(Route('POST', '/api/notes/replies'),
-                                           json={"noteId": note_id, "sinceId": since_id, "untilId": until_id, "limit": limit},
-                                           auth=True, lower=True)
+        res = await self.__session.request(
+            Route('POST', '/api/notes/replies'),
+            json={
+                'noteId': note_id,
+                'sinceId': since_id,
+                'untilId': until_id,
+                'limit': limit,
+            },
+            auth=True,
+            lower=True,
+        )
         return [Note(RawNote(i), client=self.__client) for i in res]
 
-    async def get_reaction(self, reaction: str, note_id: Optional[str] = None) -> List[NoteReaction]:
+    async def get_reaction(
+        self, reaction: str, note_id: Optional[str] = None
+    ) -> List[NoteReaction]:
         note_id = note_id or self.__note_id
         # return await ReactionManager(note_id=note_id, client=self.__client).get_reaction(reaction)
         # TODO:  self.__client形式に置き換え

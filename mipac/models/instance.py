@@ -28,8 +28,12 @@ class InstanceMeta:
         self.disable_registration: bool = bool(data['disable_registration'])
         self.disable_local_timeline: bool = bool(data['disable_local_timeline'])
         self.disable_global_timeline: bool = bool(data['disable_global_timeline'])
-        self.drive_capacity_per_local_user_mb: int = data['drive_capacity_per_local_user_mb']
-        self.drive_capacity_per_remote_user_mb: int = data['drive_capacity_per_remote_user_mb']
+        self.drive_capacity_per_local_user_mb: int = data[
+            'drive_capacity_per_local_user_mb'
+        ]
+        self.drive_capacity_per_remote_user_mb: int = data[
+            'drive_capacity_per_remote_user_mb'
+        ]
         self.email_required_for_signup: bool = bool(data['email_required_for_signup'])
         self.enable_hcaptcha: bool = bool(data['enable_hcaptcha'])
         self.enable_recaptcha: bool = bool(data['enable_recaptcha'])
@@ -95,17 +99,18 @@ class Instance:
     def theme_color(self):
         return self.__raw_data.theme_color
 
-    def get_users(self,
-                  limit: int = 10,
-                  *,
-                  offset: int = 0,
-                  sort: Optional[str] = None,
-                  state: str = 'all',
-                  origin: str = 'local',
-                  username: Optional[str] = None,
-                  hostname: Optional[str] = None,
-                  get_all: bool = False
-                  ) -> AsyncIterator[User]:
+    def get_users(
+        self,
+        limit: int = 10,
+        *,
+        offset: int = 0,
+        sort: Optional[str] = None,
+        state: str = 'all',
+        origin: str = 'local',
+        username: Optional[str] = None,
+        hostname: Optional[str] = None,
+        get_all: bool = False
+    ) -> AsyncIterator[User]:
         """
 
         Parameters

@@ -20,10 +20,10 @@ __all__ = (
     'remove_dict_empty',
     'upper_to_lower',
     'str_lower',
-    'bool_to_string'
+    'bool_to_string',
 )
 
-T = TypeVar("T")
+T = TypeVar('T')
 
 
 def deprecated_func(func):
@@ -40,11 +40,11 @@ def get_cache_key(func):
     async def decorator(self, *args, **kwargs):
         ordered_kwargs = sorted(kwargs.items())
         key = (
-                (func.__module__ or "")
-                + '.{0}'
-                + f'{self}'
-                + str(args)
-                + str(ordered_kwargs)
+            (func.__module__ or '')
+            + '.{0}'
+            + f'{self}'
+            + str(args)
+            + str(ordered_kwargs)
         )
         return await func(self, *args, **kwargs, cache_key=key)
 
@@ -54,11 +54,11 @@ def get_cache_key(func):
 def key_builder(func, cls, *args, **kwargs):
     ordered_kwargs = sorted(kwargs.items())
     key = (
-            (func.__module__ or "")
-            + f'.{func.__name__}'
-            + f'{cls}'
-            + str(args)
-            + str(ordered_kwargs)
+        (func.__module__ or '')
+        + f'.{func.__name__}'
+        + f'{cls}'
+        + str(args)
+        + str(ordered_kwargs)
     )
     return key
 
@@ -149,8 +149,10 @@ def remove_dict_empty(data: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def upper_to_lower(
-        data: Dict[str, Any], field: Optional[Dict[str, Any]] = None, nest: bool = True,
-        replace_list: Optional[Dict[str, Any]] = None
+    data: Dict[str, Any],
+    field: Optional[Dict[str, Any]] = None,
+    nest: bool = True,
+    replace_list: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
     Parameters
@@ -178,12 +180,12 @@ def upper_to_lower(
     if field is None:
         field = {}
     for attr in data:
-        pattern = re.compile("[A-Z]")
+        pattern = re.compile('[A-Z]')
         large = [i.group().lower() for i in pattern.finditer(attr)]
         result = [None] * (len(large + pattern.split(attr)))
         result[::2] = pattern.split(attr)
-        result[1::2] = ["_" + i.lower() for i in large]
-        default_key = "".join(result)
+        result[1::2] = ['_' + i.lower() for i in large]
+        default_key = ''.join(result)
         if replace_list.get(attr):
             default_key = default_key.replace(attr, replace_list.get(attr))
         field[default_key] = data[attr]
@@ -193,12 +195,12 @@ def upper_to_lower(
 
 
 def str_lower(text: str):
-    pattern = re.compile("[A-Z]")
+    pattern = re.compile('[A-Z]')
     large = [i.group().lower() for i in pattern.finditer(text)]
     result = [None] * (len(large + pattern.split(text)))
     result[::2] = pattern.split(text)
-    result[1::2] = ["_" + i.lower() for i in large]
-    return "".join(result)
+    result[1::2] = ['_' + i.lower() for i in large]
+    return ''.join(result)
 
 
 def bool_to_string(boolean: bool) -> str:
@@ -214,4 +216,4 @@ def bool_to_string(boolean: bool) -> str:
     true or false: str
         小文字になったbool文字列
     """
-    return "true" if boolean else "false"
+    return 'true' if boolean else 'false'

@@ -4,13 +4,21 @@ from .drive import FilePayload
 from .emoji import EmojiPayload
 from .user import UserPayload
 
-__all__ = ('NotePayload', 'GeoPayload', 'ReactionPayload', 'PollPayload', 'RenotePayload', 'OptionalReaction')
+__all__ = (
+    'NotePayload',
+    'GeoPayload',
+    'ReactionPayload',
+    'PollPayload',
+    'RenotePayload',
+    'OptionalReaction',
+)
 
 
 class GeoPayload(TypedDict):
     """
     衛星情報
     """
+
     coordinates: Optional[List[Any]]
     altitude: Optional[int]
     accuracy: Optional[int]
@@ -56,6 +64,7 @@ class _NoteOptional(TypedDict, total=False):
     """
     ノートに必ず存在すると限らない物
     """
+
     text: str
     cw: str
     geo: GeoPayload

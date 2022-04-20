@@ -18,7 +18,15 @@ class RawInstance:
     theme_color : Optional[str], default=None
     """
 
-    __slots__ = ('host', 'name', 'software_name', 'software_version', 'icon_url', 'favicon_url', 'theme_color')
+    __slots__ = (
+        'host',
+        'name',
+        'software_name',
+        'software_version',
+        'icon_url',
+        'favicon_url',
+        'theme_color',
+    )
 
     def __init__(self, data: InstancePayload):
         self.host: Optional[str] = data.get('host')

@@ -6,7 +6,12 @@ from typing import Any, Dict, List, Optional, TYPE_CHECKING, Union
 from mipac.core import RawUser
 from mipac.models.emoji import Emoji
 from mipac.models.instance import Instance
-from mipac.types import ChannelPayload, FieldContentPayload, PinnedNotePayload, PinnedPagePayload
+from mipac.types import (
+    ChannelPayload,
+    FieldContentPayload,
+    PinnedNotePayload,
+    PinnedPagePayload,
+)
 
 if TYPE_CHECKING:
     from mipac.manager.client import ClientActions
@@ -19,7 +24,9 @@ __all__ = ['User', 'FollowRequest', 'Followee']
 class Followee:
     def __init__(self, data, *, client: ClientActions):
         self.id: str = data['id']
-        self.created_at: datetime = datetime.strptime(data["created_at"], '%Y-%m-%dT%H:%M:%S.%fZ')
+        self.created_at: datetime = datetime.strptime(
+            data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'
+        )
         self.followee_id: str = data['followee_id']
         self.follower_id: str = data['follower_id']
         self.user: User = User(RawUser(data['follower']), client=client)
@@ -51,70 +58,81 @@ class FollowRequest:
 
 class Channel:
     def __init__(self, data: ChannelPayload):
-        self.id: Optional[str] = data.get("id")
-        self.created_at: Optional[datetime] = datetime.strptime(data["created_at"], '%Y-%m-%dT%H:%M:%S.%fZ') if data.get(
-            "created_at") else None
-        self.last_noted_at: Optional[str] = data.get("last_noted_at")
-        self.name: Optional[str] = data.get("name")
-        self.description: Optional[str] = data.get("description")
-        self.banner_url: Optional[str] = data.get("banner_url")
-        self.notes_count: Optional[int] = data.get("notes_count")
-        self.users_count: Optional[int] = data.get("users_count")
-        self.is_following: Optional[bool] = data.get("is_following")
-        self.user_id: Optional[str] = data.get("user_id")
+        self.id: Optional[str] = data.get('id')
+        self.created_at: Optional[datetime] = datetime.strptime(
+            data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'
+        ) if data.get('created_at') else None
+        self.last_noted_at: Optional[str] = data.get('last_noted_at')
+        self.name: Optional[str] = data.get('name')
+        self.description: Optional[str] = data.get('description')
+        self.banner_url: Optional[str] = data.get('banner_url')
+        self.notes_count: Optional[int] = data.get('notes_count')
+        self.users_count: Optional[int] = data.get('users_count')
+        self.is_following: Optional[bool] = data.get('is_following')
+        self.user_id: Optional[str] = data.get('user_id')
 
 
 class PinnedNote:
     def __init__(self, data: PinnedNotePayload, *, client: ClientActions):
-        self.id: Optional[str] = data.get("id")
-        self.created_at: Optional[datetime] = datetime.strptime(data["created_at"], '%Y-%m-%dT%H:%M:%S.%fZ') if data.get(
-            "created_at") else None
-        self.text: Optional[str] = data.get("text")
-        self.cw: Optional[str] = data.get("cw")
-        self.user_id: Optional[str] = data.get("user_id")
-        self.user: Optional[User] = User(RawUser(data['user']), client=client) if data.get('user') else None
-        self.reply_id: Optional[str] = data.get("reply_id")
-        self.reply: Optional[Dict[str, Any]] = data.get("reply")
-        self.renote: Optional[Dict[str, Any]] = data.get("renote")
-        self.via_mobile: Optional[bool] = data.get("via_mobile")
-        self.is_hidden: Optional[bool] = data.get("is_hidden")
-        self.visibility: Optional[bool] = bool(data["visibility"]) if data.get("visibility") else None
-        self.mentions: Optional[List[str]] = data.get("mentions")
-        self.visible_user_ids: Optional[List[str]] = data.get("visible_user_ids")
-        self.file_ids: Optional[List[str]] = data.get("file_ids")
-        self.files: Optional[List[str]] = data.get("files")
-        self.tags: Optional[List[str]] = data.get("tags")
-        self.poll: Optional[List[str]] = data.get("poll")
-        self.channel: Optional[Channel] = Channel(data["channel"]) if data.get("channel") else None
-        self.local_only: Optional[bool] = data.get("local_only")
-        self.emojis: Optional[List[Emoji]] = [Emoji(i) for i in data["emojis"]] if data.get("emojis") else None
-        self.reactions: Optional[Dict[str, Any]] = data.get("reactions")
-        self.renote_count: Optional[int] = data.get("renote_count")
-        self.replies_count: Optional[int] = data.get("replies_count")
-        self.uri: Optional[str] = data.get("uri")
-        self.url: Optional[str] = data.get("url")
-        self.my_reaction: Optional[Dict[str, Any]] = data.get("my_reaction")
+        self.id: Optional[str] = data.get('id')
+        self.created_at: Optional[datetime] = datetime.strptime(
+            data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'
+        ) if data.get('created_at') else None
+        self.text: Optional[str] = data.get('text')
+        self.cw: Optional[str] = data.get('cw')
+        self.user_id: Optional[str] = data.get('user_id')
+        self.user: Optional[User] = User(
+            RawUser(data['user']), client=client
+        ) if data.get('user') else None
+        self.reply_id: Optional[str] = data.get('reply_id')
+        self.reply: Optional[Dict[str, Any]] = data.get('reply')
+        self.renote: Optional[Dict[str, Any]] = data.get('renote')
+        self.via_mobile: Optional[bool] = data.get('via_mobile')
+        self.is_hidden: Optional[bool] = data.get('is_hidden')
+        self.visibility: Optional[bool] = bool(data['visibility']) if data.get(
+            'visibility'
+        ) else None
+        self.mentions: Optional[List[str]] = data.get('mentions')
+        self.visible_user_ids: Optional[List[str]] = data.get('visible_user_ids')
+        self.file_ids: Optional[List[str]] = data.get('file_ids')
+        self.files: Optional[List[str]] = data.get('files')
+        self.tags: Optional[List[str]] = data.get('tags')
+        self.poll: Optional[List[str]] = data.get('poll')
+        self.channel: Optional[Channel] = Channel(data['channel']) if data.get(
+            'channel'
+        ) else None
+        self.local_only: Optional[bool] = data.get('local_only')
+        self.emojis: Optional[List[Emoji]] = [
+            Emoji(i) for i in data['emojis']
+        ] if data.get('emojis') else None
+        self.reactions: Optional[Dict[str, Any]] = data.get('reactions')
+        self.renote_count: Optional[int] = data.get('renote_count')
+        self.replies_count: Optional[int] = data.get('replies_count')
+        self.uri: Optional[str] = data.get('uri')
+        self.url: Optional[str] = data.get('url')
+        self.my_reaction: Optional[Dict[str, Any]] = data.get('my_reaction')
 
 
 class PinnedPage:
     def __init__(self, data: PinnedPagePayload):
-        self.id: Optional[str] = data.get("id")
-        self.created_at: Optional[datetime] = datetime.strptime(data["created_at"], '%Y-%m-%dT%H:%M:%S.%fZ') if data.get(
-            "created_at") else None
-        self.updated_at: Optional[str] = data.get("updated_at")
-        self.title: Optional[str] = data.get("title")
-        self.name: Optional[str] = data.get("name")
-        self.summary: Optional[str] = data.get("summary")
-        self.content: Optional[List] = data.get("content")
-        self.variables: Optional[List] = data.get("variables")
-        self.user_id: Optional[str] = data.get("user_id")
-        self.author: Optional[Dict[str, Any]] = data.get("author")
+        self.id: Optional[str] = data.get('id')
+        self.created_at: Optional[datetime] = datetime.strptime(
+            data['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ'
+        ) if data.get('created_at') else None
+        self.updated_at: Optional[str] = data.get('updated_at', None)
+        self.title: Optional[str] = data.get('title')
+        self.name: Optional[str] = data.get('name')
+        self.summary: Optional[str] = data.get('summary')
+        self.content: Optional[List] = data.get('content')
+        self.variables: Optional[List] = data.get('variables')
+        self.user_id: Optional[str] = data.get('user_id')
+        self.author: Optional[Dict[str, Any]] = data.get('author')
 
 
 class FieldContent:
     def __init__(self, data: FieldContentPayload):
-        self.name: str = data["name"]
-        self.value: str = data["value"]
+        self.name: str = data['name']
+        self.value: str = data['value']
 
 
 class User:

@@ -13,8 +13,13 @@ if TYPE_CHECKING:
 
 
 class FollowManager(AbstractManager):
-
-    def __init__(self, user_id: Optional[str] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self,
+        user_id: Optional[str] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
+    ):
         self.__user_id: Optional[str] = user_id
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
@@ -33,10 +38,12 @@ class FollowManager(AbstractManager):
 
         user_id = user_id or self.__user_id
 
-        data = {"userId": user_id}
-        res = await self.__session.request(Route('POST', '/api/following/create'), json=data, auth=True, lower=True)
-        if res.get("error"):
-            code = res["error"]["code"]
+        data = {'userId': user_id}
+        res = await self.__session.request(
+            Route('POST', '/api/following/create'), json=data, auth=True, lower=True
+        )
+        if res.get('error'):
+            code = res['error']['code']
             status = False
         else:
             code = None
@@ -55,13 +62,21 @@ class FollowManager(AbstractManager):
 
         user_id = user_id or self.__user_id
 
-        data = {"userId": user_id}
-        res = await self.__session.request(Route('POST', '/api/following/delete'), json=data, auth=True)
+        data = {'userId': user_id}
+        res = await self.__session.request(
+            Route('POST', '/api/following/delete'), json=data, auth=True
+        )
         return bool(res.status_code == 204 or 200)
 
 
 class FollowRequestManager(AbstractManager):
-    def __init__(self, user_id: Optional[str] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self,
+        user_id: Optional[str] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
+    ):
         self.__user_id: Optional[str] = user_id
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
@@ -71,8 +86,12 @@ class FollowRequestManager(AbstractManager):
         未承認のフォローリクエストを取得します
         """
 
-        return [FollowRequest(i['follower']) for i in
-                await self.__session.request(Route('POST', '/api/following/requests/list'), auth=True, lower=True)]
+        return [
+            FollowRequest(i['follower'])
+            for i in await self.__session.request(
+                Route('POST', '/api/following/requests/list'), auth=True, lower=True
+            )
+        ]
 
     async def get_user(self, user_id: Optional[str] = None) -> User:
         """
@@ -100,7 +119,11 @@ class FollowRequestManager(AbstractManager):
         user_id = user_id or self.__user_id
 
         data = {'userId': user_id}
-        return bool(await self.__session.request(Route('POST', '/api/following/requests/accept'), json=data, auth=True))
+        return bool(
+            await self.__session.request(
+                Route('POST', '/api/following/requests/accept'), json=data, auth=True
+            )
+        )
 
     async def reject(self, user_id: Optional[str]) -> bool:
         """
@@ -110,4 +133,8 @@ class FollowRequestManager(AbstractManager):
         user_id = user_id or self.__user_id
 
         data = {'userId': user_id}
-        return bool(await self.__session.request(Route('POST', '/api/following/requests/reject'), json=data, auth=True))
+        return bool(
+            await self.__session.request(
+                Route('POST', '/api/following/requests/reject'), json=data, auth=True
+            )
+        )

@@ -11,7 +11,9 @@ if TYPE_CHECKING:
 
 
 class UserManager(AbstractManager):
-    def __init__(self, user: Optional[User] = None, *, session: HTTPClient, client: ClientActions):
+    def __init__(
+        self, user: Optional[User] = None, *, session: HTTPClient, client: ClientActions
+    ):
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
         self.user: Optional[User] = user

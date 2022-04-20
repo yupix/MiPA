@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Union
+from typing import TYPE_CHECKING, Optional, Union
 
-from mipac.core import RawUser
+from mipac.core.models.user import RawUser
 from mipac.core.models.drive import RawFile, RawFolder, RawProperties
 from mipac.models.user import User
 
@@ -17,7 +17,7 @@ class Properties:
         self.__raw_data: RawProperties = raw_data
 
     @property
-    def width(self) -> int:
+    def width(self) -> Optional[int]:
         return self.__raw_data.width
 
     @property
@@ -25,7 +25,7 @@ class Properties:
         return self.__raw_data.height
 
     @property
-    def avg_color(self) -> Union[float, None]:
+    def avg_color(self) -> Optional[str]:
         return self.__raw_data.avg_color
 
 
