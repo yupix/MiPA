@@ -25,7 +25,6 @@ class FeaturesPayload:
     object_storage: bool
     twitter: bool
     github: bool
-    github: bool
     discord: bool
     service_worker: bool
     miauth: bool
