@@ -89,7 +89,9 @@ class PinnedNote:
             'visibility'
         ) else None
         self.mentions: Optional[List[str]] = data.get('mentions')
-        self.visible_user_ids: Optional[List[str]] = data.get('visible_user_ids')
+        self.visible_user_ids: Optional[List[str]] = data.get(
+            'visible_user_ids'
+        )
         self.file_ids: Optional[List[str]] = data.get('file_ids')
         self.files: Optional[List[str]] = data.get('files')
         self.tags: Optional[List[str]] = data.get('tags')
@@ -286,7 +288,11 @@ class User:
 
     @property
     def instance(self) -> Union[Instance, None]:
-        return Instance(self.__raw_user.instance, client=self.__client) if self.__raw_user.instance else None
+        return (
+            Instance(self.__raw_user.instance, client=self.__client)
+            if self.__raw_user.instance
+            else None
+        )
 
     @property
     def action(self) -> UserActions:

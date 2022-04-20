@@ -282,7 +282,9 @@ class Note:
 
     @property
     def renote(self) -> Union[None, Renote]:
-        return Renote(self.__raw_data.renote) if self.__raw_data.renote else None
+        return (
+            Renote(self.__raw_data.renote) if self.__raw_data.renote else None
+        )
 
     @property
     def visibility(self) -> Optional[str]:

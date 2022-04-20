@@ -21,8 +21,14 @@ class AdminActions:
         self.ad = AdminAdvertisingManager(session=session, client=client)
         self.moderator = AdminModeratorManager(session=session, client=client)
 
-    def get_emoji_instance(self, emoji_id: Optional[str] = None) -> AdminEmojiManager:
-        return AdminEmojiManager(emoji_id, session=self.__session, client=self.__client)
+    def get_emoji_instance(
+        self, emoji_id: Optional[str] = None
+    ) -> AdminEmojiManager:
+        return AdminEmojiManager(
+            emoji_id, session=self.__session, client=self.__client
+        )
 
     async def get_invite(self) -> bool:
-        return bool(await self.__session.request(Route('POST', '/api/admin/invite')))
+        return bool(
+            await self.__session.request(Route('POST', '/api/admin/invite'))
+        )

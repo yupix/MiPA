@@ -27,12 +27,18 @@ class NoteActions:
         client: ClientActions
     ):
         self.__note_id: Optional[str] = note_id
-        self.favorite = FavoriteManager(note_id=note_id, session=session, client=client)
-        self.reaction = ReactionManager(note_id=note_id, session=session, client=client)
+        self.favorite = FavoriteManager(
+            note_id=note_id, session=session, client=client
+        )
+        self.reaction = ReactionManager(
+            note_id=note_id, session=session, client=client
+        )
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
 
-    async def add_clips(self, clip_id: str, note_id: Optional[str] = None) -> bool:
+    async def add_clips(
+        self, clip_id: str, note_id: Optional[str] = None
+    ) -> bool:
         """
         クリップに追加します
 
@@ -153,7 +159,10 @@ class NoteActions:
         # field['fileIds'] = await get_file_ids(files=files)
         field = remove_dict_empty(field)
         res = await self.__session.request(
-            Route('POST', '/api/notes/create'), json=field, auth=True, lower=True
+            Route('POST', '/api/notes/create'),
+            json=field,
+            auth=True,
+            lower=True,
         )
         return Note(RawNote(res['created_note']), client=self.__client)
 

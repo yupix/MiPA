@@ -93,7 +93,10 @@ class AdminUserManager:
         user_id = user_id or self.__user_id
         data = {'userId': user_id}
         res = await self.__session.request(
-            Route('GET', '/api/admin/show-user'), json=data, auth=True, lower=True
+            Route('GET', '/api/admin/show-user'),
+            json=data,
+            auth=True,
+            lower=True,
         )
         return User(RawUser(res), client=self.__client)
 
@@ -115,7 +118,10 @@ class AdminUserManager:
         user_id = user_id or self.__user_id
         data = {'userId': user_id}
         res = await self.__session.request(
-            Route('POST', '/api/admin/suspend-user'), json=data, auth=True, lower=True
+            Route('POST', '/api/admin/suspend-user'),
+            json=data,
+            auth=True,
+            lower=True,
         )
         return bool(res)
 
@@ -137,6 +143,9 @@ class AdminUserManager:
         user_id = user_id or self.__user_id
         data = {'userId': user_id}
         res = await self.__session.request(
-            Route('POST', '/api/admin/unsuspend-user'), json=data, auth=True, lower=True
+            Route('POST', '/api/admin/unsuspend-user'),
+            json=data,
+            auth=True,
+            lower=True,
         )
         return bool(res)

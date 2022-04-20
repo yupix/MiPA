@@ -43,7 +43,14 @@ class RawFolder:
         親フォルダー
     """
 
-    __slots__ = ('id', 'created_at', 'name', 'folders_count', 'parent_id', 'parent')
+    __slots__ = (
+        'id',
+        'created_at',
+        'name',
+        'folders_count',
+        'parent_id',
+        'parent',
+    )
 
     def __init__(self, data: FolderPayload):
         self.id: str = data['id']
@@ -132,8 +139,8 @@ class RawFile:
         self.thumbnail_url: str = data['thumbnail_url']
         self.comment: str = data['comment']
         self.folder_id: str = data['folder_id']
-        self.folder: Optional[RawFolder] = RawFolder(data['folder']) if data.get(
-            'folder'
-        ) else None
+        self.folder: Optional[RawFolder] = RawFolder(
+            data['folder']
+        ) if data.get('folder') else None
         self.user_id: str = data['user_id']
         self.user: UserPayload = data['user']

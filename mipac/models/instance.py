@@ -26,15 +26,21 @@ class InstanceMeta:
         self.feedback_url: str = data['feedback_url']
         self.secure: bool = bool(data['secure'])
         self.disable_registration: bool = bool(data['disable_registration'])
-        self.disable_local_timeline: bool = bool(data['disable_local_timeline'])
-        self.disable_global_timeline: bool = bool(data['disable_global_timeline'])
+        self.disable_local_timeline: bool = bool(
+            data['disable_local_timeline']
+        )
+        self.disable_global_timeline: bool = bool(
+            data['disable_global_timeline']
+        )
         self.drive_capacity_per_local_user_mb: int = data[
             'drive_capacity_per_local_user_mb'
         ]
         self.drive_capacity_per_remote_user_mb: int = data[
             'drive_capacity_per_remote_user_mb'
         ]
-        self.email_required_for_signup: bool = bool(data['email_required_for_signup'])
+        self.email_required_for_signup: bool = bool(
+            data['email_required_for_signup']
+        )
         self.enable_hcaptcha: bool = bool(data['enable_hcaptcha'])
         self.enable_recaptcha: bool = bool(data['enable_recaptcha'])
         self.recaptcha_site_key: str = data['recaptcha_site_key']
@@ -45,14 +51,24 @@ class InstanceMeta:
         self.emojis: List[Emoji] = [Emoji(RawEmoji(i)) for i in data['emojis']]
         self.ads: list = data['ads']
         self.enable_email: bool = bool(data['enable_email'])
-        self.enable_twitter_integration = bool(data['enable_twitter_integration'])
-        self.enable_github_integration: bool = bool(data['enable_github_integration'])
-        self.enable_discord_integration: bool = bool(data['enable_discord_integration'])
+        self.enable_twitter_integration = bool(
+            data['enable_twitter_integration']
+        )
+        self.enable_github_integration: bool = bool(
+            data['enable_github_integration']
+        )
+        self.enable_discord_integration: bool = bool(
+            data['enable_discord_integration']
+        )
         self.enable_service_worker: bool = bool(data['enable_service_worker'])
         self.translator_available: bool = bool(data['translator_available'])
         self.pinned_page: Optional[List[str]] = data.get('pinned_page')
-        self.cache_remote_files: Optional[bool] = data.get('cache_remote_files')
-        self.proxy_remote_files: Optional[bool] = data.get('proxy_remote_files')
+        self.cache_remote_files: Optional[bool] = data.get(
+            'cache_remote_files'
+        )
+        self.proxy_remote_files: Optional[bool] = data.get(
+            'proxy_remote_files'
+        )
         self.require_setup: Optional[bool] = data.get('require_setup')
         self.features: Optional[Dict[str, bool]] = data.get('features')
 

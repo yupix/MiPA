@@ -29,11 +29,19 @@ class RawActiveUsersChart:
         self.read: List[int] = data['read']
         self.write: List[int] = data['write']
         self.registered_within_week: List[int] = data['registered_within_week']
-        self.registered_within_month: List[int] = data['registered_within_month']
+        self.registered_within_month: List[int] = data[
+            'registered_within_month'
+        ]
         self.registered_within_year: List[int] = data['registered_within_year']
-        self.registered_outside_week: List[int] = data['registered_outside_week']
-        self.registered_outside_month: List[int] = data['registered_outside_month']
-        self.registered_outside_year: List[int] = data['registered_outside_year']
+        self.registered_outside_week: List[int] = data[
+            'registered_outside_week'
+        ]
+        self.registered_outside_month: List[int] = data[
+            'registered_outside_month'
+        ]
+        self.registered_outside_year: List[int] = data[
+            'registered_outside_year'
+        ]
 
 
 class RawDriveLocalChart:

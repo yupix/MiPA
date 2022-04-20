@@ -27,7 +27,9 @@ class FileManager:
         self.__client: ClientActions = client
         self.__file_id = file_id
 
-    async def show_file(self, file_id: Optional[str], url: Optional[str]) -> File:
+    async def show_file(
+        self, file_id: Optional[str], url: Optional[str]
+    ) -> File:
         """
         ファイルの情報を取得します。
 
@@ -257,6 +259,9 @@ class DriveManager(AbstractManager):
             'folderId': folder_id,
         }
         data = await self.__session.request(
-            Route('POST', '/api/drive/folders'), json=data, lower=True, auth=True
+            Route('POST', '/api/drive/folders'),
+            json=data,
+            lower=True,
+            auth=True,
         )
         return [Folder(RawFolder(i)) for i in data]

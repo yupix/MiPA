@@ -27,7 +27,9 @@ class NoteManager(AbstractManager):
     @property
     def action(self) -> NoteActions:
         return NoteActions(
-            note_id=self.__note_id, session=self.__session, client=self.__client
+            note_id=self.__note_id,
+            session=self.__session,
+            client=self.__client,
         )
 
     async def get(

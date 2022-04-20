@@ -74,7 +74,12 @@ class ChatManager:
             送信するグループのID
         """
         user_id = user_id or self.__user_id
-        data = {'userId': user_id, 'groupId': group_id, 'text': text, 'fileId': file_id}
+        data = {
+            'userId': user_id,
+            'groupId': group_id,
+            'text': text,
+            'fileId': file_id,
+        }
         res = await self.__session.request(
             Route('POST', '/api/messaging/messages/create'),
             json=data,
@@ -104,6 +109,8 @@ class ChatManager:
         message_id = message_id or self.__message_id
         args = {'messageId': f'{message_id}'}
         data = await self.__session.request(
-            Route('POST', '/api/messaging/messages/delete'), json=args, auth=True
+            Route('POST', '/api/messaging/messages/delete'),
+            json=args,
+            auth=True,
         )
         return bool(data)

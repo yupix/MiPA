@@ -33,7 +33,12 @@ class AdminEmojiManager(AbstractManager):
         aliases: Optional[List[str]] = None
     ) -> bool:
         if config.is_ayuskey:  # TODO: どうにかする
-            data = {'name': name, 'url': url, 'category': category, 'aliases': aliases}
+            data = {
+                'name': name,
+                'url': url,
+                'category': category,
+                'aliases': aliases,
+            }
         else:
             data = {'fileId': file_id}
 
@@ -41,7 +46,10 @@ class AdminEmojiManager(AbstractManager):
             raise NotExistRequiredData('required a file_id or url')
         return bool(
             await self.__session.request(
-                Route('POST', '/api/admin/emoji/add'), json=data, lower=True, auth=True
+                Route('POST', '/api/admin/emoji/add'),
+                json=data,
+                lower=True,
+                auth=True,
             )
         )
 

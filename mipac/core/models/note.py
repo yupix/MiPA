@@ -92,7 +92,15 @@ class RawReaction:
     reaction : str
     """
 
-    __slots__ = ('id', 'created_at', 'type', 'is_read', 'user', 'note', 'reaction')
+    __slots__ = (
+        'id',
+        'created_at',
+        'type',
+        'is_read',
+        'user',
+        'note',
+        'reaction',
+    )
 
     def __init__(self, data: ReactionPayload):
         self.id: Optional[str] = data.get('id')
@@ -185,9 +193,9 @@ class RawNote:
         self.author: RawUser = RawUser(data['user'])
         self.content: Optional[str] = data.get('text')
         self.cw: Optional[str] = data.get('cw')
-        self.renote: Optional[RawRenote] = RawRenote(data['renote']) if data.get(
-            'renote'
-        ) else None
+        self.renote: Optional[RawRenote] = RawRenote(
+            data['renote']
+        ) if data.get('renote') else None
         self.visibility: Optional[str] = data.get(
             'visibility'
         )  # This may be an optional
@@ -200,13 +208,17 @@ class RawNote:
         self.reactions: Dict[str, Any] = data['reactions']
         self.emojis: List[RawEmoji] = [RawEmoji(i) for i in data['emojis']]
         self.file_ids: Optional[List[str]] = data['file_ids']
-        self.files: List[RawFile] = [RawFile(upper_to_lower(i)) for i in data['files']]
+        self.files: List[RawFile] = [
+            RawFile(upper_to_lower(i)) for i in data['files']
+        ]
         self.reply_id: Optional[str] = data['reply_id']
         self.renote_id: Optional[str] = data['renote_id']
         self.poll: Optional[RawPoll] = RawPoll(data['poll']) if data.get(
             'poll'
         ) else None
-        self.visible_user_ids: Optional[List[str]] = data.get('visible_user_ids', [])
+        self.visible_user_ids: Optional[List[str]] = data.get(
+            'visible_user_ids', []
+        )
         self.via_mobile: bool = bool(data.get('via_mobile', False))
         self.local_only: bool = bool(data.get('local_only', False))
         self.extract_mentions: bool = bool(data.get('extract_mentions'))

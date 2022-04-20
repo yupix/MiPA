@@ -46,7 +46,9 @@ class ReactionManager(AbstractManager):
 
         data = remove_dict_empty({'noteId': note_id, 'reaction': reaction})
         route = Route('POST', '/api/notes/reactions/create')
-        return await self.__session.request(route, json=data, auth=True, lower=True)
+        return await self.__session.request(
+            route, json=data, auth=True, lower=True
+        )
 
     async def remove(self, note_id: Optional[str] = None) -> bool:
         note_id = note_id or self.__note_id
@@ -54,16 +56,23 @@ class ReactionManager(AbstractManager):
         data = remove_dict_empty({'noteId': note_id})
         route = Route('POST', '/api/notes/reactions/delete')
         return bool(
-            await self.__session.request(route, json=data, auth=True, lower=True)
+            await self.__session.request(
+                route, json=data, auth=True, lower=True
+            )
         )
 
     async def get_reaction(
         self, reaction: str, note_id: Optional[str] = None, *, limit: int = 11
     ) -> List[NoteReaction]:
         note_id = note_id or self.__note_id
-        data = remove_dict_empty({'noteId': note_id, 'limit': limit, 'type': reaction})
+        data = remove_dict_empty(
+            {'noteId': note_id, 'limit': limit, 'type': reaction}
+        )
         res = await self.__session.request(
-            Route('POST', '/api/notes/reactions'), json=data, auth=True, lower=True
+            Route('POST', '/api/notes/reactions'),
+            json=data,
+            auth=True,
+            lower=True,
         )
         return [NoteReaction(RawNoteReaction(i)) for i in res]
 

@@ -22,7 +22,10 @@ class ChartManager(AbstractManager):
     ) -> RawActiveUsersChart:
         data = {'span': span, 'limit': limit, 'offset': offset}
         data = await self.__session.request(
-            Route('POST', '/api/charts/active-users'), json=data, auth=True, lower=True
+            Route('POST', '/api/charts/active-users'),
+            json=data,
+            auth=True,
+            lower=True,
         )
         return RawActiveUsersChart(data)
 
@@ -31,6 +34,9 @@ class ChartManager(AbstractManager):
     ) -> RawDriveChart:
         data = {'span': span, 'limit': limit, 'offset': offset}
         data = await self.__session.request(
-            Route('POST', '/api/charts/drive'), json=data, auth=True, lower=True
+            Route('POST', '/api/charts/drive'),
+            json=data,
+            auth=True,
+            lower=True,
         )
         return RawDriveChart(data)

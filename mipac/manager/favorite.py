@@ -26,7 +26,9 @@ class FavoriteManager(AbstractManager):
         data = {'noteId': note_id}
         return bool(
             await self.__session.request(
-                Route('POST', '/api/notes/favorites/create'), json=data, auth=True
+                Route('POST', '/api/notes/favorites/create'),
+                json=data,
+                auth=True,
             )
         )
 
@@ -35,6 +37,8 @@ class FavoriteManager(AbstractManager):
         data = {'noteId': note_id}
         return bool(
             await self.__session.request(
-                Route('POST', '/api/notes/favorites/delete'), json=data, auth=True
+                Route('POST', '/api/notes/favorites/delete'),
+                json=data,
+                auth=True,
             )
         )

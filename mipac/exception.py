@@ -9,5 +9,6 @@ class ParameterError(Exception):
 class NotSupportedError(Exception):
     """特定のForkでサポートしていない場合のエラー"""
 
+
 class APIError(Exception):
     """APIのエラー"""

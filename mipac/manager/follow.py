@@ -24,7 +24,9 @@ class FollowManager(AbstractManager):
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
 
-    async def add(self, user_id: Optional[str] = None) -> tuple[bool, Optional[str]]:
+    async def add(
+        self, user_id: Optional[str] = None
+    ) -> tuple[bool, Optional[str]]:
         """
         ユーザーをフォローします
 
@@ -40,7 +42,10 @@ class FollowManager(AbstractManager):
 
         data = {'userId': user_id}
         res = await self.__session.request(
-            Route('POST', '/api/following/create'), json=data, auth=True, lower=True
+            Route('POST', '/api/following/create'),
+            json=data,
+            auth=True,
+            lower=True,
         )
         if res.get('error'):
             code = res['error']['code']
@@ -89,7 +94,9 @@ class FollowRequestManager(AbstractManager):
         return [
             FollowRequest(i['follower'])
             for i in await self.__session.request(
-                Route('POST', '/api/following/requests/list'), auth=True, lower=True
+                Route('POST', '/api/following/requests/list'),
+                auth=True,
+                lower=True,
             )
         ]
 
@@ -121,7 +128,9 @@ class FollowRequestManager(AbstractManager):
         data = {'userId': user_id}
         return bool(
             await self.__session.request(
-                Route('POST', '/api/following/requests/accept'), json=data, auth=True
+                Route('POST', '/api/following/requests/accept'),
+                json=data,
+                auth=True,
             )
         )
 
@@ -135,6 +144,8 @@ class FollowRequestManager(AbstractManager):
         data = {'userId': user_id}
         return bool(
             await self.__session.request(
-                Route('POST', '/api/following/requests/reject'), json=data, auth=True
+                Route('POST', '/api/following/requests/reject'),
+                json=data,
+                auth=True,
             )
         )

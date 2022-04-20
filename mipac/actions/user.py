@@ -22,7 +22,10 @@ if TYPE_CHECKING:
 
 class UserActions:
     def __init__(
-        self, session: HTTPClient, client: ClientActions, user: Optional[User] = None
+        self,
+        session: HTTPClient,
+        client: ClientActions,
+        user: Optional[User] = None,
     ):
         self.__session: HTTPClient = session
         self.__user: Optional[User] = user
@@ -115,10 +118,10 @@ class UserActions:
         file_type: Optional[List[str]] = None,
         exclude_nsfw: bool = True,
     ) -> List[Note]:
-        
+
         if check_multi_arg(user_id, self.__user):
             raise ParameterError('user_idがありません')
-        
+
         user_id = user_id or self.__user and self.__user.id
         data = {
             'userId': user_id,
@@ -157,7 +160,9 @@ class UserActions:
 
         if user is None:
             raise NotExistRequiredData('Required parameters: user')
-        return f'@{user.name}@{user.host}' if user.instance else f'@{user.name}'
+        return (
+            f'@{user.name}@{user.host}' if user.instance else f'@{user.name}'
+        )
 
     # def get_follow(self, user_id: str) -> FollowManager:
     #     return FollowManager(user_id=user_id)

@@ -43,7 +43,9 @@ class RawUserDetails:
         self.banner_blurhash = data.get('banner_blurhash')
         self.banner_color = data.get('banner_color')
         self.two_factor_enabled = data.get('two_factor_enabled', False)
-        self.use_password_less_login = data.get('use_password_less_login', False)
+        self.use_password_less_login = data.get(
+            'use_password_less_login', False
+        )
         self.security_keys = data.get('security_keys', False)
         self.has_pending_follow_request_from_you = data.get(
             'has_pending_follow_request_from_you', False

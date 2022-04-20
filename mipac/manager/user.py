@@ -13,7 +13,11 @@ if TYPE_CHECKING:
 
 class UserManager(AbstractManager):
     def __init__(
-        self, user: Optional[User] = None, *, session: HTTPClient, client: ClientActions
+        self,
+        user: Optional[User] = None,
+        *,
+        session: HTTPClient,
+        client: ClientActions
     ):
         self.__session: HTTPClient = session
         self.__client: ClientActions = client
@@ -21,4 +25,6 @@ class UserManager(AbstractManager):
 
     @property
     def action(self) -> UserActions:
-        return UserActions(session=self.__session, client=self.__client, user=self.user)
+        return UserActions(
+            session=self.__session, client=self.__client, user=self.user
+        )
