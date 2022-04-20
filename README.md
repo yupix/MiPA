@@ -1,11 +1,12 @@
 # MiPAC
 
 <a href="https://discord.gg/CcT997U"><img src="https://img.shields.io/discord/530299114387406860?style=flat-square&color=5865f2&logo=discord&logoColor=ffffff&label=discord" alt="Discord server invite" /></a>
-
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-axblack-8bd124.svg"></a>
 
 ## 概要
 
 MiPAのCoreとなるライブラリです
+
 
 # サポートしているMisskey
 
@@ -42,6 +43,10 @@ MiPAのCoreとなるライブラリです
 
 - [Discord.py](https://github.com/Rapptz/discord.py)
     - 一部や仕組みを参考にさせてもらっています。実際にコードも利用しています
+
+### 開発者向け情報
+
+このプロジェクトでは [black](https://github.com/psf/black)のforkである、[axblack](https://github.com/axiros/axblack)を利用しています。主な違いはダブルクォートがデフォルトではなく、シングルクォートになっている点です
 
 # LICENSE
 
