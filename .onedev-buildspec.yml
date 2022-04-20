@@ -1,0 +1,28 @@
+version: 15
+jobs:
+- name: test
+  steps:
+  - !CheckoutStep
+    name: checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: check error
+    runInContainer: true
+    image: 3.10.4-slim
+    interpreter: !DefaultInterpreter
+      commands:
+      - pip install setup.py
+      - pip install .[ci]
+      - mypy mipac
+      - flake8 mipac
+    useTTY: true
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  cpuRequirement: 250
+  memoryRequirement: 256
+  timeout: 3600
