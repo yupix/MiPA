@@ -25,7 +25,7 @@ class UserActions:
         self.__session: HTTPClient = session
         self.__user: User = user
         self.__client: ClientActions = client
-        self.note: NoteManager(session=session, client=client)
+        self.note: NoteManager = NoteManager(session=session, client=client)
 
     @cached(ttl=10, namespace='get_user', key_builder=key_builder)
     async def get(
