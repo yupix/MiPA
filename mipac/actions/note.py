@@ -5,7 +5,7 @@ from mipac.core.models.note import RawNote
 from mipac.exception import ParameterError
 from mipac.http import HTTPClient, Route
 from mipac.manager.favorite import FavoriteManager
-from mipac.manager.file import MiFile, get_file_ids
+from mipac.manager.file import MiFile
 from mipac.manager.reaction import ReactionManager
 
 __all__ = ['NoteActions']
@@ -132,8 +132,8 @@ class NoteActions:
             })
             field["poll"] = poll_data
 
-        if files:
-            field["fileIds"] = await get_file_ids(files=files)
+        # if files:  # TODO: get_file_idsを直さないと使えない
+            # field['fileIds'] = await get_file_ids(files=files)
         field = remove_dict_empty(field)
         res = await self.__session.request(Route('POST', '/api/notes/create'), json=field, auth=True, lower=True)
         return Note(RawNote(res["created_note"]), client=self.__client)
