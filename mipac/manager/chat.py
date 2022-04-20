@@ -6,6 +6,7 @@ from mipac.core.models.chat import RawChat
 from mipac.exception import ParameterError
 from mipac.http import HTTPClient, Route
 from mipac.models.chat import Chat
+from mipac.util import check_multi_arg
 
 if TYPE_CHECKING:
     from mipac.manager.client import ClientActions
@@ -96,6 +97,9 @@ class ChatManager:
         bool
             成功したか否か
         """
+
+        if check_multi_arg(message_id, self.__message_id) is False:
+            raise ParameterError('message_idがありません')
 
         message_id = message_id or self.__message_id
         args = {'messageId': f'{message_id}'}

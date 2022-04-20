@@ -113,7 +113,11 @@ class UserActions:
         file_type: Optional[List[str]] = None,
         exclude_nsfw: bool = True,
     ) -> List[Note]:
-        user_id = user_id or self.__user.id
+        
+        if check_multi_arg(user_id, self.__user):
+            raise ParameterError('user_idがありません')
+        
+        user_id = user_id or self.__user and self.__user.id
         data = {
             'userId': user_id,
             'includeReplies': include_replies,
