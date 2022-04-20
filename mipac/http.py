@@ -7,6 +7,7 @@ from typing import Any, Dict
 import aiohttp
 
 from mipac import __version__
+from mipac.exception import APIError
 from mipac.util import remove_dict_empty, upper_to_lower
 
 
@@ -82,6 +83,8 @@ class HTTPClient:
                     data = upper_to_lower(data)
             if 300 > res.status >= 200:
                 return data
+            if 511 > res.status >= 300:
+                raise APIError(data)
 
     async def close_session(self):
         await self.__session.close()
