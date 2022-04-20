@@ -51,7 +51,7 @@ class HTTPClient:
         self.__url: str = url
         self.__token: str = token
 
-    async def request(self, route: Route, **kwargs):
+    async def request(self, route: Route, **kwargs) -> Any:
         headers: Dict[str, str] = {
             'User-Agent': self.user_agent,
         }
