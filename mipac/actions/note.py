@@ -84,6 +84,7 @@ class NoteActions:
             投稿する内容
         visibility : str, optional
             公開範囲, by default "public"
+            Enum: "public" "home" "followers" "specified"
         visible_user_ids : Optional[List[str]], optional
             公開するユーザー, by default None
         cw : Optional[str], optional
