@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Any, Dict, Optional
 
 from mipac.types import FilePayload, FolderPayload, PropertiesPayload
+from mipac.types.user import UserPayload
 
 
 class RawProperties:
@@ -135,4 +136,4 @@ class RawFile:
             'folder'
         ) else None
         self.user_id: str = data['user_id']
-        self.user: Dict[str, Any] = data['user']
+        self.user: UserPayload = data['user']

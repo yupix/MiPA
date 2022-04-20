@@ -1,9 +1,12 @@
 from __future__ import annotations
-
-
-__all__ = ['Chat']
+from typing import TYPE_CHECKING
 
 from mipac.core.models.chat import RawChat
+
+if TYPE_CHECKING:
+    from mipac.manager.client import ClientActions
+
+__all__ = ['Chat']
 
 
 class Chat:
@@ -11,8 +14,9 @@ class Chat:
     チャットオブジェクト
     """
 
-    def __init__(self, raw_data: RawChat):
-        self.__raw_data = raw_data
+    def __init__(self, raw_data: RawChat, *, client: ClientActions):
+        self.__raw_data: RawChat = raw_data
+        self.__client: ClientActions = client
 
     @property
     def id(self):
@@ -67,5 +71,5 @@ class Chat:
         bool:
             成功したか否か
         """
-        res = await manager.ClientActions().chat.delete(message_id=self.id)
+        res = await self.__client.chat.delete(message_id=self.id)
         return bool(res)

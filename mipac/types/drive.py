@@ -1,4 +1,10 @@
-from typing import Any, Dict, Optional, TypedDict
+from __future__ import annotations
+from typing import TYPE_CHECKING, Any, Dict, Optional, TypedDict
+
+
+if TYPE_CHECKING:
+    from mipac.types.user import UserPayload
+
 
 __all__ = ('PropertiesPayload', 'FolderPayload', 'FilePayload')
 
@@ -47,4 +53,4 @@ class FilePayload(TypedDict):
     folder_id: str
     folder: FolderPayload
     user_id: str
-    user: Dict[str, Any]
+    user: UserPayload  # TODO: ここ確認

@@ -417,9 +417,11 @@ class Note:
         """
         if file_ids is None:
             file_ids = []
-        return await self.__client.note.send(
+        visibility = self.visibility or 'public'
+
+        return await self.__client.note.action.send(
             content,
-            visibility=self.visibility,
+            visibility=visibility,
             visible_user_ids=self.visible_user_ids,
             cw=cw,
             local_only=self.local_only,
@@ -429,6 +431,6 @@ class Note:
             reply_id=self.id,
             renote_id=renote_id,
             channel_id=channel_id,
-            file_ids=file_ids,
+            # file_ids=file_ids, TODO:  修正
             poll=poll,
         )

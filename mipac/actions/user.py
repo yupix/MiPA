@@ -23,7 +23,7 @@ class UserActions:
         self, session: HTTPClient, client: ClientActions, user: Optional[User] = None
     ):
         self.__session: HTTPClient = session
-        self.__user: User = user
+        self.__user: Optional[User] = user
         self.__client: ClientActions = client
         self.note: NoteManager = NoteManager(session=session, client=client)
 
@@ -139,12 +139,12 @@ class UserActions:
     def get_mention(self, user: Optional[User] = None) -> str:
         """
         Get mention name of user.
-        
+
         Parameters
         ----------
         user : Optional[User], default=None
             メンションを取得したいユーザーのオブジェクト
-        
+
         Returns
         -------
         str

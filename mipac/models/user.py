@@ -290,7 +290,7 @@ class User:
 
     @property
     def instance(self) -> Union[Instance, None]:
-        return Instance(self.__raw_user.instance) if self.__raw_user.instance else None
+        return Instance(self.__raw_user.instance, client=self.__client) if self.__raw_user.instance else None
 
     @property
     def action(self) -> UserActions:
