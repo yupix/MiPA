@@ -82,7 +82,7 @@ class ChatManager:
         )
         return Chat(RawChat(res))
 
-    async def delete(self, message_id: str) -> bool:
+    async def delete(self, message_id: Optional[str] = None) -> bool:
         """
         指定したidのメッセージを削除します。
 
