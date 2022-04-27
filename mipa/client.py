@@ -212,7 +212,7 @@ class Client:
                 await self.connect(event_name='reconnect')
 
     @property
-    def action(self) -> ClientActions:
+    def client(self) -> ClientActions:
         return self.api.action
 
     async def start(

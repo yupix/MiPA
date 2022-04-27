@@ -70,7 +70,7 @@ class ConnectionState:
 
     def parse_me_updated(self, message: UserPayload):
         self.__dispatch(
-            'me_updated', User(RawUser(message), client=self.__client.action)
+            'me_updated', User(RawUser(message), client=self.__client.client)
         )
 
     def parse_read_all_announcements(self, message: Dict[str, Any]) -> None:
@@ -81,7 +81,7 @@ class ConnectionState:
         リプライ
         """
         self.__dispatch(
-            'message', Note(RawNote(message), client=self.__client.action)
+            'message', Note(RawNote(message), client=self.__client.client)
         )
 
     def parse_follow(self, message: Dict[str, Any]) -> None:
@@ -90,7 +90,7 @@ class ConnectionState:
         """
 
         self.__dispatch(
-            'user_follow', User(RawUser(message), client=self.__client.action)
+            'user_follow', User(RawUser(message), client=self.__client.client)
         )
 
     def parse_followed(self, message: Dict[str, Any]) -> None:
@@ -99,7 +99,7 @@ class ConnectionState:
         """
 
         self.__dispatch(
-            'follow', User(RawUser(message), client=self.__client.action)
+            'follow', User(RawUser(message), client=self.__client.client)
         )
 
     def parse_mention(self, message: Dict[str, Any]) -> None:
@@ -108,7 +108,7 @@ class ConnectionState:
         """
 
         self.__dispatch(
-            'mention', Note(RawNote(message), client=self.__client.action)
+            'mention', Note(RawNote(message), client=self.__client.client)
         )
 
     def parse_drive_file_created(self, message: Dict[str, Any]) -> None:
@@ -147,7 +147,7 @@ class ConnectionState:
         チャットが来た際のデータを処理する関数
         """
         self.__dispatch(
-            'message', Chat(RawChat(message), client=self.__client.action)
+            'message', Chat(RawChat(message), client=self.__client.client)
         )
 
     def parse_unread_messaging_message(self, message: Dict[str, Any]) -> None:
@@ -155,7 +155,7 @@ class ConnectionState:
         チャットが既読になっていない場合のデータを処理する関数
         """
         self.__dispatch(
-            'message', Chat(RawChat(message), client=self.__client.action)
+            'message', Chat(RawChat(message), client=self.__client.client)
         )
 
     def parse_notification(self, message: Dict[str, Any]) -> None:
@@ -197,13 +197,13 @@ class ConnectionState:
         """
         self.__dispatch(
             'reaction',
-            Reaction(RawReaction(message), client=self.__client.action),
+            Reaction(RawReaction(message), client=self.__client.client),
         )
 
     def parse_note(self, message: NotePayload) -> None:
         """
         ノートイベントを解析する関数
         """
-        note = Note(RawNote(message), self.__client.action)
+        note = Note(RawNote(message), self.__client.client)
         # Router(self.http.ws).capture_message(note.id) TODO: capture message
         self.__client._on_message(note)
