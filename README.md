@@ -1,12 +1,16 @@
-# MiPAC
+# MiPA
 
 <a href="https://discord.gg/CcT997U"><img src="https://img.shields.io/discord/530299114387406860?style=flat-square&color=5865f2&logo=discord&logoColor=ffffff&label=discord" alt="Discord server invite" /></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-axblack-8bd124.svg"></a>
 
 ## 概要
 
-MiPAのCoreとなるライブラリです
+MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
+ライクな書き方ができるように作っている MisskeyApi wrapper です
 
+## 注意
+
+このプロジェクトは開発中です。仕様が定まっていないため、破壊的変更が多いです
 
 # サポートしているMisskey
 
