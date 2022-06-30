@@ -16,8 +16,8 @@ class Context:
     ):
         self.__message: Note = message
         self.bot: BotBase = bot
-        self.args = args if args else ()
-        self.kwargs = kwargs if kwargs else {}
+        self.args = args or ()
+        self.kwargs = kwargs or {}
         self.command = cmd.func
         self.__cmd = cmd
 

@@ -108,7 +108,7 @@ class Client:
 
         """
 
-        ev = 'on_' + event_name
+        ev = f'on_{event_name}'
         for event in self.special_events.get(ev, []):
             foo = importlib.import_module(event.__module__)
             coro = getattr(foo, ev)
@@ -120,7 +120,7 @@ class Client:
     def dispatch(
         self, event_name: str, *args: tuple[Any], **kwargs: Dict[Any, Any]
     ):
-        ev = 'on_' + event_name
+        ev = f'on_{event_name}'
         for event in self.extra_events.get(ev, []):
             if inspect.ismethod(event):
                 coro = event
