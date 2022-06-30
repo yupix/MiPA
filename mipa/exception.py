@@ -1,5 +1,5 @@
 __all__ = (
-    'WebSocketRecconect',
+    'WebSocketReconnect',
     'CogNameDuplicate',
     'ExtensionAlreadyLoaded',
     'ExtensionFailed',
@@ -10,7 +10,7 @@ __all__ = (
 )
 
 
-class WebSocketRecconect(Exception):
+class WebSocketReconnect(Exception):
     """Websocketに再接続が必要"""
 
 

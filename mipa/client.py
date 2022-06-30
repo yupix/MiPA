@@ -13,7 +13,7 @@ from mipac.client import Client as API
 from mipac.manager import ClientActions
 from mipac.models import User
 
-from mipa.exception import WebSocketRecconect
+from mipa.exception import WebSocketReconnect
 from mipa.gateway import MisskeyWebSocket
 from mipa.state import ConnectionState
 
@@ -208,7 +208,7 @@ class Client:
         while True:
             try:
                 await self.ws.poll_event()
-            except WebSocketRecconect:
+            except WebSocketReconnect:
                 await self.connect(event_name='reconnect')
 
     @property

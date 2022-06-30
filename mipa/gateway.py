@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, Optional, TypeVar
 import aiohttp
 from mipac.util import str_lower
 
-from mipa.exception import ClientConnectorError, WebSocketRecconect
+from mipa.exception import ClientConnectorError, WebSocketReconnect
 
 if TYPE_CHECKING:
     from .client import Client
@@ -66,7 +66,7 @@ class MisskeyWebSocket:
 
         if msg is aiohttp.http.WS_CLOSED_MESSAGE:
             await asyncio.sleep(3)
-            raise WebSocketRecconect()
+            raise WebSocketReconnect()
 
         elif msg.type is aiohttp.WSMsgType.TEXT:
             await self.received_message(json.loads(msg.data))
