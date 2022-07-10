@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Callable, Dict
 
 from mipac.core.models import RawChat, RawNote, RawReaction, RawUser
 from mipac.models import Chat, Emoji, FollowRequest, Note, Reaction, User
-from mipac.types import ChatPayload, NotePayload, UserPayload
+from mipac.types import ChatPayload, INote, UserPayload
 from mipac.util import str_lower, upper_to_lower
 
 if TYPE_CHECKING:
@@ -76,7 +76,7 @@ class ConnectionState:
     def parse_read_all_announcements(self, message: Dict[str, Any]) -> None:
         pass  # TODO: 実装
 
-    def parse_reply(self, message: NotePayload) -> None:
+    def parse_reply(self, message: INote) -> None:
         """
         リプライ
         """
@@ -200,7 +200,7 @@ class ConnectionState:
             Reaction(RawReaction(message), client=self.__client.client),
         )
 
-    def parse_note(self, message: NotePayload) -> None:
+    def parse_note(self, message: INote) -> None:
         """
         ノートイベントを解析する関数
         """
