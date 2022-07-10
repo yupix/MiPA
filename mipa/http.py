@@ -3,6 +3,7 @@
 import json
 import sys
 from typing import Any, Optional
+from mipa.exception import ClientConnectorError
 
 import aiohttp
 
