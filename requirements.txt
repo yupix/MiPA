@@ -1,2 +1,2 @@
-aiohttp
-mipac
+aiohttp==3.8.3
+mipac==0.2.0
