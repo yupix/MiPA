@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import importlib
 import inspect
+import logging
 import re
 import sys
 import traceback
@@ -11,11 +12,14 @@ from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, Union
 from aiohttp import ClientWebSocketResponse
 from mipac.client import Client as API
 from mipac.manager import ClientActions
-from mipac.models import User
+from mipac.models.user import UserDetailed
 
 from mipa.exception import WebSocketReconnect
 from mipa.gateway import MisskeyWebSocket
 from mipa.state import ConnectionState
+from mipa.utils import LOGING_LEVEL_TYPE, setup_logging
+
+_log = logging.getLogger()
 
 
 class Client:
@@ -31,11 +35,10 @@ class Client:
         self.token: Optional[str] = None
         self.origin_uri: Optional[str] = None
         self.loop = asyncio.get_event_loop() if loop is None else loop
-        self.api: API
-        self._connection: ConnectionState = self._get_state(**options)
-        self.user: User
+        self.core: API
+        self._connection: ConnectionState
+        self.user: UserDetailed
         self.ws: MisskeyWebSocket
-        # self.logger = get_module_logger(__name__) # TODO: 作る
 
     def _get_state(self, **options: Any) -> ConnectionState:
         return ConnectionState(
@@ -85,7 +88,7 @@ class Client:
         name = func.__name__ if name is None else name
         if not asyncio.iscoroutinefunction(func):
             raise TypeError('Listeners must be coroutines')
-
+        _log.debug(f'add_listener: {name} {func.__name__}')
         if name in self.extra_events:
             self.extra_events[name].append(func)
         else:
@@ -170,8 +173,8 @@ class Client:
         self.event_dispatch('error', err)
 
     async def create_api_session(self, token: str, url: str) -> API:
-        self.api = API(url, token)
-        return self.api
+        self.core = API(url, token)
+        return self.core
 
     async def login(self, token: str, url: str):
         """
@@ -185,9 +188,9 @@ class Client:
             BOTにするユーザーがいるインスタンスのURL
         """
 
-        api = await self.create_api_session(token, url)
-        await api.http.login()
-        self.user = await api.action.get_me()
+        core = await self.create_api_session(token, url)
+        await core.http.login()
+        self.user = await core.api.get_me()
 
     async def connect(
         self,
@@ -196,7 +199,7 @@ class Client:
         timeout: int = 60,
         event_name: str = 'ready',
     ) -> None:
-
+        self._connection = self._get_state()
         coro = MisskeyWebSocket.from_client(
             self, timeout=timeout, event_name=event_name
         )
@@ -213,7 +216,7 @@ class Client:
 
     @property
     def client(self) -> ClientActions:
-        return self.api.action
+        return self.core.api
 
     async def start(
         self,
@@ -224,6 +227,7 @@ class Client:
         reconnect: bool = True,
         timeout: int = 60,
         is_ayuskey: bool = False,
+        log_level: LOGING_LEVEL_TYPE = 'INFO',
     ):
         """
         Starting Bot
@@ -241,7 +245,7 @@ class Client:
         timeout: int, default 60
             Time until websocket times out
         """
-
+        setup_logging(level=log_level)
         self.token = token
         if origin_url := re.search(r'wss?://(.*)/streaming', url):
             origin_url = (

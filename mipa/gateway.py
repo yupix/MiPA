@@ -12,15 +12,10 @@ from mipa.exception import ClientConnectorError, WebSocketReconnect
 if TYPE_CHECKING:
     from .client import Client
 
-__all__ = ('MisskeyWebSocket', 'MisskeyClientWebSocketResponse')
+__all__ = ('MisskeyWebSocket',)
 
 
-class MisskeyClientWebSocketResponse(aiohttp.ClientWebSocketResponse):
-    async def close(self, *, code: int = 4000, message: bytes = b'') -> bool:
-        return await super().close(code=code, message=message)
-
-
-MS = TypeVar('MS', bound='MisskeyClientWebSocketResponse')
+MS = TypeVar('MS', bound='aiohttp.ClientWebSocketResponse')
 
 
 class MisskeyWebSocket:
@@ -36,7 +31,7 @@ class MisskeyWebSocket:
         cls, client: Client, *, timeout: int = 60, event_name: str = 'ready'
     ):
         try:
-            socket = await client.api.http.session.ws_connect(
+            socket = await client.core.http.session.ws_connect(
                 f'{client.url}?i={client.token}'
             )
             ws = cls(socket, client)

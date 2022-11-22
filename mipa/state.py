@@ -2,15 +2,24 @@ from __future__ import annotations
 
 import asyncio
 import inspect
+import logging
 from typing import TYPE_CHECKING, Any, Callable, Dict
 
-from mipac.core.models import RawChat, RawNote, RawReaction, RawUser
-from mipac.models import Chat, Emoji, FollowRequest, Note, Reaction, User
-from mipac.types import ChatPayload, INote, UserPayload
+from mipac.types import INote
 from mipac.util import str_lower, upper_to_lower
+from mipac.models.emoji import CustomEmoji
+from mipac.types.user import IUserLite
+from mipac.types.chat import IChatMessage
+from mipac.types.note import INoteReaction
+from mipac.models import Note
+from mipac.models.chat import ChatMessage
+from mipac.models.user import LiteUser
+from mipac.models.note import NoteReaction
 
 if TYPE_CHECKING:
     from mipa.client import Client
+
+_log = logging.getLogger(__name__)
 
 
 class ConnectionState:
@@ -22,7 +31,7 @@ class ConnectionState:
     ):
         self.__client: Client = client
         self.__dispatch = dispatch
-        # self.logger = get_module_logger(__name__) TODO: 直す
+        self.api = client.core.api
         self.loop: asyncio.AbstractEventLoop = loop
         self.parsers = parsers = {}
         for attr, func in inspect.getmembers(self):
@@ -30,7 +39,9 @@ class ConnectionState:
                 parsers[attr[6:].upper()] = func
 
     def parse_emoji_added(self, message: Dict[str, Any]):
-        self.__dispatch('emoji_add', Emoji(message['body']['emoji']))
+        self.__dispatch(
+            'emoji_add', CustomEmoji(message['body']['emoji'], client=self.api)
+        )
 
     def parse_channel(self, message: Dict[str, Any]) -> None:
         """parse_channel is a function to parse channel event
@@ -44,8 +55,8 @@ class ConnectionState:
         """
         base_msg = upper_to_lower(message['body'])
         channel_type = str_lower(base_msg.get('type'))
-        # self.logger.debug(f'ChannelType: {channel_type}') TODO: 修正
-        # self.logger.debug(f'recv event type: {channel_type}') TODO: 修正
+        _log.debug(f'ChannelType: {channel_type}')
+        _log.debug(f'recv event type: {channel_type}')
         getattr(self, f'parse_{channel_type}')(base_msg['body'])
 
     def parse_renote(self, message: Dict[str, Any]):
@@ -66,12 +77,10 @@ class ConnectionState:
         フォローリクエストを受け取った際のイベントを解析する関数
         """
 
-        self.__dispatch('follow_request', FollowRequest(message))
+        # self.__dispatch('follow_request', FollowRequest(message)) TODO:修正
 
-    def parse_me_updated(self, message: UserPayload):
-        self.__dispatch(
-            'me_updated', User(RawUser(message), client=self.__client.client)
-        )
+    def parse_me_updated(self, user: IUserLite):
+        self.__dispatch('me_updated', LiteUser(user))
 
     def parse_read_all_announcements(self, message: Dict[str, Any]) -> None:
         pass  # TODO: 実装
@@ -80,36 +89,28 @@ class ConnectionState:
         """
         リプライ
         """
-        self.__dispatch(
-            'message', Note(RawNote(message), client=self.__client.client)
-        )
+        self.__dispatch('message', Note(message, client=self.__client.client))
 
-    def parse_follow(self, message: Dict[str, Any]) -> None:
+    def parse_follow(self, message: IUserLite) -> None:
         """
         ユーザーをフォローした際のイベントを解析する関数
         """
 
-        self.__dispatch(
-            'user_follow', User(RawUser(message), client=self.__client.client)
-        )
+        self.__dispatch('user_follow', LiteUser(message))
 
-    def parse_followed(self, message: Dict[str, Any]) -> None:
+    def parse_followed(self, user: IUserLite) -> None:
         """
         フォローイベントを解析する関数
         """
 
-        self.__dispatch(
-            'follow', User(RawUser(message), client=self.__client.client)
-        )
+        self.__dispatch('follow', LiteUser(user))
 
-    def parse_mention(self, message: Dict[str, Any]) -> None:
+    def parse_mention(self, note: INote) -> None:
         """
         メンションイベントを解析する関数
         """
 
-        self.__dispatch(
-            'mention', Note(RawNote(message), client=self.__client.client)
-        )
+        self.__dispatch('mention', Note(note, client=self.__client.client))
 
     def parse_drive_file_created(self, message: Dict[str, Any]) -> None:
         self.__dispatch('drive_file_created', message)
@@ -142,20 +143,20 @@ class ConnectionState:
     ) -> None:
         pass
 
-    def parse_messaging_message(self, message: ChatPayload) -> None:
+    def parse_messaging_message(self, message: IChatMessage) -> None:
         """
         チャットが来た際のデータを処理する関数
         """
         self.__dispatch(
-            'message', Chat(RawChat(message), client=self.__client.client)
+            'message', ChatMessage(message, client=self.__client.client)
         )
 
-    def parse_unread_messaging_message(self, message: Dict[str, Any]) -> None:
+    def parse_unread_messaging_message(self, message: IChatMessage) -> None:
         """
         チャットが既読になっていない場合のデータを処理する関数
         """
         self.__dispatch(
-            'message', Chat(RawChat(message), client=self.__client.client)
+            'message', ChatMessage(message, client=self.__client.client)
         )
 
     def parse_notification(self, message: Dict[str, Any]) -> None:
@@ -191,19 +192,18 @@ class ConnectionState:
         # notification_type = str_lower(message['type'])
         # getattr(self, f'parse_{notification_type}')(message)
 
-    def parse_reaction(self, message: Dict[str, Any]) -> None:
+    def parse_reaction(self, message: INoteReaction) -> None:
         """
         リアクションに関する情報を解析する関数
         """
         self.__dispatch(
-            'reaction',
-            Reaction(RawReaction(message), client=self.__client.client),
+            'reaction', NoteReaction(message),
         )
 
     def parse_note(self, message: INote) -> None:
         """
         ノートイベントを解析する関数
         """
-        note = Note(RawNote(message), self.__client.client)
+        note = Note(message, self.__client.client)
         # Router(self.http.ws).capture_message(note.id) TODO: capture message
         self.__client._on_message(note)

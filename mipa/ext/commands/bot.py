@@ -9,21 +9,35 @@ import re
 import sys
 import traceback
 from types import ModuleType
-from typing import (TYPE_CHECKING, Any, Callable, Coroutine, Dict, List,
-                    Optional, Tuple, Union)
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Coroutine,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    Union,
+)
 
-from mipac.models import User
+from mipac.models.user import UserDetailed
 
 from mipa import Client
-from mipa.exception import (CogNameDuplicate, ExtensionAlreadyLoaded,
-                            ExtensionFailed, InvalidCogPath, NoEntryPointError)
 from mipa.ext.commands.context import Context
 from mipa.ext.commands.core import CommandManager
+from mipa.exception import (
+    CogNameDuplicate,
+    ExtensionAlreadyLoaded,
+    ExtensionFailed,
+    InvalidCogPath,
+    NoEntryPointError,
+)
 
 if TYPE_CHECKING:
     from aiohttp.client_ws import ClientWebSocketResponse
-
     from mipa.ext import Cog
+
 
 __all__ = ['BotBase', 'Bot']
 
@@ -39,7 +53,7 @@ class BotBase(CommandManager):
         self.token: Optional[str] = None
         self.origin_uri: Optional[str] = None
         self.__extensions: Dict[str, Any] = {}
-        self.user: User
+        self.user: UserDetailed
         self.__cogs: Dict[str, Cog] = {}
         self.strip_after_prefix = options.get('strip_after_prefix', False)
         # self.logger = get_module_logger(__name__) TODO: 直す
@@ -263,5 +277,5 @@ class BotBase(CommandManager):
         await self.progress_command(message)
 
 
-class Bot(BotBase, Client):
+class Bot(Client, BotBase):
     pass
