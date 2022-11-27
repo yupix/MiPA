@@ -24,8 +24,6 @@ from typing import (
 from mipac.models.user import UserDetailed
 
 from mipa import Client
-from mipa.ext.commands.context import Context
-from mipa.ext.commands.core import CommandManager
 from mipa.exception import (
     CogNameDuplicate,
     ExtensionAlreadyLoaded,
@@ -33,9 +31,12 @@ from mipa.exception import (
     InvalidCogPath,
     NoEntryPointError,
 )
+from mipa.ext.commands.context import Context
+from mipa.ext.commands.core import CommandManager
 
 if TYPE_CHECKING:
     from aiohttp.client_ws import ClientWebSocketResponse
+
     from mipa.ext import Cog
 
 

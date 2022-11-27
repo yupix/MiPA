@@ -3,11 +3,11 @@
 import json
 import sys
 from typing import Any, Optional
-from mipa.exception import ClientConnectorError
 
 import aiohttp
 
 from mipa import __version__
+from mipa.exception import ClientConnectorError
 
 __all__ = ('HTTPClient', 'HTTPSession')
 

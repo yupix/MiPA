@@ -5,16 +5,16 @@ import inspect
 import logging
 from typing import TYPE_CHECKING, Any, Callable, Dict
 
-from mipac.types import INote
-from mipac.util import str_lower, upper_to_lower
-from mipac.models.emoji import CustomEmoji
-from mipac.types.user import ILiteUser
-from mipac.types.chat import IChatMessage
-from mipac.types.note import INoteReaction
 from mipac.models import Note
 from mipac.models.chat import ChatMessage
-from mipac.models.user import LiteUser
+from mipac.models.emoji import CustomEmoji
 from mipac.models.note import NoteReaction
+from mipac.models.user import LiteUser
+from mipac.types import INote
+from mipac.types.chat import IChatMessage
+from mipac.types.note import INoteReaction
+from mipac.types.user import ILiteUser
+from mipac.util import str_lower, upper_to_lower
 
 if TYPE_CHECKING:
     from mipa.client import Client
