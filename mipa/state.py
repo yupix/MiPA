@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, Callable, Dict
 from mipac.types import INote
 from mipac.util import str_lower, upper_to_lower
 from mipac.models.emoji import CustomEmoji
-from mipac.types.user import IUserLite
+from mipac.types.user import ILiteUser
 from mipac.types.chat import IChatMessage
 from mipac.types.note import INoteReaction
 from mipac.models import Note
@@ -79,7 +79,7 @@ class ConnectionState:
 
         # self.__dispatch('follow_request', FollowRequest(message)) TODO:修正
 
-    def parse_me_updated(self, user: IUserLite):
+    def parse_me_updated(self, user: ILiteUser):
         self.__dispatch('me_updated', LiteUser(user))
 
     def parse_read_all_announcements(self, message: Dict[str, Any]) -> None:
@@ -91,14 +91,14 @@ class ConnectionState:
         """
         self.__dispatch('message', Note(message, client=self.__client.client))
 
-    def parse_follow(self, message: IUserLite) -> None:
+    def parse_follow(self, message: ILiteUser) -> None:
         """
         ユーザーをフォローした際のイベントを解析する関数
         """
 
         self.__dispatch('user_follow', LiteUser(message))
 
-    def parse_followed(self, user: IUserLite) -> None:
+    def parse_followed(self, user: ILiteUser) -> None:
         """
         フォローイベントを解析する関数
         """
