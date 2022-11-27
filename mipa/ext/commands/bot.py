@@ -263,6 +263,9 @@ class BotBase(CommandManager):
             if cmd.cmd_type == 'regex':
                 if re.search(cmd.key, message.content):
                     hit_list = re.findall(cmd.key, message.content)
+                    if isinstance(hit_list, list):
+                        hit_list = tuple(hit_list)
+                    
                     if isinstance(hit_list[0], tuple):
                         hit_list = tuple(
                             i for i in hit_list[0] if len(i.rstrip()) > 0

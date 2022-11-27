@@ -66,7 +66,7 @@ class Command(_BaseCommand):
 
     @staticmethod
     async def _parse_arguments(ctx: Context):
-        args = [ctx] if ctx.cog is None else (ctx.cog, ctx)
+        args = (ctx,) if ctx.cog is None else (ctx.cog, ctx)
         ctx.args = args + ctx.args
         return ctx
 
