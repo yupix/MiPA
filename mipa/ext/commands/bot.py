@@ -278,5 +278,5 @@ class BotBase(CommandManager):
         await self.progress_command(message)
 
 
-class Bot(Client, BotBase):
+class Bot(BotBase, Client):
     pass
