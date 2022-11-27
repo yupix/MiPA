@@ -19,7 +19,7 @@ class CogMeta(type):
         attrs['__cog_settings__'] = kwargs.pop('command_attrs', {})
         listeners = {}
         commands = {}
-        no_bot_cog = 'Commands or listeners must not start with cog_ or bot_ (in method {0.__name__}.{1})'
+        no_bot_cog = 'Commands or listeners must not start with cog_ or bot_ (in method {0.__name__}.{1})'  # noqa: E501
         new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
 
         for base in reversed(new_cls.__mro__):  # 多重継承を確認 !コマンドを登録

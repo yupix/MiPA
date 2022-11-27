@@ -179,7 +179,7 @@ class Client:
     async def login(self, token: str, url: str):
         """
         ユーザーにログインし、ユーザー情報を取得します
-        
+
         Parameters
         ----------
         token : str
