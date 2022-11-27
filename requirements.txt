@@ -1,2 +1,3 @@
 aiohttp==3.8.3
-mipac==0.2.1
+mipac==0.2.2
+versioneer

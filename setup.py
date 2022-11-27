@@ -1,6 +1,7 @@
 import pathlib
 
 from setuptools import setup
+import versioneer
 
 description = 'A Python wrapper for the Misskey API'
 readme_file = pathlib.Path(__file__).parent / 'README.md'
@@ -19,7 +20,8 @@ packages = ['mipa', 'mipa.ext', 'mipa.ext.commands', 'mipa.ext.tasks']
 
 setup(
     name='mipa',
-    version='0.0.4',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     install_requires=requirements,
     url='https://github.com/yupix/MiPA',
     author='yupix',
