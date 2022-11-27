@@ -1,2 +1,2 @@
 aiohttp==3.8.3
-mipac==0.2.0
+mipac==0.2.1
