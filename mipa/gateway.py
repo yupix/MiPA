@@ -55,7 +55,7 @@ class MisskeyWebSocket:
         if isinstance(msg, bytes):
             msg = msg.decode()
 
-        self._misskey_parsers[str_lower(msg['type']).upper()](msg)
+        await self._misskey_parsers[str_lower(msg['type']).upper()](msg)
 
     async def poll_event(self, *, timeout: int = 60):
 

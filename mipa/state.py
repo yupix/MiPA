@@ -38,12 +38,12 @@ class ConnectionState:
             if attr.startswith('parse'):
                 parsers[attr[6:].upper()] = func
 
-    def parse_emoji_added(self, message: Dict[str, Any]):
+    async def parse_emoji_added(self, message: Dict[str, Any]):
         self.__dispatch(
             'emoji_add', CustomEmoji(message['body']['emoji'], client=self.api)
         )
 
-    def parse_channel(self, message: Dict[str, Any]) -> None:
+    async def parse_channel(self, message: Dict[str, Any]) -> None:
         """parse_channel is a function to parse channel event
 
         チャンネルタイプのデータを解析後適切なパーサーに移動させます
@@ -57,93 +57,104 @@ class ConnectionState:
         channel_type = str_lower(base_msg.get('type'))
         _log.debug(f'ChannelType: {channel_type}')
         _log.debug(f'recv event type: {channel_type}')
-        getattr(self, f'parse_{channel_type}')(base_msg['body'])
+        await getattr(self, f'parse_{channel_type}')(base_msg['body'])
 
-    def parse_renote(self, message: Dict[str, Any]):
+    async def parse_renote(self, message: Dict[str, Any]):
         pass
 
-    def parse_unfollow(self, message: Dict[str, Any]):
+    async def parse_unfollow(self, message: Dict[str, Any]):
         """
         フォローを解除した際のイベントを解析する関数
         """
 
-    def parse_signin(self, message: Dict[str, Any]):
+    async def parse_signin(self, message: Dict[str, Any]):
         """
         ログインが発生した際のイベント
         """
 
-    def parse_receive_follow_request(self, message: Dict[str, Any]):
+    async def parse_receive_follow_request(self, message: Dict[str, Any]):
         """
         フォローリクエストを受け取った際のイベントを解析する関数
         """
 
         # self.__dispatch('follow_request', FollowRequest(message)) TODO:修正
 
-    def parse_me_updated(self, user: ILiteUser):
-        self.__dispatch('me_updated', LiteUser(user))
+    async def note_updated(self, message: Any):
+        pass  # TODO: ノートのキャプチャ後に来たリアクションなど
 
-    def parse_read_all_announcements(self, message: Dict[str, Any]) -> None:
+    async def parse_me_updated(self, user: ILiteUser):
+        self.__dispatch('me_updated', LiteUser(user, client=self.api))
+
+    async def parse_read_all_announcements(
+        self, message: Dict[str, Any]
+    ) -> None:
         pass  # TODO: 実装
 
-    def parse_reply(self, message: INote) -> None:
+    async def parse_reply(self, message: INote) -> None:
         """
         リプライ
         """
         self.__dispatch('message', Note(message, client=self.__client.client))
 
-    def parse_follow(self, message: ILiteUser) -> None:
+    async def parse_follow(self, message: ILiteUser) -> None:
         """
         ユーザーをフォローした際のイベントを解析する関数
         """
 
-        self.__dispatch('user_follow', LiteUser(message))
+        self.__dispatch('user_follow', LiteUser(message, client=self.api))
 
-    def parse_followed(self, user: ILiteUser) -> None:
+    async def parse_followed(self, user: ILiteUser) -> None:
         """
         フォローイベントを解析する関数
         """
 
-        self.__dispatch('follow', LiteUser(user))
+        self.__dispatch('follow', LiteUser(user, client=self.api))
 
-    def parse_mention(self, note: INote) -> None:
+    async def parse_mention(self, note: INote) -> None:
         """
         メンションイベントを解析する関数
         """
 
         self.__dispatch('mention', Note(note, client=self.__client.client))
 
-    def parse_drive_file_created(self, message: Dict[str, Any]) -> None:
+    async def parse_drive_file_created(self, message: Dict[str, Any]) -> None:
         self.__dispatch('drive_file_created', message)
 
-    def parse_read_all_unread_mentions(self, message: Dict[str, Any]) -> None:
-        pass  # TODO:実装
-
-    def parse_read_all_unread_specified_notes(
+    async def parse_read_all_unread_mentions(
         self, message: Dict[str, Any]
     ) -> None:
         pass  # TODO:実装
 
-    def parse_read_all_channels(self, message: Dict[str, Any]) -> None:
+    async def parse_read_all_unread_specified_notes(
+        self, message: Dict[str, Any]
+    ) -> None:
         pass  # TODO:実装
 
-    def parse_read_all_notifications(self, message: Dict[str, Any]) -> None:
+    async def parse_read_all_channels(self, message: Dict[str, Any]) -> None:
         pass  # TODO:実装
 
-    def parse_url_upload_finished(self, message: Dict[str, Any]) -> None:
+    async def parse_read_all_notifications(
+        self, message: Dict[str, Any]
+    ) -> None:
         pass  # TODO:実装
 
-    def parse_unread_mention(self, message: Dict[str, Any]) -> None:
+    async def parse_url_upload_finished(self, message: Dict[str, Any]) -> None:
+        pass  # TODO:実装
+
+    async def parse_unread_mention(self, message: Dict[str, Any]) -> None:
         pass
 
-    def parse_unread_specified_note(self, message: Dict[str, Any]) -> None:
-        pass
-
-    def parse_read_all_messaging_messages(
+    async def parse_unread_specified_note(
         self, message: Dict[str, Any]
     ) -> None:
         pass
 
-    def parse_messaging_message(self, message: IChatMessage) -> None:
+    async def parse_read_all_messaging_messages(
+        self, message: Dict[str, Any]
+    ) -> None:
+        pass
+
+    async def parse_messaging_message(self, message: IChatMessage) -> None:
         """
         チャットが来た際のデータを処理する関数
         """
@@ -151,7 +162,9 @@ class ConnectionState:
             'message', ChatMessage(message, client=self.__client.client)
         )
 
-    def parse_unread_messaging_message(self, message: IChatMessage) -> None:
+    async def parse_unread_messaging_message(
+        self, message: IChatMessage
+    ) -> None:
         """
         チャットが既読になっていない場合のデータを処理する関数
         """
@@ -159,7 +172,7 @@ class ConnectionState:
             'message', ChatMessage(message, client=self.__client.client)
         )
 
-    def parse_notification(self, message: Dict[str, Any]) -> None:
+    async def parse_notification(self, message: Dict[str, Any]) -> None:
         """
         通知イベントを解析する関数
 
@@ -172,15 +185,17 @@ class ConnectionState:
         accept_type = ['reaction']
         notification_type = str_lower(message['type'])
         if notification_type in accept_type:
-            getattr(self, f'parse_{notification_type}')(message)
+            await getattr(self, f'parse_{notification_type}')(message)
 
-    def parse_follow_request_accepted(self, message: Dict[str, Any]) -> None:
+    async def parse_follow_request_accepted(
+        self, message: Dict[str, Any]
+    ) -> None:
         pass
 
-    def parse_poll_vote(self, message: Dict[str, Any]) -> None:
+    async def parse_poll_vote(self, message: Dict[str, Any]) -> None:
         pass  # TODO: 実装
 
-    def parse_unread_notification(self, message: Dict[str, Any]) -> None:
+    async def parse_unread_notification(self, message: Dict[str, Any]) -> None:
         """
         未読の通知を解析する関数
 
@@ -192,18 +207,18 @@ class ConnectionState:
         # notification_type = str_lower(message['type'])
         # getattr(self, f'parse_{notification_type}')(message)
 
-    def parse_reaction(self, message: INoteReaction) -> None:
+    async def parse_reaction(self, message: INoteReaction) -> None:
         """
         リアクションに関する情報を解析する関数
         """
         self.__dispatch(
-            'reaction', NoteReaction(message),
+            'reaction', NoteReaction(message, client=self.api),
         )
 
-    def parse_note(self, message: INote) -> None:
+    async def parse_note(self, message: INote) -> None:
         """
         ノートイベントを解析する関数
         """
         note = Note(message, self.__client.client)
-        # Router(self.http.ws).capture_message(note.id) TODO: capture message
-        self.__client._on_message(note)
+        await self.__client.router.capture_message(note.id)
+        self.__dispatch('message', note)

@@ -44,18 +44,18 @@ __all__ = ['BotBase', 'Bot']
 
 
 class BotBase(CommandManager):
-    def __init__(self, **options: Dict[Any, Any]):
+    def __init__(self, **options: dict[Any, Any]):
         super().__init__(**options)
-        self.extra_events: Dict[str, Any] = {}
-        self.special_events: Dict[str, Any] = {}
+        self.extra_events: dict[str, Any] = {}
+        self.special_events: dict[str, Any] = {}
         self._check_once: List[Any] = []  # TODO: いつか確認する
         self._checks: List[Any] = []  # TODO: いつか確認する
         self._after_invoke = None
         self.token: Optional[str] = None
         self.origin_uri: Optional[str] = None
-        self.__extensions: Dict[str, Any] = {}
+        self.__extensions: dict[str, Any] = {}
         self.user: UserDetailed
-        self.__cogs: Dict[str, Cog] = {}
+        self.__cogs: dict[str, Cog] = {}
         self.strip_after_prefix = options.get('strip_after_prefix', False)
         # self.logger = get_module_logger(__name__) TODO: 直す
         self.loop = asyncio.get_event_loop()
@@ -113,7 +113,7 @@ class BotBase(CommandManager):
             self.extra_events[name] = [func]
 
     async def event_dispatch(
-        self, event_name: str, *args: Tuple[Any], **kwargs: Dict[Any, Any]
+        self, event_name: str, *args: Tuple[Any], **kwargs: dict[Any, Any]
     ) -> bool:
         """
         on_ready等といった
@@ -138,7 +138,7 @@ class BotBase(CommandManager):
         return ev in dir(self)
 
     def dispatch(
-        self, event_name: str, *args: tuple[Any], **kwargs: Dict[Any, Any]
+        self, event_name: str, *args: tuple[Any], **kwargs: dict[Any, Any]
     ):
         ev = f'on_{event_name}'
         for event in self.extra_events.get(ev, []):
@@ -219,7 +219,7 @@ class BotBase(CommandManager):
         coro: Callable[..., Coroutine[Any, Any, Any]],
         event_name: str,
         *args: tuple[Any],
-        **kwargs: Dict[Any, Any],
+        **kwargs: dict[Any, Any],
     ) -> asyncio.Task[Any]:
         return asyncio.create_task(
             self._run_event(coro, event_name, *args, **kwargs),
@@ -265,7 +265,7 @@ class BotBase(CommandManager):
                     hit_list = re.findall(cmd.key, message.content)
                     if isinstance(hit_list, list):
                         hit_list = tuple(hit_list)
-                    
+
                     if isinstance(hit_list[0], tuple):
                         hit_list = tuple(
                             i for i in hit_list[0] if len(i.rstrip()) > 0
