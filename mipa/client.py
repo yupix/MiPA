@@ -16,6 +16,7 @@ from mipac.models.user import UserDetailed
 
 from mipa.exception import WebSocketReconnect
 from mipa.gateway import MisskeyWebSocket
+from mipa.router import Router
 from mipa.state import ConnectionState
 from mipa.utils import LOGING_LEVEL_TYPE, setup_logging
 
@@ -26,9 +27,12 @@ class Client:
     def __init__(
         self,
         loop: Optional[asyncio.AbstractEventLoop] = None,
+        max_capture: int = 100,
         **options: Dict[Any, Any],
     ):
         super().__init__(**options)
+        self.max_capture = max_capture
+        self._router: Router
         self.url = None
         self.extra_events: Dict[str, Any] = {}
         self.special_events: Dict[str, Any] = {}
@@ -217,6 +221,10 @@ class Client:
     @property
     def client(self) -> ClientActions:
         return self.core.api
+
+    @property
+    def router(self) -> Router:
+        return self._router
 
     async def start(
         self,

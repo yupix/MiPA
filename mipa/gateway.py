@@ -8,6 +8,7 @@ import aiohttp
 from mipac.util import str_lower
 
 from mipa.exception import ClientConnectorError, WebSocketReconnect
+from mipa.router import Router
 
 if TYPE_CHECKING:
     from .client import Client
@@ -38,6 +39,7 @@ class MisskeyWebSocket:
             ws._dispatch = client.dispatch
             ws._connection = client._connection
             ws._misskey_parsers = client._connection.parsers
+            client._router = Router(socket, max_capure=client.max_capture)
             client.dispatch(event_name, socket)
             return ws
         except ClientConnectorError:
