@@ -115,7 +115,7 @@ class ConnectionState:
         """
         リプライ
         """
-        self.__dispatch('message', Note(message, client=self.__client.client))
+        self.__dispatch('note', Note(message, client=self.__client.client))
 
     async def parse_follow(self, message: ILiteUser) -> None:
         """
@@ -180,7 +180,7 @@ class ConnectionState:
         チャットが来た際のデータを処理する関数
         """
         self.__dispatch(
-            'message', ChatMessage(message, client=self.__client.client)
+            'chat', ChatMessage(message, client=self.__client.client)
         )
 
     async def parse_unread_messaging_message(
@@ -190,7 +190,7 @@ class ConnectionState:
         チャットが既読になっていない場合のデータを処理する関数
         """
         self.__dispatch(
-            'message', ChatMessage(message, client=self.__client.client)
+            'chat', ChatMessage(message, client=self.__client.client)
         )
 
     async def parse_notification(self, message: Dict[str, Any]) -> None:
@@ -242,4 +242,4 @@ class ConnectionState:
         """
         note = Note(message, self.__client.client)
         await self.__client.router.capture_message(note.id)
-        self.__dispatch('message', note)
+        self.__dispatch('note', note)

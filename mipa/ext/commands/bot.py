@@ -60,8 +60,8 @@ class BotBase(CommandManager):
         # self.logger = get_module_logger(__name__) TODO: 直す
         self.loop = asyncio.get_event_loop()
 
-    def _on_message(self, message):
-        self.dispatch('message', message)
+    def _on_note(self, message):
+        self.dispatch('note', message)
 
     async def on_ready(self, ws: ClientWebSocketResponse):
         """
