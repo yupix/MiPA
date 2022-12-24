@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] 2022-12-24
+
 ### Added
 
 - ✨ feat: add .flake8 config.
