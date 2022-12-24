@@ -1,3 +1,3 @@
 aiohttp==3.8.3
-mipac==0.2.8
+mipac==0.3.0
 versioneer
