@@ -10,9 +10,10 @@ from mipac.models.chat import ChatMessage
 from mipac.models.emoji import CustomEmoji
 from mipac.models.note import NoteReaction
 from mipac.models.user import LiteUser
+from mipac.models.reaction import PartialReaction
 from mipac.types import INote
 from mipac.types.chat import IChatMessage
-from mipac.types.note import INoteReaction
+from mipac.types.note import INoteReaction, INoteUpdated, INoteUpdatedReaction
 from mipac.types.user import ILiteUser
 from mipac.util import str_lower, upper_to_lower
 
@@ -79,8 +80,20 @@ class ConnectionState:
 
         # self.__dispatch('follow_request', FollowRequest(message)) TODO:修正
 
-    async def note_updated(self, message: Any):
-        pass  # TODO: ノートのキャプチャ後に来たリアクションなど
+    async def parse_note_updated(self, message: INoteUpdated[Any]):
+        await getattr(self, f'parse_{message["body"]["type"]}')(
+            upper_to_lower(message)
+        )
+
+    async def parse_unreacted(
+        self, reaction: INoteUpdated[INoteUpdatedReaction]
+    ):
+        self.__dispatch('unreacted', PartialReaction(reaction))
+
+    async def parse_reacted(
+        self, reaction: INoteUpdated[INoteUpdatedReaction]
+    ):
+        self.__dispatch('reacted', PartialReaction(reaction))
 
     async def parse_me_updated(self, user: ILiteUser):
         self.__dispatch('me_updated', LiteUser(user, client=self.api))
