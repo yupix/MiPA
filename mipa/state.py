@@ -8,12 +8,17 @@ from typing import TYPE_CHECKING, Any, Callable, Dict
 from mipac.models import Note
 from mipac.models.chat import ChatMessage
 from mipac.models.emoji import CustomEmoji
-from mipac.models.note import NoteReaction
+from mipac.models.note import NoteReaction, NoteDeleted
 from mipac.models.user import LiteUser
 from mipac.models.reaction import PartialReaction
 from mipac.types import INote
 from mipac.types.chat import IChatMessage
-from mipac.types.note import INoteReaction, INoteUpdated, INoteUpdatedReaction
+from mipac.types.note import (
+    INoteReaction,
+    INoteUpdated,
+    INoteUpdatedReaction,
+    INoteUpdatedDelete,
+)
 from mipac.types.user import ILiteUser
 from mipac.util import str_lower, upper_to_lower
 
@@ -84,6 +89,9 @@ class ConnectionState:
         await getattr(self, f'parse_{message["body"]["type"]}')(
             upper_to_lower(message)
         )
+
+    async def parse_deleted(self, note: INoteUpdated[INoteUpdatedDelete]):
+        self.__dispatch('note_deleted', NoteDeleted(note))
 
     async def parse_unreacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
