@@ -30,6 +30,8 @@ class Router:
         WebSocketでHomeTimeLineに接続します
     local_time_line:
         WebSocketでLocalTimeLineに接続します
+    hybrid_time_line:
+        WebSocketでHybridTimeLineに接続します
     capture_message:
         与えられたメッセージを元にnote idを取得し、そのメッセージをon_message等の監視対象に追加します
     """
@@ -43,15 +45,15 @@ class Router:
 
     async def connect_channel(
         self,
-        channel_list: Iterable[Literal['global', 'main', 'home', 'local']],
+        channel_list: Iterable[Literal['global', 'main', 'home', 'local', 'hybrid']],
     ) -> None:
         """
         与えられたlistを元にチャンネルに接続します
 
         Parameters
         ----------
-        channel_list : Iterable[Literal['global', 'main', 'home', 'local']]
-            ['global', 'local', 'home', 'main']
+        channel_list : Iterable[Literal['global', 'main', 'home', 'local', 'hybrid']]
+            ['global', 'main', 'home', 'local', 'hybrid']
         """
 
         channel_dict = {
@@ -59,6 +61,7 @@ class Router:
             'main': 'main',
             'home': 'homeTimeline',
             'local': 'localTimeline',
+            'hybrid': 'hybridTimeline',
         }
         try:
             for channel in channel_list:
