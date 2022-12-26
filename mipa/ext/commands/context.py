@@ -13,7 +13,13 @@ class Context:
     __slots__ = ('__message', 'bot', 'args', 'kwargs', 'command', '__cmd')
 
     def __init__(
-        self, *, message, bot: BotBase, args: tuple | None=None, kwargs=None, cmd: CMD = None
+        self,
+        *,
+        message,
+        bot: BotBase,
+        args: tuple | None = None,
+        kwargs=None,
+        cmd: CMD = None,
     ):
         self.__message: Note = message
         self.bot: BotBase = bot

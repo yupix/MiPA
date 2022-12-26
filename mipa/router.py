@@ -45,14 +45,18 @@ class Router:
 
     async def connect_channel(
         self,
-        channel_list: Iterable[Literal['global', 'main', 'home', 'local', 'hybrid']],
+        channel_list: Iterable[
+            Literal['global', 'main', 'home', 'local', 'hybrid']
+        ],
     ) -> None:
         """
         与えられたlistを元にチャンネルに接続します
 
         Parameters
         ----------
-        channel_list : Iterable[Literal['global', 'main', 'home', 'local', 'hybrid']]
+        channel_list : Iterable[
+                           Literal['global', 'main', 'home', 'local', 'hybrid']
+                       ]
             ['global', 'main', 'home', 'local', 'hybrid']
         """
 
