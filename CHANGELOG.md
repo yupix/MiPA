@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- ✨ feat: support all notifications #MA-11
+  - `on_user_follow` when you follow a user
+  - `on_user_unfollow` when you unfollow a user
+  - `on_user_followed` when someone follows you
+  - `on_mention` when someone mentions you
+  - `on_reply` when someone replies to your note
+  - `on_renote` when someone renote your note
+  - `on_quote` when someone quote your note
+  - `on_reaction` when someone react to your note
+  - `on_poll_vote` when someone vote to your poll
+  - `on_poll_end` when a poll is ended
+  - `on_follow_request` when someone send you a follow request
+  - `on_follow_request_accept` when someone accept your follow request
+
 ## [0.1.0] 2022-12-24
 
 ### Added

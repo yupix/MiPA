@@ -8,22 +8,25 @@ from typing import TYPE_CHECKING, Any, Callable, Dict
 from mipac.models import Note
 from mipac.models.chat import ChatMessage
 from mipac.models.emoji import CustomEmoji
-from mipac.models.note import NoteReaction, NoteDeleted
-from mipac.models.user import LiteUser
+from mipac.models.note import NoteDeleted
+from mipac.models.notification import NotificationFollow, \
+    NotificationFollowRequest, NotificationNote, NotificationPollEnd, \
+    NotificationReaction
+from mipac.models.user import UserDetailed
 from mipac.models.reaction import PartialReaction
 from mipac.types import INote
 from mipac.types.chat import IChatMessage
 from mipac.types.note import (
-    INoteReaction,
     INoteUpdated,
     INoteUpdatedReaction,
     INoteUpdatedDelete,
 )
-from mipac.types.user import ILiteUser
 from mipac.util import str_lower, upper_to_lower
 
 if TYPE_CHECKING:
     from mipa.client import Client
+    from mipac.types.notification import INotification
+    from mipac.types.user import IUserDetailed
 
 _log = logging.getLogger(__name__)
 
@@ -63,32 +66,42 @@ class ConnectionState:
         channel_type = str_lower(base_msg.get('type'))
         _log.debug(f'ChannelType: {channel_type}')
         _log.debug(f'recv event type: {channel_type}')
-        await getattr(self, f'parse_{channel_type}')(base_msg['body'])
+        if func := getattr(self, f'parse_{channel_type}', None):
+            await func(base_msg['body'])
+        else:
+            _log.debug(f'Unknown event type: {channel_type}')
 
-    async def parse_renote(self, message: Dict[str, Any]):
-        pass
+    async def parse_follow(self, message: IUserDetailed) -> None:
+        """
+        When you follow someone, this event will be called
+        """
+        user: UserDetailed = UserDetailed(
+            message, client=self.api,
+        )
+        self.__dispatch('user_follow', user)
 
-    async def parse_unfollow(self, message: Dict[str, Any]):
+    async def parse_unfollow(self, message: IUserDetailed):
         """
-        フォローを解除した際のイベントを解析する関数
+        When you unfollow someone, this event will be called
         """
+        user: UserDetailed = UserDetailed(
+            message, client=self.api,
+        )
+        self.__dispatch('user_unfollow', user)
 
     async def parse_signin(self, message: Dict[str, Any]):
         """
         ログインが発生した際のイベント
         """
 
-    async def parse_receive_follow_request(self, message: Dict[str, Any]):
-        """
-        フォローリクエストを受け取った際のイベントを解析する関数
-        """
-
-        # self.__dispatch('follow_request', FollowRequest(message)) TODO:修正
-
     async def parse_note_updated(self, message: INoteUpdated[Any]):
-        await getattr(self, f'parse_{message["body"]["type"]}')(
-            upper_to_lower(message)
-        )
+        message: Dict[str, Any] = upper_to_lower(message)
+        if func := getattr(self, f'parse_{message["body"]["type"]}', None):
+            await func(message)
+        else:
+            _log.debug(
+                f'Unknown note_updated event type: {message["body"]["type"]}'
+            )
 
     async def parse_deleted(self, note: INoteUpdated[INoteUpdatedDelete]):
         self.__dispatch('note_deleted', NoteDeleted(note))
@@ -103,40 +116,13 @@ class ConnectionState:
     ):
         self.__dispatch('reacted', PartialReaction(reaction))
 
-    async def parse_me_updated(self, user: ILiteUser):
-        self.__dispatch('me_updated', LiteUser(user, client=self.api))
+    async def parse_me_updated(self, user: IUserDetailed):
+        self.__dispatch('me_updated', UserDetailed(user, client=self.api))
 
     async def parse_read_all_announcements(
         self, message: Dict[str, Any]
     ) -> None:
         pass  # TODO: 実装
-
-    async def parse_reply(self, message: INote) -> None:
-        """
-        リプライ
-        """
-        self.__dispatch('note', Note(message, client=self.__client.client))
-
-    async def parse_follow(self, message: ILiteUser) -> None:
-        """
-        ユーザーをフォローした際のイベントを解析する関数
-        """
-
-        self.__dispatch('user_follow', LiteUser(message, client=self.api))
-
-    async def parse_followed(self, user: ILiteUser) -> None:
-        """
-        フォローイベントを解析する関数
-        """
-
-        self.__dispatch('follow', LiteUser(user, client=self.api))
-
-    async def parse_mention(self, note: INote) -> None:
-        """
-        メンションイベントを解析する関数
-        """
-
-        self.__dispatch('mention', Note(note, client=self.__client.client))
 
     async def parse_drive_file_created(self, message: Dict[str, Any]) -> None:
         self.__dispatch('drive_file_created', message)
@@ -180,7 +166,7 @@ class ConnectionState:
         チャットが来た際のデータを処理する関数
         """
         self.__dispatch(
-            'chat', ChatMessage(message, client=self.__client.client)
+            'chat', ChatMessage(message, client=self.api),
         )
 
     async def parse_unread_messaging_message(
@@ -190,31 +176,47 @@ class ConnectionState:
         チャットが既読になっていない場合のデータを処理する関数
         """
         self.__dispatch(
-            'chat', ChatMessage(message, client=self.__client.client)
+            'chat', ChatMessage(message, client=self.api),
         )
 
     async def parse_notification(self, message: Dict[str, Any]) -> None:
         """
-        通知イベントを解析する関数
+        Parse notification event
 
         Parameters
         ----------
         message: Dict[str, Any]
             Received message
         """
-
-        accept_type = ['reaction']
-        notification_type = str_lower(message['type'])
-        if notification_type in accept_type:
-            await getattr(self, f'parse_{notification_type}')(message)
-
-    async def parse_follow_request_accepted(
-        self, message: Dict[str, Any]
-    ) -> None:
-        pass
-
-    async def parse_poll_vote(self, message: Dict[str, Any]) -> None:
-        pass  # TODO: 実装
+        message: INotification = upper_to_lower(message)
+        notification_map: dict[
+            str,
+            tuple[
+                str,
+                [NotificationFollow | NotificationNote | NotificationReaction |
+                 NotificationPollEnd | NotificationFollowRequest],
+            ],
+        ] = {
+            'follow': ('user_followed', NotificationFollow),
+            'mention': ('mention', NotificationNote),
+            'reply': ('reply', NotificationNote),
+            'renote': ('renote', NotificationNote),
+            'quote': ('quote', NotificationNote),
+            'reaction': ('reaction', NotificationReaction),
+            'poll_vote': ('poll_vote', NotificationNote),
+            'poll_ended': ('poll_end', NotificationPollEnd),
+            'receive_follow_request':
+                ('follow_request', NotificationFollowRequest),
+            'follow_request_accepted':
+                ('follow_request_accept', NotificationFollow),
+        }
+        dispatch_path, parse_class = notification_map.get(
+            str_lower(message["type"]), (None, None)
+        )
+        if dispatch_path:
+            self.__dispatch(
+                dispatch_path, parse_class(message, client=self.api)
+            )
 
     async def parse_unread_notification(self, message: Dict[str, Any]) -> None:
         """
@@ -228,18 +230,10 @@ class ConnectionState:
         # notification_type = str_lower(message['type'])
         # getattr(self, f'parse_{notification_type}')(message)
 
-    async def parse_reaction(self, message: INoteReaction) -> None:
-        """
-        リアクションに関する情報を解析する関数
-        """
-        self.__dispatch(
-            'reaction', NoteReaction(message, client=self.api),
-        )
-
     async def parse_note(self, message: INote) -> None:
         """
         ノートイベントを解析する関数
         """
-        note = Note(message, self.__client.client)
+        note = Note(message, self.api)
         await self.__client.router.capture_message(note.id)
         self.__dispatch('note', note)

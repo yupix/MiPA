@@ -1,5 +1,4 @@
 [flake8]
 per-file-ignores=
-    ./mipa/ext/__init__.py:F403,F401
-    ./mipa/ext/commands/__init__.py:F403,F401
-    ./mipa/__init__.py:F403,F401
+    ./mipa/__init__.py:E402,F403,F401
+    ./mipa/**/__init__.py:F403,F401

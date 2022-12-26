@@ -14,7 +14,6 @@ from typing import (
     Any,
     Callable,
     Coroutine,
-    Dict,
     List,
     Optional,
     Tuple,
@@ -38,6 +37,9 @@ if TYPE_CHECKING:
     from aiohttp.client_ws import ClientWebSocketResponse
 
     from mipa.ext import Cog
+    from mipac.models.notification import NotificationNote, \
+        NotificationFollow, NotificationFollowRequest, \
+        NotificationPollEnd, NotificationReaction
 
 
 __all__ = ['BotBase', 'Bot']
@@ -277,8 +279,114 @@ class BotBase(CommandManager):
             else:
                 continue
 
-    async def on_mention(self, message):
-        await self.progress_command(message)
+    async def on_user_follow(self, user: UserDetailed):
+        """
+        When you follow a user
+
+        Parameters
+        ----------
+        user : UserDetailed
+        """
+
+    async def on_user_unfollow(self, user: UserDetailed):
+        """
+        When you unfollow a user
+
+        Parameters
+        ----------
+        user : UserDetailed
+        """
+
+    async def on_user_followed(self, notice: NotificationFollow):
+        """
+        When someone follows you
+
+        Parameters
+        ----------
+        notice : NotificationFollow
+        """
+
+    async def on_mention(self, notice: NotificationNote):
+        """
+        When someone mentions you
+
+        Parameters
+        ----------
+        notice : NotificationNote
+        """
+        await self.progress_command(notice.note)
+
+    async def on_reply(self, notice: NotificationNote):
+        """
+        When someone replies to you
+
+        Parameters
+        ----------
+        notice : NotificationNote
+        """
+
+    async def on_renote(self, notice: NotificationNote):
+        """
+        When someone renote your note
+
+        Parameters
+        ----------
+        notice : NotificationNote
+        """
+
+    async def on_quote(self, notice: NotificationNote):
+        """
+        When someone quote your note
+
+        Parameters
+        ----------
+        notice : NotificationNote
+        """
+
+    async def on_reaction(self, notice: NotificationReaction):
+        """
+        When someone react to your note
+
+        Parameters
+        ----------
+        notice : NotificationReaction
+        """
+
+    async def on_poll_vote(self, notice: NotificationNote):
+        """
+        When someone vote to your poll
+
+        Parameters
+        ----------
+        notice : NotificationNote
+        """
+
+    async def on_poll_end(self, notice: NotificationPollEnd):
+        """
+        When a poll is ended
+
+        Parameters
+        ----------
+        notice : NotificationPollEnd
+        """
+
+    async def on_follow_request(self, notice: NotificationFollowRequest):
+        """
+        When someone send you a follow request
+
+        Parameters
+        ----------
+        notice : NotificationFollowRequest
+        """
+
+    async def on_follow_request_accept(self, notice: NotificationFollow):
+        """
+        When someone accept your follow request
+
+        Parameters
+        ----------
+        notice : NotificationFollow
+        """
 
 
 class Bot(BotBase, Client):
