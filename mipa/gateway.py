@@ -5,6 +5,7 @@ import json
 from typing import TYPE_CHECKING, Any, Callable, Dict, Optional, TypeVar
 
 import aiohttp
+from aiohttp import ClientError
 from mipac.util import str_lower
 
 from mipa.exception import ClientConnectorError, WebSocketReconnect
@@ -42,7 +43,7 @@ class MisskeyWebSocket:
             client._router = Router(socket, max_capure=client.max_capture)
             client.dispatch(event_name, socket)
             return ws
-        except ClientConnectorError:
+        except (ClientConnectorError, ClientError):
             while True:
                 await asyncio.sleep(3)
                 return await cls.from_client(
