@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `on_follow_request` when someone send you a follow request
   - `on_follow_request_accept` when someone accept your follow request
 
+### Fixed
+
+- 🐛 fix: ws reconnect
+
 ## [0.1.0] 2022-12-24
 
 ### Added
