@@ -64,7 +64,7 @@ MiPAでは多くの部分においてDiscord.pyを参考にさせていただき
     - Cogの仕組みやtask,stateの管理等多くの部分で参考にさせていただきました。
 
 <p align="center">
-    <a href="">Documentation</a>
+    <a href="https://mipa.akarinext.org">Documentation</a>
     *
     <a href="https://discord.gg/CcT997U">Discord Server</a>
 </p>
