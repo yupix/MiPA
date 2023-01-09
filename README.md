@@ -52,9 +52,16 @@ MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
 
 このプロジェクトでは [black](https://github.com/psf/black)のforkである、[axblack](https://github.com/axiros/axblack)を利用しています。主な違いはダブルクォートがデフォルトではなく、シングルクォートになっている点です
 
-# LICENSE
+## LICENSE
 
-準備中
+このプロジェクトは [MIT LICENSE](./LICENSE) で提供されます。
+
+MiPAでは多くの部分においてDiscord.pyを参考にさせていただきました。そのため、Discord.pyのソースコードを利用させていただいている個所ではファイルの初めにDiscord.py側のライセンスを明記しています。詳しくはコードを確認してください。
+
+## Special Thanks
+
+- [Discord.py](https://github.com/Rapptz/discord.py)
+    - Cogの仕組みやtask,stateの管理等多くの部分で参考にさせていただきました。
 
 <p align="center">
     <a href="">Documentation</a>

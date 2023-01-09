@@ -1,3 +1,31 @@
+"""
+The MIT License (MIT)
+
+Copyright (c) 2015-present Rapptz
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+The Software is modified as follows:
+    - Delete unused functions and method.
+    - Removing functions beyond what is necessary to make it work.
+    - Simplification of some functions.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+"""
 from __future__ import annotations
 
 import asyncio
@@ -9,9 +37,13 @@ from mipac.models import Note
 from mipac.models.chat import ChatMessage
 from mipac.models.emoji import CustomEmoji
 from mipac.models.note import NoteDeleted
-from mipac.models.notification import NotificationFollow, \
-    NotificationFollowRequest, NotificationNote, NotificationPollEnd, \
-    NotificationReaction
+from mipac.models.notification import (
+    NotificationFollow,
+    NotificationFollowRequest,
+    NotificationNote,
+    NotificationPollEnd,
+    NotificationReaction,
+)
 from mipac.models.user import UserDetailed
 from mipac.models.reaction import PartialReaction
 from mipac.types import INote
@@ -193,8 +225,13 @@ class ConnectionState:
             str,
             tuple[
                 str,
-                [NotificationFollow | NotificationNote | NotificationReaction |
-                 NotificationPollEnd | NotificationFollowRequest],
+                [
+                    NotificationFollow
+                    | NotificationNote
+                    | NotificationReaction
+                    | NotificationPollEnd
+                    | NotificationFollowRequest
+                ],
             ],
         ] = {
             'follow': ('user_followed', NotificationFollow),
@@ -205,13 +242,17 @@ class ConnectionState:
             'reaction': ('reaction', NotificationReaction),
             'poll_vote': ('poll_vote', NotificationNote),
             'poll_ended': ('poll_end', NotificationPollEnd),
-            'receive_follow_request':
-                ('follow_request', NotificationFollowRequest),
-            'follow_request_accepted':
-                ('follow_request_accept', NotificationFollow),
+            'receive_follow_request': (
+                'follow_request',
+                NotificationFollowRequest,
+            ),
+            'follow_request_accepted': (
+                'follow_request_accept',
+                NotificationFollow,
+            ),
         }
         dispatch_path, parse_class = notification_map.get(
-            str_lower(message["type"]), (None, None)
+            str_lower(message['type']), (None, None)
         )
         if dispatch_path:
             self.__dispatch(
