@@ -208,7 +208,7 @@ class ConnectionState:
         チャットが既読になっていない場合のデータを処理する関数
         """
         self.__dispatch(
-            'chat', ChatMessage(message, client=self.api),
+            'chat_unread_message', ChatMessage(message, client=self.api),
         )
 
     async def parse_notification(self, message: Dict[str, Any]) -> None:
