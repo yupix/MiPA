@@ -47,6 +47,7 @@ from typing import (
     Union,
 )
 
+from mipac.models.chat import ChatMessage
 from mipac.models.user import UserDetailed
 
 from mipa import Client
@@ -417,6 +418,24 @@ class BotBase(CommandManager):
         Parameters
         ----------
         notice : NotificationFollow
+        """
+
+    async def on_chat(self, message: ChatMessage):
+        """
+        When someone send you a chat message
+
+        Parameters
+        ----------
+        message : ChatMessage
+        """
+
+    async def on_chat_unread_message(self, message: ChatMessage):
+        """
+        When someone send you a chat message, and you have not connected to that chat
+
+        Parameters
+        ----------
+        message : ChatMessage
         """
 
 
