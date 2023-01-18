@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - `on_follow_request` when someone send you a follow request
   - `on_follow_request_accept` when someone accept your follow request
 
+### Changed
+
+- 使用するMiPACのバージョンを`0.4.0`に
+
 ### Fixed
 
 - 🐛 fix: ws reconnect
