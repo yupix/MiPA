@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.1] 2022-01-18
+
 ### Added
 
 - ✨ feat: support all notifications #MA-11
