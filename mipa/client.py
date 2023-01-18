@@ -40,7 +40,7 @@ from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, Union
 
 from aiohttp import ClientWebSocketResponse
 from mipac.client import Client as API
-from mipac.manager import ClientActions
+from mipac.manager.client import ClientManager
 from mipac.models.user import UserDetailed
 
 from mipa.exception import WebSocketReconnect
@@ -248,7 +248,7 @@ class Client:
                 await self.connect(event_name='reconnect')
 
     @property
-    def client(self) -> ClientActions:
+    def client(self) -> ClientManager:
         return self.core.api
 
     @property
