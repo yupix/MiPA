@@ -43,6 +43,7 @@ from mipac.models.notification import (
     NotificationNote,
     NotificationPollEnd,
     NotificationReaction,
+    NotificationAchievement,
 )
 from mipac.models.user import UserDetailed
 from mipac.models.reaction import PartialReaction
@@ -249,6 +250,10 @@ class ConnectionState:
             'follow_request_accepted': (
                 'follow_request_accept',
                 NotificationFollow,
+            ),
+            'achievement_earned': (
+                'achievement_earned',
+                NotificationAchievement,
             ),
         }
         dispatch_path, parse_class = notification_map.get(

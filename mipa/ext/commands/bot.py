@@ -71,6 +71,7 @@ if TYPE_CHECKING:
         NotificationFollowRequest,
         NotificationPollEnd,
         NotificationReaction,
+        NotificationAchievement,
     )
 
 
@@ -431,11 +432,21 @@ class BotBase(CommandManager):
 
     async def on_chat_unread_message(self, message: ChatMessage):
         """
-        When someone send you a chat message, and you have not connected to that chat
+        When someone send you a chat message,
+        and you have not connected to that chat.
 
         Parameters
         ----------
         message : ChatMessage
+        """
+
+    async def on_achievement_earned(self, notice: NotificationAchievement):
+        """
+        When you earn an achievement
+
+        Parameters
+        ----------
+        notice : NotificationAchievement
         """
 
 
