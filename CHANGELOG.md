@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- ✨ added event `on_achievement_earned`.
+
 ## [0.1.1] 2022-01-18
 
 ### Added

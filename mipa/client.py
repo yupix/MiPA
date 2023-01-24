@@ -244,7 +244,7 @@ class Client:
         while True:
             try:
                 await self.ws.poll_event()
-            except WebSocketReconnect:
+            except (WebSocketReconnect, asyncio.exceptions.TimeoutError):
                 await self.connect(event_name='reconnect')
 
     @property
