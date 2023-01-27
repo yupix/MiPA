@@ -43,7 +43,7 @@ from mipac.client import Client as API
 from mipac.manager.client import ClientManager
 from mipac.models.user import UserDetailed
 
-from mipa.exception import WebSocketReconnect
+from mipa.exception import WebSocketReconnect, WebSocketNotConnected
 from mipa.gateway import MisskeyWebSocket
 from mipa.router import Router
 from mipa.state import ConnectionState
@@ -71,7 +71,8 @@ class Client:
         self.core: API
         self._connection: ConnectionState
         self.user: UserDetailed
-        self.ws: MisskeyWebSocket
+        self.ws: Optional[MisskeyWebSocket] = None
+        self.should_reconnect = True
 
     def _get_state(self, **options: Any) -> ConnectionState:
         return ConnectionState(
@@ -225,10 +226,9 @@ class Client:
         await core.http.login()
         self.user = await core.api.get_me()
 
-    async def connect(
+    async def _connect(
         self,
         *,
-        reconnect: bool = True,
         timeout: int = 60,
         event_name: str = 'ready',
     ) -> None:
@@ -236,16 +236,32 @@ class Client:
         coro = MisskeyWebSocket.from_client(
             self, timeout=timeout, event_name=event_name
         )
-        try:
-            self.ws = await asyncio.wait_for(coro, timeout=60)
-        except asyncio.exceptions.TimeoutError:
-            await self.connect(reconnect=reconnect, timeout=timeout)
+        self.ws = await asyncio.wait_for(coro, timeout=60)
+        while True:
+            await self.ws.poll_event()
 
+    async def connect(
+        self,
+        *,
+        reconnect: bool = True,
+        timeout: int = 60,
+    ) -> None:
+        self.should_reconnect = reconnect
+        event_name = 'ready'
         while True:
             try:
-                await self.ws.poll_event()
+                await self._connect(timeout=timeout, event_name=event_name)
             except (WebSocketReconnect, asyncio.exceptions.TimeoutError):
-                await self.connect(event_name='reconnect')
+                if not self.should_reconnect:
+                    break
+                event_name = 'reconnect'
+                await asyncio.sleep(3)
+
+    async def disconnect(self):
+        if not self.ws:
+            raise WebSocketNotConnected()
+        self.should_reconnect = False
+        await self.ws.socket.close()
 
     @property
     def client(self) -> ClientManager:
