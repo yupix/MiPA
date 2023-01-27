@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - ✨ added event `on_achievement_earned`.
+- ✨ added `disconnect` method to `Client` class.
 
 ## [0.1.1] 2022-01-18
 

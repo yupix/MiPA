@@ -1,4 +1,7 @@
 __all__ = (
+    'MIPABaseException',
+    'MIPABaseWebSocketError',
+    'WebSocketNotConnected',
     'WebSocketReconnect',
     'CogNameDuplicate',
     'ExtensionAlreadyLoaded',
@@ -10,33 +13,45 @@ __all__ = (
 )
 
 
-class WebSocketReconnect(Exception):
-    """Websocketに再接続が必要"""
+class MIPABaseException(Exception):
+    """MIPA Base Exception"""
 
 
-class CogNameDuplicate(Exception):
+class MIPABaseWebSocketError(MIPABaseException):
+    """Websocket Base Exception"""
+
+
+class WebSocketNotConnected(MIPABaseWebSocketError):
+    """Websocket not connected"""
+
+
+class WebSocketReconnect(MIPABaseWebSocketError):
+    """Websocket should reconnect"""
+
+
+class CogNameDuplicate(MIPABaseException):
     """Cogの名前が重複している"""
 
 
-class ExtensionAlreadyLoaded(Exception):
+class ExtensionAlreadyLoaded(MIPABaseException):
     """Cogは既に読み込まれている"""
 
 
-class ExtensionFailed(Exception):
+class ExtensionFailed(MIPABaseException):
     """Cog周りのエラー"""
 
 
-class InvalidCogPath(Exception):
+class InvalidCogPath(MIPABaseException):
     """無効なCogのパス"""
 
 
-class NoEntryPointError(Exception):
+class NoEntryPointError(MIPABaseException):
     """Cogにsetup関数が存在しない"""
 
 
-class ClientConnectorError(Exception):
+class ClientConnectorError(MIPABaseException):
     """WebSocketの接続に問題が発生した"""
 
 
-class TaskNotRunningError(Exception):
+class TaskNotRunningError(MIPABaseException):
     """タスクが動いてない状態で停止しようとした"""

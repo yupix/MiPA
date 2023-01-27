@@ -92,8 +92,10 @@ class MisskeyWebSocket:
         msg = await self.socket.receive(timeout=timeout)
 
         if msg is aiohttp.http.WS_CLOSED_MESSAGE:
-            await asyncio.sleep(3)
             raise WebSocketReconnect()
-
+        elif msg is aiohttp.http.WS_CLOSING_MESSAGE:
+            raise WebSocketReconnect()
         elif msg.type is aiohttp.WSMsgType.TEXT:
             await self.received_message(json.loads(msg.data))
+        elif msg.type is aiohttp.WSMsgType.ERROR:
+            raise WebSocketReconnect()
