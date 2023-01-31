@@ -63,7 +63,7 @@ class MisskeyWebSocket:
     ):
         try:
             socket = await client.core.http.session.ws_connect(
-                f'{client.url}?i={client.token}'
+                f'{client.url}streaming?i={client.token}'
             )
             ws = cls(socket, client)
             ws._dispatch = client.dispatch
