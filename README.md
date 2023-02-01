@@ -19,32 +19,6 @@ MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
 - [Misskey Official v12](https://github.com/misskey-dev/misskey)
 - [Ayuskey latest](https://gtihub.com/teamblackcrystal/misskey)
 
-
-### Collaborators
-
-<table>
-    <tr>
-        <td><img src="https://avatars.githubusercontent.com/u/50538210?s=120&v=4"></img></td>
-    </tr>
-    <tr>
-        <td align="center"><a href="https://github.com/yupix">Author | @yupix</a></td>
-    </tr>
-</table>
-
-### SpecialThanks
-
-開発を手伝ってくれている方々です。
-<table>
-    <tr>
-        <td align="center">
-            <img src="https://avatars.githubusercontent.com/u/26793720?s=120&v=4" alt="uraking"/>
-        </td>
-    </tr>
-    <tr>
-        <td><a href="https://github.com/Uraking-Github">Adviser  ｜ @Uraking</a></td>
-    </tr>
-</table>
-
 ### 開発者向け情報
 
 このプロジェクトでは [black](https://github.com/psf/black)のforkである、[axblack](https://github.com/axiros/axblack)を利用しています。主な違いはダブルクォートがデフォルトではなく、シングルクォートになっている点です
