@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - ✨ added event `on_achievement_earned`.
 - ✨ added `disconnect` method to `Client` class.
 
+### Fixed
+
+- incorrect URL for streaming API #16, #17
+
 ## [0.1.1] 2022-01-18
 
 ### Added

@@ -300,16 +300,22 @@ class Client:
         """
         setup_logging(level=log_level)
         self.token = token
-        if origin_url := re.search(r'wss?://(.*)/streaming', url):
-            origin_url = (
-                origin_url.group(0)
-                .replace('wss', 'https')
-                .replace('ws', 'http')
-                .replace('/streaming', '')
-            )
+        url = url[:-1] if url[-1] == '/' else url
+        split_url = url.split('/')
+
+        if origin_url := re.search(r'wss?://(.*)', url):
+                    origin_url = (
+                        origin_url.group(0)
+                        .replace('wss', 'https')
+                        .replace('ws', 'http')
+                        .replace('/streaming', '')
+                    )
         else:
             origin_url = url
-        self.origin_url = origin_url[:-1] if url[-1] == '/' else origin_url
-        self.url = url
+        if ('streaming' not in split_url):
+            split_url.append('streaming')
+            url = '/'.join(split_url)
+        self.url = url.replace('https', 'wss').replace('http', 'ws')
+        self.origin_url = origin_url
         await self.login(token, origin_url)
         await self.connect(reconnect=reconnect, timeout=timeout)
