@@ -12,7 +12,7 @@ MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
 ## 注意
 
 - このプロジェクトは開発中です。仕様が定まっていないため、破壊的変更が多いです。
-- `master` ブランチで使用しているmipacは`GitHub`にあるmipacの`master`ブランチの物です。
+- `master` ブランチで使用しているmipacは`GitHub`にあるmipacの`develop`ブランチの物です。
 
 # サポートしているMisskey
 
