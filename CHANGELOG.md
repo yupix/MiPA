@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- none
+
+## [0.1.2] 2023-03-14
+
+### Added
+
 - ✨ added event `on_achievement_earned`.
 - ✨ added `disconnect` method to `Client` class.
 
@@ -16,7 +22,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - incorrect URL for streaming API #16, #17
 
-## [0.1.1] 2022-01-18
+### Changed
+
+- 使用するMiPACのバージョンを`0.4.1`に
+
+## [0.1.1] 2023-01-18
 
 ### Added
 
