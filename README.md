@@ -14,10 +14,50 @@ MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
 - このプロジェクトは開発中です。仕様が定まっていないため、破壊的変更が多いです。
 - `master` ブランチで使用しているmipacは`GitHub`にあるmipacの`develop`ブランチの物です。
 
-# サポートしているMisskey
+## サポートしているMisskey
 
 - [Misskey Official v12](https://github.com/misskey-dev/misskey)
 - [Ayuskey latest](https://gtihub.com/teamblackcrystal/misskey)
+
+### Examples
+
+```py
+import asyncio
+
+from aiohttp import ClientWebSocketResponse
+from mipac import Note
+from mipac.models import ChatMessage
+
+from mipa.ext.commands.bot import Bot
+
+
+class MyBot(Bot):
+    def __init__(self):
+        super().__init__()
+
+    async def on_ready(self, ws: ClientWebSocketResponse):
+        await self.router.connect_channel(['main', 'home'])
+        print('Logged in ', self.user.username)
+
+    async def on_note(self, note: Note):
+        print(note.author.username, note.content)
+
+    async def on_chat(self, message: ChatMessage):
+        print(message.user.username, message.text)
+        if message.text == 'hello':
+            await self.client.chat.action.send(
+                f'hello! {message.user.username}',
+                user_id=message.user.id
+            )
+
+if __name__ == '__main__':
+    bot = MyBot()
+    asyncio.run(bot.start('wss://example.com/streaming', 'your token here'))
+```
+
+Want more examples? Go to the [examples folder](examples)! Want to know how to use a feature that isn't even here?
+Submit a request in an Issue!
+
 
 ### 開発者向け情報
 
