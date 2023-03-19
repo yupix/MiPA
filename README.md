@@ -17,7 +17,7 @@ MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
 ## サポートしているMisskey
 
 - [Misskey Official v12](https://github.com/misskey-dev/misskey)
-- [Ayuskey latest](https://gtihub.com/teamblackcrystal/misskey)
+- [Ayuskey latest](https://github.com/teamblackcrystal/misskey)
 
 ### Examples
 
