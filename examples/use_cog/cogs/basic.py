@@ -20,4 +20,4 @@ class BasicCog(commands.Cog):
 
 
 async def setup(bot: Bot):
-    bot.add_cog(BasicCog(bot))
+    await bot.add_cog(BasicCog(bot))

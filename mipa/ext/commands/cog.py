@@ -98,7 +98,7 @@ class Cog(metaclass=CogMeta):
     __cog_listeners__: ClassVar[List[Tuple[str, str]]]
     __cog_commands__: List[Command] = []
 
-    def __new__(cls, *args: tuple[Any], **kwargs: Dict[str, Any]):
+    def __new__(cls, *args: Any, **kwargs: Any):
         self = super().__new__(cls)
         self.__cog_commands__ = tuple(cls.__cog_commands__)
         return self
