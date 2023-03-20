@@ -1,5 +1,5 @@
 import logging
-from typing import Literal
+from typing import Any, Literal
 
 LOGING_LEVEL_TYPE = Literal[
     'NOTSET', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'
@@ -12,6 +12,20 @@ LOGING_LEVELS = {
     'ERROR': 40,
     'CRITICAL': 50,
 }
+
+
+class _MissingSentinel:
+    def __eq__(self, other):
+        return False
+
+    def __bool__(self):
+        return False
+
+    def __repr__(self):
+        return '...'
+
+
+MISSING: Any = _MissingSentinel()
 
 
 def parse_logging_level(level: LOGING_LEVEL_TYPE):

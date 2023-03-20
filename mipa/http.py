@@ -35,22 +35,9 @@ import aiohttp
 
 from mipa import __version__
 from mipa.exception import ClientConnectorError
+from mipa.utils import MISSING
 
 __all__ = ('HTTPClient', 'HTTPSession')
-
-
-class _MissingSentinel:
-    def __eq__(self, other):
-        return False
-
-    def __bool__(self):
-        return False
-
-    def __repr__(self):
-        return '...'
-
-
-MISSING: Any = _MissingSentinel()
 
 
 async def json_or_text(response: aiohttp.ClientResponse):
