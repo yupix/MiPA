@@ -27,25 +27,48 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 import asyncio
-from typing import Any, Callable, Coroutine, Dict, Optional
+import inspect
+from typing import (
+    Any,
+    Callable,
+    Coroutine,
+    Dict,
+    Generic,
+    Optional,
+    Type,
+    TypeVar,
+)
 
 from mipa.exception import TaskNotRunningError
+from mipa.utils import MISSING
 
 __all__ = ['Loop', 'loop']
 
+_func = Callable[..., Coroutine[Any, Any, Any]]
+LF = TypeVar('LF', bound=_func)
+T = TypeVar('T')
 
-class Loop:
+
+class Loop(Generic[LF]):
     def __init__(
-        self,
-        func: Callable[..., Coroutine[Any, Any, Any]],
-        seconds: int = 60,
-        custom_loop: Optional[asyncio.AbstractEventLoop] = None,
+        self, coro: LF, seconds: float, count: Optional[int],
     ):
-        self.seconds: int = seconds
-        self.func: Callable[..., Coroutine[Any, Any, Any]] = func
-        self._task: Optional[asyncio.Task[Any]] = None
-        self.stop_next_iteration = None
-        self._loop: Optional[asyncio.AbstractEventLoop] = custom_loop
+        self.seconds = seconds
+        self.coro: LF = coro
+        self.count: Optional[int] = count
+        self._current_loop = 0
+        self._task: Optional[asyncio.Task[None]] = None
+        self._injected = None
+
+        self._stop_next_iteration = False
+
+        if self.count is not None and self.count <= 0:
+            raise ValueError('count must be greater than 0 or None.')
+
+        if not inspect.iscoroutinefunction(self.coro):
+            raise TypeError(
+                f'Expected coroutine function, not {type(self.coro).__name__!r}.'
+            )
 
     def start(
         self, *args: tuple[Any], **kwargs: Dict[Any, Any]
@@ -62,10 +85,9 @@ class Loop:
         -------
         _task : asyncio.Task[Any]
         """
-        _loop = (
-            asyncio.get_running_loop() if self._loop is None else self._loop
-        )  # self._loop が無いなら取得
-        self._task = _loop.create_task(self.task(*args, **kwargs))
+        if self._injected is not None:
+            args = (self._injected, *args)
+        self._task = asyncio.create_task(self._loop(*args, **kwargs))
         return self._task
 
     def stop(self):
@@ -77,18 +99,36 @@ class Loop:
             raise TaskNotRunningError('タスクは起動していません')
 
         if not self._task.done():
-            self.stop_next_iteration = True
+            self._stop_next_iteration = True
 
-    async def task(self, *args: tuple[Any], **kwargs: Dict[Any, Any]):
+    async def _loop(self, *args: tuple[Any], **kwargs: Dict[Any, Any]):
         while True:
-            if self.stop_next_iteration:
+            if self._stop_next_iteration is True:
                 return
-            await self.func(self.seconds, *args, **kwargs)
+            await self.coro(*args, **kwargs)
             await asyncio.sleep(self.seconds)
 
+            self._current_loop += 1
+            if self._current_loop == self.count:
+                break
 
-def loop(n: int, custom_loop: Optional[asyncio.AbstractEventLoop] = None):
-    def _deco(f: Callable[..., Coroutine[Any, Any, Any]]) -> Loop:
-        return Loop(f, n, custom_loop=custom_loop)
+    def __get__(self, obj: T, objtype: Type[T]):
+        if obj is None:
+            return self
 
-    return _deco
+        copy: Loop[LF] = Loop(
+            self.coro, seconds=self.seconds, count=self.count,
+        )
+        copy._injected = obj
+
+        setattr(obj, self.coro.__name__, copy)
+        return copy
+
+
+def loop(
+    *, seconds: float = MISSING, count: Optional[int] = None,
+) -> Callable[[LF], Loop[LF]]:
+    def decorator(func: LF) -> Loop[LF]:
+        return Loop[LF](func, seconds=seconds, count=count,)
+
+    return decorator
