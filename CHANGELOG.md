@@ -7,9 +7,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] 2023-03-20
+
 ### Added
 
-- none
+- `setup_hook` イベントが追加されました
+  - `load_extension` 等はこのイベントで行うことを推奨します
+- `ExtensionNotLoaded` 例外が追加されました
+
+### Changed
+
+- **BREAKING CHANGES** 以下のメソッドが非同期になります
+  - Cogs内の `setup` 関数
+  - `add_cog`
+  - `remove_cog`
+  - `load_extension`
+
+### Fixed
+
+- `tasks.loop` をクラス内で使用すると `self` が受け取れない
 
 ## [0.1.2] 2023-03-14
 
