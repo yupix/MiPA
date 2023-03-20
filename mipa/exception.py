@@ -33,6 +33,10 @@ class CogNameDuplicate(MIPABaseException):
     """Cogの名前が重複している"""
 
 
+class ExtensionNotLoaded(MIPABaseException):
+    """Cogが読み込まれていない"""
+
+
 class ExtensionAlreadyLoaded(MIPABaseException):
     """Cogは既に読み込まれている"""
 

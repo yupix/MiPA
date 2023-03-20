@@ -43,7 +43,7 @@ from mipac.client import Client as API
 from mipac.manager.client import ClientManager
 from mipac.models.user import UserDetailed
 
-from mipa.exception import WebSocketReconnect, WebSocketNotConnected
+from mipa.exception import WebSocketNotConnected, WebSocketReconnect
 from mipa.gateway import MisskeyWebSocket
 from mipa.router import Router
 from mipa.state import ConnectionState
@@ -210,6 +210,9 @@ class Client:
         self.core = API(url, token)
         return self.core
 
+    async def setup_hook(self) -> None:
+        ...
+
     async def login(self, token: str, url: str):
         """
         ユーザーにログインし、ユーザー情報を取得します
@@ -225,12 +228,10 @@ class Client:
         core = await self.create_api_session(token, url)
         await core.http.login()
         self.user = await core.api.get_me()
+        await self.setup_hook()
 
     async def _connect(
-        self,
-        *,
-        timeout: int = 60,
-        event_name: str = 'ready',
+        self, *, timeout: int = 60, event_name: str = 'ready',
     ) -> None:
         self._connection = self._get_state()
         coro = MisskeyWebSocket.from_client(
@@ -241,10 +242,7 @@ class Client:
             await self.ws.poll_event()
 
     async def connect(
-        self,
-        *,
-        reconnect: bool = True,
-        timeout: int = 60,
+        self, *, reconnect: bool = True, timeout: int = 60,
     ) -> None:
         self.should_reconnect = reconnect
         event_name = 'ready'
@@ -304,15 +302,15 @@ class Client:
         split_url = url.split('/')
 
         if origin_url := re.search(r'wss?://(.*)', url):
-                    origin_url = (
-                        origin_url.group(0)
-                        .replace('wss', 'https')
-                        .replace('ws', 'http')
-                        .replace('/streaming', '')
-                    )
+            origin_url = (
+                origin_url.group(0)
+                .replace('wss', 'https')
+                .replace('ws', 'http')
+                .replace('/streaming', '')
+            )
         else:
             origin_url = url
-        if ('streaming' not in split_url):
+        if 'streaming' not in split_url:
             split_url.append('streaming')
             url = '/'.join(split_url)
         self.url = url.replace('https', 'wss').replace('http', 'ws')

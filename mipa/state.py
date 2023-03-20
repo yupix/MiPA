@@ -38,28 +38,29 @@ from mipac.models.chat import ChatMessage
 from mipac.models.emoji import CustomEmoji
 from mipac.models.note import NoteDeleted
 from mipac.models.notification import (
+    NotificationAchievement,
     NotificationFollow,
     NotificationFollowRequest,
     NotificationNote,
     NotificationPollEnd,
     NotificationReaction,
-    NotificationAchievement,
 )
-from mipac.models.user import UserDetailed
 from mipac.models.reaction import PartialReaction
+from mipac.models.user import UserDetailed
 from mipac.types import INote
 from mipac.types.chat import IChatMessage
 from mipac.types.note import (
     INoteUpdated,
-    INoteUpdatedReaction,
     INoteUpdatedDelete,
+    INoteUpdatedReaction,
 )
 from mipac.util import str_lower, upper_to_lower
 
 if TYPE_CHECKING:
-    from mipa.client import Client
     from mipac.types.notification import INotification
     from mipac.types.user import IUserDetailed
+
+    from mipa.client import Client
 
 _log = logging.getLogger(__name__)
 

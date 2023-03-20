@@ -63,16 +63,16 @@ from mipa.ext.commands.core import CommandManager
 
 if TYPE_CHECKING:
     from aiohttp.client_ws import ClientWebSocketResponse
-
-    from mipa.ext import Cog
     from mipac.models.notification import (
-        NotificationNote,
+        NotificationAchievement,
         NotificationFollow,
         NotificationFollowRequest,
+        NotificationNote,
         NotificationPollEnd,
         NotificationReaction,
-        NotificationAchievement,
     )
+
+    from mipa.ext import Cog
 
 
 __all__ = ['BotBase', 'Bot']
@@ -187,35 +187,35 @@ class BotBase(CommandManager):
         if ev in dir(self):
             self.schedule_event(getattr(self, ev), ev, *args, **kwargs)
 
-    def add_cog(self, cog: Cog, override: bool = False) -> None:
+    async def add_cog(self, cog: Cog, override: bool = False) -> None:
         cog_name = cog.__cog_name__
         existing = self.__cogs.get(cog_name)
         if existing is not None:
             if not override:
                 raise CogNameDuplicate()
-            self.remove_cog(cog_name)  # TODO: 作る
+            await self.remove_cog(cog_name)  # TODO: 作る
 
         cog = cog._inject(self)
         self.__cogs[cog_name] = cog
 
-    def remove_cog(self, name: str):  # TODO: Optional[Cog]を返すように
+    async def remove_cog(self, name: str):  # TODO: Optional[Cog]を返すように
         """Cogを削除します"""
         cog = self.__cogs.get(name)
         if cog is None:
             return
 
-        cog._eject(self)
+        cog._inject(self)
 
         return cog
 
-    def _load_from_module(self, spec: ModuleType, key: str) -> None:
+    async def _load_from_module(self, spec: ModuleType, key: str) -> None:
         try:
             setup = spec.setup
         except AttributeError as e:
             raise NoEntryPointError(f'{key} にsetupが存在しません') from e
 
         try:
-            setup(self)
+            await setup(self)
         except Exception as e:
             raise ExtensionFailed(key, e) from e
         else:
@@ -228,7 +228,7 @@ class BotBase(CommandManager):
         except ImportError as e:
             raise InvalidCogPath(name) from e
 
-    def load_extension(
+    async def load_extension(
         self, name: str, *, package: Optional[str] = None
     ) -> None:
         """拡張をロードする
@@ -247,7 +247,7 @@ class BotBase(CommandManager):
             module = importlib.import_module(name)
         except ModuleNotFoundError as e:
             raise InvalidCogPath(f'cog: {name} へのパスが無効です') from e
-        self._load_from_module(module, name)
+        await self._load_from_module(module, name)
 
     def schedule_event(
         self,

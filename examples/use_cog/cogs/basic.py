@@ -19,5 +19,5 @@ class BasicCog(commands.Cog):
         await ctx.message.api.action.reply(f'{time} seconds have passed!')
 
 
-def setup(bot: Bot):
+async def setup(bot: Bot):
     bot.add_cog(BasicCog(bot))

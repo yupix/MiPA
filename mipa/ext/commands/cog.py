@@ -34,7 +34,7 @@ from mipa.ext.commands._types import _BaseCommand
 from mipa.ext.commands.core import Command
 
 if TYPE_CHECKING:
-    from mipa.ext import Bot
+    from mipa.ext.commands.bot import BotBase
 
 
 class CogMeta(type):
@@ -127,7 +127,7 @@ class Cog(metaclass=CogMeta):
     def qualified_name(cls) -> str:
         return cls.__cog_name__
 
-    def _inject(self, bot: Bot):
+    def _inject(self, bot: BotBase):
         for command in self.__cog_commands__:
             bot.add_command(command, self.__cog_name__)
 

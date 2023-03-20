@@ -6,11 +6,6 @@ from mipa.ext.commands.context import Context
 class BasicCog(commands.Cog):
     def __init__(self, bot: Bot) -> None:
         self.bot = bot
-    
-    @commands.mention_command(text='hello')
-    async def hello(self, ctx: Context):
-        await ctx.message.api.action.reply(f'こんにちは！ {ctx.message.author.username} さん')
-
 
     @commands.mention_command(regex=r'(\d+)秒タイマー')
     async def timer(self, ctx: Context, time: str):
@@ -19,5 +14,5 @@ class BasicCog(commands.Cog):
         await ctx.message.api.action.reply(f'{time}秒経ちました！')
 
 
-def setup(bot: Bot):
-    bot.add_cog(BasicCog(bot))
+async def setup(bot: Bot):
+    await bot.add_cog(BasicCog(bot))
