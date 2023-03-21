@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+
+
+## [0.2.1] 2023-03-22
+
+### Changed
+
+- 使用するMiPACのバージョンを`0.4.2`に
+
 ## [0.2.0] 2023-03-20
 
 ### Added
