@@ -7,7 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
 
+- `Cog.listener` を使った際に型エラーが出る
 
 ## [0.2.1] 2023-03-22
 
