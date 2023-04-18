@@ -28,13 +28,15 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 import inspect
-from typing import TYPE_CHECKING, Any, ClassVar, Dict, List, Optional, Tuple
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Dict, List, Optional, Tuple, TypeVar
 
 from mipa.ext.commands._types import _BaseCommand
 from mipa.ext.commands.core import Command
 
 if TYPE_CHECKING:
     from mipa.ext.commands.bot import BotBase
+
+FuncT = TypeVar('FuncT', bound=Callable[..., Any])
 
 
 class CogMeta(type):
@@ -104,8 +106,8 @@ class Cog(metaclass=CogMeta):
         return self
 
     @classmethod
-    def listener(cls, name: Optional[str] = None):
-        def decorator(func: Cog):
+    def listener(cls, name: Optional[str] = None) -> Callable[[FuncT], FuncT]:
+        def decorator(func: FuncT):
             actual = func
             if isinstance(actual, staticmethod):
                 actual = actual.__func__
