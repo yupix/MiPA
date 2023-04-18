@@ -59,6 +59,17 @@ Want more examples? Go to the [examples folder](examples)! Want to know how to u
 Submit a request in an Issue!
 
 
+### 使用者の方へ
+
+MiPAで作ったBotなどをGitHubなどで公開している場合は、Issueなどに送信してくだされば、MiPAで作られている物に追加します。また、良ければBotのプロフィールなどにこのBotはMiPAで作成されているとの旨を記載してくださると嬉しいです。
+
+### MiPAで作られているもの
+
+#### Bot
+
+- [akari](https://github.com/teamblackcrystal/akari)
+    - 作者の yupix が作成しているBotです。クリーンアーキテクチャを用いているため、部分的に分かりにくい所があるかもしれません。
+
 ### 開発者向け情報
 
 このプロジェクトでは [black](https://github.com/psf/black)のforkである、[axblack](https://github.com/axiros/axblack)を利用しています。主な違いはダブルクォートがデフォルトではなく、シングルクォートになっている点です
