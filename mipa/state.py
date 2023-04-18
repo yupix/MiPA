@@ -54,7 +54,7 @@ from mipac.types.note import (
     INoteUpdatedDelete,
     INoteUpdatedReaction,
 )
-from mipac.util import str_lower, upper_to_lower
+from mipac.utils.format import str_lower, upper_to_lower
 
 if TYPE_CHECKING:
     from mipac.types.notification import INotification
@@ -128,8 +128,8 @@ class ConnectionState:
         ログインが発生した際のイベント
         """
 
-    async def parse_note_updated(self, message: INoteUpdated[Any]):
-        message: Dict[str, Any] = upper_to_lower(message)
+    async def parse_note_updated(self, note_data: INoteUpdated[Any]):
+        message: Dict[str, Any] = upper_to_lower(note_data)
         if func := getattr(self, f'parse_{message["body"]["type"]}', None):
             await func(message)
         else:
@@ -143,12 +143,12 @@ class ConnectionState:
     async def parse_unreacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
     ):
-        self.__dispatch('unreacted', PartialReaction(reaction))
+        self.__dispatch('unreacted', PartialReaction(reaction, client=self.api))
 
     async def parse_reacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
     ):
-        self.__dispatch('reacted', PartialReaction(reaction))
+        self.__dispatch('reacted', PartialReaction(reaction, client=self.api))
 
     async def parse_me_updated(self, user: IUserDetailed):
         self.__dispatch('me_updated', UserDetailed(user, client=self.api))
@@ -213,7 +213,7 @@ class ConnectionState:
             'chat_unread_message', ChatMessage(message, client=self.api),
         )
 
-    async def parse_notification(self, message: Dict[str, Any]) -> None:
+    async def parse_notification(self, notification_data: Dict[str, Any]) -> None:
         """
         Parse notification event
 
@@ -222,7 +222,7 @@ class ConnectionState:
         message: Dict[str, Any]
             Received message
         """
-        message: INotification = upper_to_lower(message)
+        message: INotification = upper_to_lower(notification_data)
         notification_map: dict[
             str,
             tuple[
@@ -260,7 +260,7 @@ class ConnectionState:
         dispatch_path, parse_class = notification_map.get(
             str_lower(message['type']), (None, None)
         )
-        if dispatch_path:
+        if dispatch_path and parse_class:
             self.__dispatch(
                 dispatch_path, parse_class(message, client=self.api)
             )

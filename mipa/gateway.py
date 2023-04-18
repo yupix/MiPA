@@ -35,7 +35,7 @@ from typing import TYPE_CHECKING, Any, Callable, Dict, Optional, TypeVar
 
 import aiohttp
 from aiohttp import ClientError
-from mipac.util import str_lower
+from mipac.utils.format import str_lower
 
 from mipa.exception import ClientConnectorError, WebSocketReconnect
 from mipa.router import Router
