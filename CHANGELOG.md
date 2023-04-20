@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- v13, v12? で 絵文字が削除された際に `on_emoji_deleted` イベントを発火するように
+
 ### Fixed
 
 - `Cog.listener` を使った際に型エラーが出る
