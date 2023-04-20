@@ -31,7 +31,7 @@ from __future__ import annotations
 import asyncio
 import inspect
 import logging
-from typing import TYPE_CHECKING, Any, Callable, Dict
+from typing import TYPE_CHECKING, Any, Callable, Dict, Generic, Literal, TypeVar, TypedDict
 
 from mipac.models import Note
 from mipac.models.chat import ChatMessage
@@ -54,6 +54,7 @@ from mipac.types.note import (
     INoteUpdatedDelete,
     INoteUpdatedReaction,
 )
+from mipac.types.emoji import ICustomEmoji
 from mipac.utils.format import str_lower, upper_to_lower
 
 if TYPE_CHECKING:
@@ -64,6 +65,13 @@ if TYPE_CHECKING:
 
 _log = logging.getLogger(__name__)
 
+T = TypeVar('T')
+
+
+class IMessage(TypedDict, Generic[T]):
+    type: str
+    body: dict[str, T]
+    
 
 class ConnectionState:
     def __init__(
@@ -85,6 +93,13 @@ class ConnectionState:
         self.__dispatch(
             'emoji_add', CustomEmoji(message['body']['emoji'], client=self.api)
         )
+
+    async def parse_emoji_deleted(self, message: IMessage[list[ICustomEmoji]]):
+        self.__dispatch(
+            'emoji_deleted', [CustomEmoji(emoji, client=self.api) for emoji in message['body']['emojis']]
+        )
+
+    
 
     async def parse_channel(self, message: Dict[str, Any]) -> None:
         """parse_channel is a function to parse channel event

@@ -49,7 +49,7 @@ from typing import (
 
 from mipac.models.chat import ChatMessage
 from mipac.models.user import UserDetailed
-
+from mipac.models.emoji import CustomEmoji
 from mipa import Client
 from mipa.exception import (
     CogNameDuplicate,
@@ -449,6 +449,15 @@ class BotBase(CommandManager):
         notice : NotificationAchievement
         """
 
+    async def on_emoji_deleted(self, emojis: list[CustomEmoji]):
+        """
+        カスタム絵文字が削除された
+
+        Parameters
+        ----------
+        emojis : list[CustomEmoji]
+            削除された絵文字のリスト
+        """
 
 class Bot(BotBase, Client):
     pass
