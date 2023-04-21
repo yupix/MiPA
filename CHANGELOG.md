@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - v13, v12? で 絵文字が削除された際に `on_emoji_deleted` イベントを発火するように
+- v13, v12? で 絵文字が更新された際に `on_emoji_updated` イベントを発火するように
 
 ### Fixed
 

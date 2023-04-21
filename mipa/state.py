@@ -99,6 +99,11 @@ class ConnectionState:
             'emoji_deleted', [CustomEmoji(emoji, client=self.api) for emoji in message['body']['emojis']]
         )
 
+    async def parse_emoji_updated(self, message: IMessage[list[ICustomEmoji]]):
+        self.__dispatch(
+            'emoji_updated', [CustomEmoji(emoji, client=self.api) for emoji in message['body']['emojis']]
+        )
+
     
 
     async def parse_channel(self, message: Dict[str, Any]) -> None:

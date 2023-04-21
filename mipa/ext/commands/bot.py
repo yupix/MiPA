@@ -459,5 +459,15 @@ class BotBase(CommandManager):
             削除された絵文字のリスト
         """
 
+    async def on_emoji_updated(self, emojis:list[CustomEmoji]):
+        """
+        カスタム絵文字が更新された
+
+        Parameters
+        ----------
+        emojis : list[CustomEmoji]
+            更新された絵文字のリスト
+        """
+
 class Bot(BotBase, Client):
     pass
