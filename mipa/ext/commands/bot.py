@@ -48,6 +48,7 @@ from typing import (
 )
 
 from mipac.models.chat import ChatMessage
+from mipac.models.emoji import CustomEmoji
 from mipac.models.user import UserDetailed
 
 from mipa import Client
@@ -447,6 +448,26 @@ class BotBase(CommandManager):
         Parameters
         ----------
         notice : NotificationAchievement
+        """
+
+    async def on_emoji_deleted(self, emojis: list[CustomEmoji]):
+        """
+        カスタム絵文字が削除された
+
+        Parameters
+        ----------
+        emojis : list[CustomEmoji]
+            削除された絵文字のリスト
+        """
+
+    async def on_emoji_updated(self, emojis: list[CustomEmoji]):
+        """
+        カスタム絵文字が更新された
+
+        Parameters
+        ----------
+        emojis : list[CustomEmoji]
+            更新された絵文字のリスト
         """
 
 

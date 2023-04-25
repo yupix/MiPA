@@ -11,6 +11,10 @@ MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
 
 ## 注意
 
+### MiPACとの関係性について
+
+MiPAはMiPACというライブラリに依存しています。これはMiPAのCore部分をまとめた物であり、基本的にはApiへのアクセス用メソッドなどを提供します。MiPAではMiPACのメソッド群をそのまま公開している為、MiPAC側で大きな変更が入るとMiPAを使用しているプロジェクトでもその影響を受ける可能性があります。そのため、[CHANGELOG.md](./CHANGELOG.md) で MiPACのバージョンが変更された際はそのリリースノートへのリンクを添付しています。予めMiPAC側での変更を確認したうえでアップデートをお願いします。
+
 - このプロジェクトは開発中です。仕様が定まっていないため、破壊的変更が多いです。
 - `master` ブランチで使用しているmipacは`GitHub`にあるmipacの`develop`ブランチの物です。
 

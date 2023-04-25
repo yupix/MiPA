@@ -31,7 +31,15 @@ from __future__ import annotations
 import asyncio
 import inspect
 import logging
-from typing import TYPE_CHECKING, Any, Callable, Dict
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    TypedDict,
+    TypeVar,
+)
 
 from mipac.models import Note
 from mipac.models.chat import ChatMessage
@@ -49,12 +57,13 @@ from mipac.models.reaction import PartialReaction
 from mipac.models.user import UserDetailed
 from mipac.types import INote
 from mipac.types.chat import IChatMessage
+from mipac.types.emoji import ICustomEmoji
 from mipac.types.note import (
     INoteUpdated,
     INoteUpdatedDelete,
     INoteUpdatedReaction,
 )
-from mipac.util import str_lower, upper_to_lower
+from mipac.utils.format import str_lower, upper_to_lower
 
 if TYPE_CHECKING:
     from mipac.types.notification import INotification
@@ -63,6 +72,13 @@ if TYPE_CHECKING:
     from mipa.client import Client
 
 _log = logging.getLogger(__name__)
+
+T = TypeVar('T')
+
+
+class IMessage(TypedDict, Generic[T]):
+    type: str
+    body: dict[str, T]
 
 
 class ConnectionState:
@@ -84,6 +100,24 @@ class ConnectionState:
     async def parse_emoji_added(self, message: Dict[str, Any]):
         self.__dispatch(
             'emoji_add', CustomEmoji(message['body']['emoji'], client=self.api)
+        )
+
+    async def parse_emoji_deleted(self, message: IMessage[list[ICustomEmoji]]):
+        self.__dispatch(
+            'emoji_deleted',
+            [
+                CustomEmoji(emoji, client=self.api)
+                for emoji in message['body']['emojis']
+            ],
+        )
+
+    async def parse_emoji_updated(self, message: IMessage[list[ICustomEmoji]]):
+        self.__dispatch(
+            'emoji_updated',
+            [
+                CustomEmoji(emoji, client=self.api)
+                for emoji in message['body']['emojis']
+            ],
         )
 
     async def parse_channel(self, message: Dict[str, Any]) -> None:
@@ -128,8 +162,8 @@ class ConnectionState:
         ログインが発生した際のイベント
         """
 
-    async def parse_note_updated(self, message: INoteUpdated[Any]):
-        message: Dict[str, Any] = upper_to_lower(message)
+    async def parse_note_updated(self, note_data: INoteUpdated[Any]):
+        message: Dict[str, Any] = upper_to_lower(note_data)
         if func := getattr(self, f'parse_{message["body"]["type"]}', None):
             await func(message)
         else:
@@ -143,12 +177,14 @@ class ConnectionState:
     async def parse_unreacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
     ):
-        self.__dispatch('unreacted', PartialReaction(reaction))
+        self.__dispatch(
+            'unreacted', PartialReaction(reaction, client=self.api)
+        )
 
     async def parse_reacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
     ):
-        self.__dispatch('reacted', PartialReaction(reaction))
+        self.__dispatch('reacted', PartialReaction(reaction, client=self.api))
 
     async def parse_me_updated(self, user: IUserDetailed):
         self.__dispatch('me_updated', UserDetailed(user, client=self.api))
@@ -213,7 +249,9 @@ class ConnectionState:
             'chat_unread_message', ChatMessage(message, client=self.api),
         )
 
-    async def parse_notification(self, message: Dict[str, Any]) -> None:
+    async def parse_notification(
+        self, notification_data: Dict[str, Any]
+    ) -> None:
         """
         Parse notification event
 
@@ -222,7 +260,7 @@ class ConnectionState:
         message: Dict[str, Any]
             Received message
         """
-        message: INotification = upper_to_lower(message)
+        message: INotification = upper_to_lower(notification_data)
         notification_map: dict[
             str,
             tuple[
@@ -260,7 +298,7 @@ class ConnectionState:
         dispatch_path, parse_class = notification_map.get(
             str_lower(message['type']), (None, None)
         )
-        if dispatch_path:
+        if dispatch_path and parse_class:
             self.__dispatch(
                 dispatch_path, parse_class(message, client=self.api)
             )
