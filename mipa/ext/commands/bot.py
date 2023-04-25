@@ -48,8 +48,9 @@ from typing import (
 )
 
 from mipac.models.chat import ChatMessage
-from mipac.models.user import UserDetailed
 from mipac.models.emoji import CustomEmoji
+from mipac.models.user import UserDetailed
+
 from mipa import Client
 from mipa.exception import (
     CogNameDuplicate,
@@ -459,7 +460,7 @@ class BotBase(CommandManager):
             削除された絵文字のリスト
         """
 
-    async def on_emoji_updated(self, emojis:list[CustomEmoji]):
+    async def on_emoji_updated(self, emojis: list[CustomEmoji]):
         """
         カスタム絵文字が更新された
 
@@ -468,6 +469,7 @@ class BotBase(CommandManager):
         emojis : list[CustomEmoji]
             更新された絵文字のリスト
         """
+
 
 class Bot(BotBase, Client):
     pass

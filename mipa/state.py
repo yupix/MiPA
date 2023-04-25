@@ -31,7 +31,15 @@ from __future__ import annotations
 import asyncio
 import inspect
 import logging
-from typing import TYPE_CHECKING, Any, Callable, Dict, Generic, Literal, TypeVar, TypedDict
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    TypedDict,
+    TypeVar,
+)
 
 from mipac.models import Note
 from mipac.models.chat import ChatMessage
@@ -49,12 +57,12 @@ from mipac.models.reaction import PartialReaction
 from mipac.models.user import UserDetailed
 from mipac.types import INote
 from mipac.types.chat import IChatMessage
+from mipac.types.emoji import ICustomEmoji
 from mipac.types.note import (
     INoteUpdated,
     INoteUpdatedDelete,
     INoteUpdatedReaction,
 )
-from mipac.types.emoji import ICustomEmoji
 from mipac.utils.format import str_lower, upper_to_lower
 
 if TYPE_CHECKING:
@@ -71,7 +79,7 @@ T = TypeVar('T')
 class IMessage(TypedDict, Generic[T]):
     type: str
     body: dict[str, T]
-    
+
 
 class ConnectionState:
     def __init__(
@@ -96,15 +104,21 @@ class ConnectionState:
 
     async def parse_emoji_deleted(self, message: IMessage[list[ICustomEmoji]]):
         self.__dispatch(
-            'emoji_deleted', [CustomEmoji(emoji, client=self.api) for emoji in message['body']['emojis']]
+            'emoji_deleted',
+            [
+                CustomEmoji(emoji, client=self.api)
+                for emoji in message['body']['emojis']
+            ],
         )
 
     async def parse_emoji_updated(self, message: IMessage[list[ICustomEmoji]]):
         self.__dispatch(
-            'emoji_updated', [CustomEmoji(emoji, client=self.api) for emoji in message['body']['emojis']]
+            'emoji_updated',
+            [
+                CustomEmoji(emoji, client=self.api)
+                for emoji in message['body']['emojis']
+            ],
         )
-
-    
 
     async def parse_channel(self, message: Dict[str, Any]) -> None:
         """parse_channel is a function to parse channel event
@@ -163,7 +177,9 @@ class ConnectionState:
     async def parse_unreacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
     ):
-        self.__dispatch('unreacted', PartialReaction(reaction, client=self.api))
+        self.__dispatch(
+            'unreacted', PartialReaction(reaction, client=self.api)
+        )
 
     async def parse_reacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
@@ -233,7 +249,9 @@ class ConnectionState:
             'chat_unread_message', ChatMessage(message, client=self.api),
         )
 
-    async def parse_notification(self, notification_data: Dict[str, Any]) -> None:
+    async def parse_notification(
+        self, notification_data: Dict[str, Any]
+    ) -> None:
         """
         Parse notification event
 

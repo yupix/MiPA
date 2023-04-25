@@ -28,7 +28,17 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 import inspect
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Dict, List, Optional, Tuple, TypeVar
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Callable,
+    ClassVar,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    TypeVar,
+)
 
 from mipa.ext.commands._types import _BaseCommand
 from mipa.ext.commands.core import Command
