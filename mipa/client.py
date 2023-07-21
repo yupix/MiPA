@@ -206,14 +206,18 @@ class Client:
     async def on_error(self, err):
         self.event_dispatch('error', err)
 
-    async def create_api_session(self, token: str, url: str) -> API:
-        self.core = API(url, token)
+    async def create_api_session(
+        self, token: str, url: str, log_level: LOGING_LEVEL_TYPE | None,
+    ) -> API:
+        self.core = API(url, token, log_level=log_level)
         return self.core
 
     async def setup_hook(self) -> None:
         ...
 
-    async def login(self, token: str, url: str):
+    async def login(
+        self, token: str, url: str, log_level: LOGING_LEVEL_TYPE | None
+    ):
         """
         ユーザーにログインし、ユーザー情報を取得します
 
@@ -223,9 +227,11 @@ class Client:
             BOTにするユーザーのTOKEN
         url : str
             BOTにするユーザーがいるインスタンスのURL
+        log_level : LOGING_LEVEL_TYPE
+            The log level to use for logging. Defaults to ``INFO``.
         """
 
-        core = await self.create_api_session(token, url)
+        core = await self.create_api_session(token, url, log_level)
         await core.http.login()
         self.user = await core.api.get_me()
         await self.setup_hook()
@@ -278,7 +284,7 @@ class Client:
         reconnect: bool = True,
         timeout: int = 60,
         is_ayuskey: bool = False,
-        log_level: LOGING_LEVEL_TYPE = 'INFO',
+        log_level: LOGING_LEVEL_TYPE | None = 'INFO',
     ):
         """
         Starting Bot
@@ -296,7 +302,8 @@ class Client:
         timeout: int, default 60
             Time until websocket times out
         """
-        setup_logging(level=log_level)
+        if log_level is not None:
+            setup_logging(level=log_level)
         self.token = token
         url = url[:-1] if url[-1] == '/' else url
         split_url = url.split('/')
@@ -315,5 +322,5 @@ class Client:
             url = '/'.join(split_url)
         self.url = url.replace('https', 'wss').replace('http', 'ws')
         self.origin_url = origin_url
-        await self.login(token, origin_url)
+        await self.login(token, origin_url, log_level)
         await self.connect(reconnect=reconnect, timeout=timeout)
