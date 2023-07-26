@@ -1,15 +1,19 @@
 # Change Log
 
-All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+<!-- ## [Unreleased] -->
 
-## [Unreleased]
+## [0.3.0] 2023-04-25 
 
-### Added
+### Changes by Package 📦
 
-- None
+MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOGを読むことを推奨します。
+
+- [MiPAC](https://github.com/yupix/MiPAC/releases)
+
+### Changed
+
+- [@omg-xtao](https://github.com/omg-xtao) can cancel setup_logging when init client.
 
 ## [0.2.2] 2023-04-25
 
