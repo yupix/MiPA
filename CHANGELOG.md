@@ -11,6 +11,10 @@ MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOG�
 
 - [MiPAC](https://github.com/yupix/MiPAC/releases)
 
+### Changed
+
+- [@omg-xtao](https://github.com/omg-xtao) can cancel setup_logging when init client.
+
 ## [0.2.2] 2023-04-25
 
 ### Added
