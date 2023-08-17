@@ -39,9 +39,15 @@ class MyBot(Bot):
     def __init__(self):
         super().__init__()
 
+    async def _connect_channel(self):
+      await self.router.connect_channel(['main', 'home'])
+
     async def on_ready(self, ws: ClientWebSocketResponse):
-        await self.router.connect_channel(['main', 'home'])
+        await self._connect_channel()
         print('Logged in ', self.user.username)
+
+    async def on_reconnect(self, ws: ClientWebSocketResponse):
+        await self._connect_channel()
 
     async def on_note(self, note: Note):
         print(note.author.username, note.content)
