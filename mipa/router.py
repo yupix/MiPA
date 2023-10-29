@@ -37,12 +37,15 @@ class Router:
         ...
 
     @overload
-    async def connect_channel(self, channel_list: dict[IChannel, AbstractTimeline|None]):
+    async def connect_channel(
+        self, channel_list: dict[IChannel, AbstractTimeline | None]
+    ):
         ...
 
     async def connect_channel(
         self,
-        channel_list: Iterable[IChannel] | dict[IChannel, AbstractTimeline|None],
+        channel_list: Iterable[IChannel]
+        | dict[IChannel, AbstractTimeline | None],
     ):
         """
         Connects to a channel based on the list passed.
