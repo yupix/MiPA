@@ -205,6 +205,9 @@ class ConnectionState:
     async def parse_me_updated(self, user: IUserDetailed, channel_id: str):
         self.__dispatch("me_updated", UserDetailed(user, client=self.api))
 
+    async def parse_announcement_created(self, message: Dict[str, Any]):
+        pass
+
     async def parse_read_all_announcements(
         self, message: Dict[str, Any], channel_id: str
     ) -> None:
