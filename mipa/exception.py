@@ -1,15 +1,15 @@
 __all__ = (
-    'MIPABaseException',
-    'MIPABaseWebSocketError',
-    'WebSocketNotConnected',
-    'WebSocketReconnect',
-    'CogNameDuplicate',
-    'ExtensionAlreadyLoaded',
-    'ExtensionFailed',
-    'InvalidCogPath',
-    'NoEntryPointError',
-    'ClientConnectorError',
-    'TaskNotRunningError',
+    "MIPABaseException",
+    "MIPABaseWebSocketError",
+    "WebSocketNotConnected",
+    "WebSocketReconnect",
+    "CogNameDuplicate",
+    "ExtensionAlreadyLoaded",
+    "ExtensionFailed",
+    "InvalidCogPath",
+    "NoEntryPointError",
+    "ClientConnectorError",
+    "TaskNotRunningError",
 )
 
 

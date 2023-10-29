@@ -43,10 +43,10 @@ from mipa.router import Router
 if TYPE_CHECKING:
     from .client import Client
 
-__all__ = ('MisskeyWebSocket',)
+__all__ = ("MisskeyWebSocket",)
 
 
-MS = TypeVar('MS', bound='aiohttp.ClientWebSocketResponse')
+MS = TypeVar("MS", bound="aiohttp.ClientWebSocketResponse")
 
 
 class MisskeyWebSocket:
@@ -59,11 +59,11 @@ class MisskeyWebSocket:
 
     @classmethod
     async def from_client(
-        cls, client: Client, *, timeout: int = 60, event_name: str = 'ready'
+        cls, client: Client, *, timeout: int = 60, event_name: str = "ready"
     ):
         try:
             socket = await client.core.http.session.ws_connect(
-                f'{client.url}?i={client.token}'
+                f"{client.url}?i={client.token}"
             )
             ws = cls(socket, client)
             ws._dispatch = client.dispatch
@@ -85,10 +85,9 @@ class MisskeyWebSocket:
         if isinstance(msg, bytes):
             msg = msg.decode()
 
-        await self._misskey_parsers[str_lower(msg['type']).upper()](msg)
+        await self._misskey_parsers[str_lower(msg["type"]).upper()](msg)
 
     async def poll_event(self, *, timeout: int = 60):
-
         msg = await self.socket.receive(timeout=timeout)
 
         if msg is aiohttp.http.WS_CLOSED_MESSAGE:

@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 
 
 class Context:
-    __slots__ = ('__message', 'bot', 'args', 'kwargs', 'command', '__cmd')
+    __slots__ = ("__message", "bot", "args", "kwargs", "command", "__cmd")
 
     def __init__(
         self,

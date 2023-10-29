@@ -48,7 +48,7 @@ def hooked_wrapped_callback(coro):
 
 class CMD:
     def __init__(
-        self, cmd_type: str, key: str, func: 'Command', cog_name: str
+        self, cmd_type: str, key: str, func: "Command", cog_name: str
     ):
         self.cmd_type = cmd_type
         self.key = key
@@ -61,10 +61,10 @@ class CommandManager:
         self.all_commands: List[CMD] = []
         super().__init__(*args, **kwargs)  # Clientクラスを初期化する
 
-    def add_command(self, command: 'Command', cog_name: str):
+    def add_command(self, command: "Command", cog_name: str):
         if not isinstance(command, Command):
-            raise TypeError(f'{command}はCommandクラスである必要があります')
-        command_type = 'regex' if command.regex else 'text'
+            raise TypeError(f"{command}はCommandクラスである必要があります")
+        command_type = "regex" if command.regex else "text"
         command_key = command.regex or command.text
         self.all_commands.append(
             CMD(command_type, command_key, command, cog_name)
@@ -78,7 +78,7 @@ class Command(_BaseCommand):
 
     def __init__(self, func, regex: str, text: str, **kwargs):
         if not asyncio.iscoroutinefunction(func):
-            raise TypeError(f'{func}はコルーチンでなければなりません')
+            raise TypeError(f"{func}はコルーチンでなければなりません")
         self.regex: str = regex
         self.text: str = text
         self.callback = func

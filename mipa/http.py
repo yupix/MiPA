@@ -37,13 +37,13 @@ from mipa import __version__
 from mipa.exception import ClientConnectorError
 from mipa.utils import MISSING
 
-__all__ = ('HTTPClient', 'HTTPSession')
+__all__ = ("HTTPClient", "HTTPSession")
 
 
 async def json_or_text(response: aiohttp.ClientResponse):
-    text = await response.text(encoding='utf-8')
+    text = await response.text(encoding="utf-8")
     try:
-        if 'application/json' in response.headers['Content-Type']:
+        if "application/json" in response.headers["Content-Type"]:
             return json.loads(text)
     except KeyError:
         pass
@@ -53,7 +53,7 @@ class HTTPClient:
     def __init__(self) -> None:
         self.__session: aiohttp.ClientSession = MISSING
         self.token: Optional[str] = None
-        user_agent = 'Misskey Bot (https://github.com/yupix/MiPA {0}) Python/{1[0]}.{1[1]} aiohttp/{2}'  # noqa: E501
+        user_agent = "Misskey Bot (https://github.com/yupix/MiPA {0}) Python/{1[0]}.{1[1]} aiohttp/{2}"  # noqa: E501
         self.user_agent = user_agent.format(
             __version__, sys.version_info, aiohttp.__version__
         )
@@ -63,11 +63,11 @@ class HTTPClient:
 
     async def ws_connect(self, url: str, *, compress: int = 0) -> Any:
         kwargs = {
-            'autoclose': False,
-            'max_msg_size': 0,
-            'timeout': 30.0,
-            'headers': {'User-Agent': self.user_agent},
-            'compress': compress,
+            "autoclose": False,
+            "max_msg_size": 0,
+            "timeout": 30.0,
+            "headers": {"User-Agent": self.user_agent},
+            "compress": compress,
         }
         try:
             ws = await self.__session.ws_connect(url, **kwargs)

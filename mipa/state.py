@@ -73,7 +73,7 @@ if TYPE_CHECKING:
 
 _log = logging.getLogger(__name__)
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class IMessage(TypedDict, Generic[T]):
@@ -94,29 +94,29 @@ class ConnectionState:
         self.loop: asyncio.AbstractEventLoop = loop
         self.parsers = parsers = {}
         for attr, func in inspect.getmembers(self):
-            if attr.startswith('parse'):
+            if attr.startswith("parse"):
                 parsers[attr[6:].upper()] = func
 
     async def parse_emoji_added(self, message: Dict[str, Any]):
         self.__dispatch(
-            'emoji_add', CustomEmoji(message['body']['emoji'], client=self.api)
+            "emoji_add", CustomEmoji(message["body"]["emoji"], client=self.api)
         )
 
     async def parse_emoji_deleted(self, message: IMessage[list[ICustomEmoji]]):
         self.__dispatch(
-            'emoji_deleted',
+            "emoji_deleted",
             [
                 CustomEmoji(emoji, client=self.api)
-                for emoji in message['body']['emojis']
+                for emoji in message["body"]["emojis"]
             ],
         )
 
     async def parse_emoji_updated(self, message: IMessage[list[ICustomEmoji]]):
         self.__dispatch(
-            'emoji_updated',
+            "emoji_updated",
             [
                 CustomEmoji(emoji, client=self.api)
-                for emoji in message['body']['emojis']
+                for emoji in message["body"]["emojis"]
             ],
         )
 
@@ -130,32 +130,34 @@ class ConnectionState:
         message : Dict[str, Any]
             Received message
         """
-        base_msg = upper_to_lower(message['body'])
-        channel_type = str_lower(base_msg.get('type'))
-        _log.debug(f'ChannelType: {channel_type}')
-        _log.debug(f'recv event type: {channel_type}')
-        if func := getattr(self, f'parse_{channel_type}', None):
-            await func(base_msg['body'])
+        base_msg = upper_to_lower(message["body"])
+        channel_type = str_lower(base_msg.get("type"))
+        _log.debug(f"ChannelType: {channel_type}")
+        _log.debug(f"recv event type: {channel_type}")
+        if func := getattr(self, f"parse_{channel_type}", None):
+            await func(base_msg["body"])
         else:
-            _log.debug(f'Unknown event type: {channel_type}')
+            _log.debug(f"Unknown event type: {channel_type}")
 
     async def parse_follow(self, message: IUserDetailed) -> None:
         """
         When you follow someone, this event will be called
         """
         user: UserDetailed = UserDetailed(
-            message, client=self.api,
+            message,
+            client=self.api,
         )
-        self.__dispatch('user_follow', user)
+        self.__dispatch("user_follow", user)
 
     async def parse_unfollow(self, message: IUserDetailed):
         """
         When you unfollow someone, this event will be called
         """
         user: UserDetailed = UserDetailed(
-            message, client=self.api,
+            message,
+            client=self.api,
         )
-        self.__dispatch('user_unfollow', user)
+        self.__dispatch("user_unfollow", user)
 
     async def parse_signin(self, message: Dict[str, Any]):
         """
@@ -172,22 +174,22 @@ class ConnectionState:
             )
 
     async def parse_deleted(self, note: INoteUpdated[INoteUpdatedDelete]):
-        self.__dispatch('note_deleted', NoteDeleted(note))
+        self.__dispatch("note_deleted", NoteDeleted(note))
 
     async def parse_unreacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
     ):
         self.__dispatch(
-            'unreacted', PartialReaction(reaction, client=self.api)
+            "unreacted", PartialReaction(reaction, client=self.api)
         )
 
     async def parse_reacted(
         self, reaction: INoteUpdated[INoteUpdatedReaction]
     ):
-        self.__dispatch('reacted', PartialReaction(reaction, client=self.api))
+        self.__dispatch("reacted", PartialReaction(reaction, client=self.api))
 
     async def parse_me_updated(self, user: IUserDetailed):
-        self.__dispatch('me_updated', UserDetailed(user, client=self.api))
+        self.__dispatch("me_updated", UserDetailed(user, client=self.api))
 
     async def parse_read_all_announcements(
         self, message: Dict[str, Any]
@@ -195,7 +197,7 @@ class ConnectionState:
         pass  # TODO: 実装
 
     async def parse_drive_file_created(self, message: Dict[str, Any]) -> None:
-        self.__dispatch('drive_file_created', message)
+        self.__dispatch("drive_file_created", message)
 
     async def parse_read_all_unread_mentions(
         self, message: Dict[str, Any]
@@ -236,7 +238,8 @@ class ConnectionState:
         チャットが来た際のデータを処理する関数
         """
         self.__dispatch(
-            'chat', ChatMessage(message, client=self.api),
+            "chat",
+            ChatMessage(message, client=self.api),
         )
 
     async def parse_unread_messaging_message(
@@ -246,7 +249,8 @@ class ConnectionState:
         チャットが既読になっていない場合のデータを処理する関数
         """
         self.__dispatch(
-            'chat_unread_message', ChatMessage(message, client=self.api),
+            "chat_unread_message",
+            ChatMessage(message, client=self.api),
         )
 
     async def parse_notification(
@@ -274,29 +278,29 @@ class ConnectionState:
                 ],
             ],
         ] = {
-            'follow': ('user_followed', NotificationFollow),
-            'mention': ('mention', NotificationNote),
-            'reply': ('reply', NotificationNote),
-            'renote': ('renote', NotificationNote),
-            'quote': ('quote', NotificationNote),
-            'reaction': ('reaction', NotificationReaction),
-            'poll_vote': ('poll_vote', NotificationNote),
-            'poll_ended': ('poll_end', NotificationPollEnd),
-            'receive_follow_request': (
-                'follow_request',
+            "follow": ("user_followed", NotificationFollow),
+            "mention": ("mention", NotificationNote),
+            "reply": ("reply", NotificationNote),
+            "renote": ("renote", NotificationNote),
+            "quote": ("quote", NotificationNote),
+            "reaction": ("reaction", NotificationReaction),
+            "poll_vote": ("poll_vote", NotificationNote),
+            "poll_ended": ("poll_end", NotificationPollEnd),
+            "receive_follow_request": (
+                "follow_request",
                 NotificationFollowRequest,
             ),
-            'follow_request_accepted': (
-                'follow_request_accept',
+            "follow_request_accepted": (
+                "follow_request_accept",
                 NotificationFollow,
             ),
-            'achievement_earned': (
-                'achievement_earned',
+            "achievement_earned": (
+                "achievement_earned",
                 NotificationAchievement,
             ),
         }
         dispatch_path, parse_class = notification_map.get(
-            str_lower(message['type']), (None, None)
+            str_lower(message["type"]), (None, None)
         )
         if dispatch_path and parse_class:
             self.__dispatch(
@@ -321,4 +325,4 @@ class ConnectionState:
         """
         note = Note(message, self.api)
         await self.__client.router.capture_message(note.id)
-        self.__dispatch('note', note)
+        self.__dispatch("note", note)

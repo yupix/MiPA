@@ -76,7 +76,7 @@ if TYPE_CHECKING:
     from mipa.ext import Cog
 
 
-__all__ = ['BotBase', 'Bot']
+__all__ = ["BotBase", "Bot"]
 
 
 class BotBase(CommandManager):
@@ -92,12 +92,12 @@ class BotBase(CommandManager):
         self.__extensions: dict[str, Any] = {}
         self.user: UserDetailed
         self.__cogs: dict[str, Cog] = {}
-        self.strip_after_prefix = options.get('strip_after_prefix', False)
+        self.strip_after_prefix = options.get("strip_after_prefix", False)
         # self.logger = get_module_logger(__name__) TODO: 直す
         self.loop = asyncio.get_event_loop()
 
     def _on_note(self, message):
-        self.dispatch('note', message)
+        self.dispatch("note", message)
 
     async def on_ready(self, ws: ClientWebSocketResponse):
         """
@@ -120,7 +120,7 @@ class BotBase(CommandManager):
     ):
         name = func.__name__ if name is None else name
         if not asyncio.iscoroutinefunction(func):
-            raise TypeError('Listeners must be coroutines')
+            raise TypeError("Listeners must be coroutines")
 
         if name in self.extra_events:
             self.special_events[name].append(func)
@@ -141,7 +141,7 @@ class BotBase(CommandManager):
     ):
         name = func.__name__ if name is None else name
         if not asyncio.iscoroutinefunction(func):
-            raise TypeError('Listeners must be coroutines')
+            raise TypeError("Listeners must be coroutines")
 
         if name in self.extra_events:
             self.extra_events[name].append(func)
@@ -164,7 +164,7 @@ class BotBase(CommandManager):
         -------
 
         """
-        ev = f'on_{event_name}'
+        ev = f"on_{event_name}"
         for event in self.special_events.get(ev, []):
             foo = importlib.import_module(event.__module__)
             coro = getattr(foo, ev)
@@ -176,7 +176,7 @@ class BotBase(CommandManager):
     def dispatch(
         self, event_name: str, *args: tuple[Any], **kwargs: dict[Any, Any]
     ):
-        ev = f'on_{event_name}'
+        ev = f"on_{event_name}"
         for event in self.extra_events.get(ev, []):
             if inspect.ismethod(event):
                 coro = event
@@ -213,7 +213,7 @@ class BotBase(CommandManager):
         try:
             setup = spec.setup
         except AttributeError as e:
-            raise NoEntryPointError(f'{key} にsetupが存在しません') from e
+            raise NoEntryPointError(f"{key} にsetupが存在しません") from e
 
         try:
             await setup(self)
@@ -247,7 +247,7 @@ class BotBase(CommandManager):
         try:
             module = importlib.import_module(name)
         except ModuleNotFoundError as e:
-            raise InvalidCogPath(f'cog: {name} へのパスが無効です') from e
+            raise InvalidCogPath(f"cog: {name} へのパスが無効です") from e
         await self._load_from_module(module, name)
 
     def schedule_event(
@@ -259,7 +259,7 @@ class BotBase(CommandManager):
     ) -> asyncio.Task[Any]:
         return asyncio.create_task(
             self._run_event(coro, event_name, *args, **kwargs),
-            name=f'MiPA: {event_name}',
+            name=f"MiPA: {event_name}",
         )
 
     async def _run_event(
@@ -281,11 +281,11 @@ class BotBase(CommandManager):
 
     @staticmethod
     async def __on_error(event_method: str) -> None:
-        print(f'Ignoring exception in {event_method}', file=sys.stderr)
+        print(f"Ignoring exception in {event_method}", file=sys.stderr)
         traceback.print_exc()
 
     async def on_error(self, err):
-        await self.event_dispatch('error', err)
+        await self.event_dispatch("error", err)
 
     def get_cog(self, name: str) -> Optional[str]:
         return self.__cogs.get(name)
@@ -296,7 +296,7 @@ class BotBase(CommandManager):
     async def progress_command(self, message):
         for cmd in self.all_commands:
             ctx = await self.get_context(message, cmd)
-            if cmd.cmd_type == 'regex':
+            if cmd.cmd_type == "regex":
                 if re.search(cmd.key, message.content):
                     hit_list = re.findall(cmd.key, message.content)
                     if isinstance(hit_list, list):

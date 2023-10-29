@@ -46,7 +46,7 @@ from mipa.ext.commands.core import Command
 if TYPE_CHECKING:
     from mipa.ext.commands.bot import BotBase
 
-FuncT = TypeVar('FuncT', bound=Callable[..., Any])
+FuncT = TypeVar("FuncT", bound=Callable[..., Any])
 
 
 class CogMeta(type):
@@ -54,14 +54,16 @@ class CogMeta(type):
 
     def __new__(cls, *args: Tuple[Any], **kwargs: Dict[str, Any]):
         name, bases, attrs = args
-        attrs['__cog_name__'] = kwargs.pop('name', name)
-        attrs['__cog_settings__'] = kwargs.pop('command_attrs', {})
+        attrs["__cog_name__"] = kwargs.pop("name", name)
+        attrs["__cog_settings__"] = kwargs.pop("command_attrs", {})
         listeners = {}
         commands = {}
-        no_bot_cog = 'Commands or listeners must not start with cog_ or bot_ (in method {0.__name__}.{1})'  # noqa: E501
+        no_bot_cog = "Commands or listeners must not start with cog_ or bot_ (in method {0.__name__}.{1})"  # noqa: E501
         new_cls = super().__new__(cls, name, bases, attrs, **kwargs)
 
-        for base in reversed(new_cls.__mro__):  # 多重継承を確認 !コマンドを登録
+        for base in reversed(
+            new_cls.__mro__
+        ):  # 多重継承を確認 !コマンドを登録
             for elem, value in base.__dict__.items():
                 if elem in commands:
                     del commands[elem]  # commandsから削除
@@ -83,7 +85,7 @@ class CogMeta(type):
                     except AttributeError:
                         continue
                     else:
-                        if elem.startswith(('cog', 'bot_')):
+                        if elem.startswith(("cog", "bot_")):
                             raise TypeError(no_bot_cog.format(base, elem))
                         listeners[elem] = value
         new_cls.__cog_commands__ = list(commands.values())
@@ -123,7 +125,7 @@ class Cog(metaclass=CogMeta):
                 actual = actual.__func__
             if not inspect.iscoroutinefunction(actual):
                 raise TypeError(
-                    'Listener function must be a coroutine function.'
+                    "Listener function must be a coroutine function."
                 )
             actual.__cog_listener__ = True
             to_assign = name or actual.__name__

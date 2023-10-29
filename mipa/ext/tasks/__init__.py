@@ -42,16 +42,19 @@ from typing import (
 from mipa.exception import TaskNotRunningError
 from mipa.utils import MISSING
 
-__all__ = ['Loop', 'loop']
+__all__ = ["Loop", "loop"]
 
 _func = Callable[..., Coroutine[Any, Any, Any]]
-LF = TypeVar('LF', bound=_func)
-T = TypeVar('T')
+LF = TypeVar("LF", bound=_func)
+T = TypeVar("T")
 
 
 class Loop(Generic[LF]):
     def __init__(
-        self, coro: LF, seconds: float, count: Optional[int],
+        self,
+        coro: LF,
+        seconds: float,
+        count: Optional[int],
     ):
         self.seconds = seconds
         self.coro: LF = coro
@@ -63,11 +66,11 @@ class Loop(Generic[LF]):
         self._stop_next_iteration = False
 
         if self.count is not None and self.count <= 0:
-            raise ValueError('count must be greater than 0 or None.')
+            raise ValueError("count must be greater than 0 or None.")
 
         if not inspect.iscoroutinefunction(self.coro):
             raise TypeError(
-                f'Expected coroutine function, not {type(self.coro).__name__!r}.'
+                f"Expected coroutine function, not {type(self.coro).__name__!r}."
             )
 
     def start(
@@ -96,7 +99,7 @@ class Loop(Generic[LF]):
         """
 
         if self._task is None:
-            raise TaskNotRunningError('タスクは起動していません')
+            raise TaskNotRunningError("タスクは起動していません")
 
         if not self._task.done():
             self._stop_next_iteration = True
@@ -117,7 +120,9 @@ class Loop(Generic[LF]):
             return self
 
         copy: Loop[LF] = Loop(
-            self.coro, seconds=self.seconds, count=self.count,
+            self.coro,
+            seconds=self.seconds,
+            count=self.count,
         )
         copy._injected = obj
 
@@ -126,9 +131,15 @@ class Loop(Generic[LF]):
 
 
 def loop(
-    *, seconds: float = MISSING, count: Optional[int] = None,
+    *,
+    seconds: float = MISSING,
+    count: Optional[int] = None,
 ) -> Callable[[LF], Loop[LF]]:
     def decorator(func: LF) -> Loop[LF]:
-        return Loop[LF](func, seconds=seconds, count=count,)
+        return Loop[LF](
+            func,
+            seconds=seconds,
+            count=count,
+        )
 
     return decorator

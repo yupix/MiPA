@@ -2,15 +2,15 @@ import logging
 from typing import Any, Literal
 
 LOGING_LEVEL_TYPE = Literal[
-    'NOTSET', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'
+    "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"
 ]
 LOGING_LEVELS = {
-    'NOTSET': 0,
-    'DEBUG': 10,
-    'INFO': 20,
-    'WARNING': 30,
-    'ERROR': 40,
-    'CRITICAL': 50,
+    "NOTSET": 0,
+    "DEBUG": 10,
+    "INFO": 20,
+    "WARNING": 30,
+    "ERROR": 40,
+    "CRITICAL": 50,
 }
 
 
@@ -22,24 +22,23 @@ class _MissingSentinel:
         return False
 
     def __repr__(self):
-        return '...'
+        return "..."
 
 
 MISSING: Any = _MissingSentinel()
 
 
 def parse_logging_level(level: LOGING_LEVEL_TYPE):
-
     if level in LOGING_LEVELS:
         return LOGING_LEVELS[level]
-    raise Exception('Not found logging level {0}' % (level))
+    raise Exception("Not found logging level {0}" % (level))
 
 
 def setup_logging(
     *,
     handler: logging.Handler | None = None,
     formatter: logging.Formatter | None = None,
-    level: LOGING_LEVEL_TYPE = 'INFO',
+    level: LOGING_LEVEL_TYPE = "INFO",
 ) -> None:
     _level = parse_logging_level(level)
 
@@ -53,9 +52,9 @@ def setup_logging(
         # if isinstance(handler, logging.StreamHandler): TODO: カラー出力に対応する
         #     pass
         # else:
-        dt_fmt = '%Y-%m-%d %H:%M:%S'
+        dt_fmt = "%Y-%m-%d %H:%M:%S"
         formatter = logging.Formatter(
-            '[{asctime}] [{levelname:<8}] {name}: {message}', dt_fmt, style='{'
+            "[{asctime}] [{levelname:<8}] {name}: {message}", dt_fmt, style="{"
         )
 
     logger = logging.getLogger()

@@ -100,7 +100,7 @@ class Client:
     ):
         name = func.__name__ if name is None else name
         if not asyncio.iscoroutinefunction(func):
-            raise TypeError('Listeners must be coroutines')
+            raise TypeError("Listeners must be coroutines")
 
         if name in self.extra_events:
             self.special_events[name].append(func)
@@ -121,8 +121,8 @@ class Client:
     ):
         name = func.__name__ if name is None else name
         if not asyncio.iscoroutinefunction(func):
-            raise TypeError('Listeners must be coroutines')
-        _log.debug(f'add_listener: {name} {func.__name__}')
+            raise TypeError("Listeners must be coroutines")
+        _log.debug(f"add_listener: {name} {func.__name__}")
         if name in self.extra_events:
             self.extra_events[name].append(func)
         else:
@@ -145,7 +145,7 @@ class Client:
 
         """
 
-        ev = f'on_{event_name}'
+        ev = f"on_{event_name}"
         for event in self.special_events.get(ev, []):
             foo = importlib.import_module(event.__module__)
             coro = getattr(foo, ev)
@@ -157,7 +157,7 @@ class Client:
     def dispatch(
         self, event_name: str, *args: tuple[Any], **kwargs: Dict[Any, Any]
     ):
-        ev = f'on_{event_name}'
+        ev = f"on_{event_name}"
         for event in self.extra_events.get(ev, []):
             if inspect.ismethod(event):
                 coro = event
@@ -178,7 +178,7 @@ class Client:
     ) -> asyncio.Task[Any]:
         return self.loop.create_task(
             self._run_event(coro, event_name, *args, **kwargs),
-            name=f'MiPA: {event_name}',
+            name=f"MiPA: {event_name}",
         )
 
     async def _run_event(
@@ -200,14 +200,17 @@ class Client:
 
     @staticmethod
     async def __on_error(event_method: str) -> None:
-        print(f'Ignoring exception in {event_method}', file=sys.stderr)
+        print(f"Ignoring exception in {event_method}", file=sys.stderr)
         traceback.print_exc()
 
     async def on_error(self, err):
-        self.event_dispatch('error', err)
+        self.event_dispatch("error", err)
 
     async def create_api_session(
-        self, token: str, url: str, log_level: LOGING_LEVEL_TYPE | None,
+        self,
+        token: str,
+        url: str,
+        log_level: LOGING_LEVEL_TYPE | None,
     ) -> API:
         self.core = API(url, token, log_level=log_level)
         return self.core
@@ -237,7 +240,10 @@ class Client:
         await self.setup_hook()
 
     async def _connect(
-        self, *, timeout: int = 60, event_name: str = 'ready',
+        self,
+        *,
+        timeout: int = 60,
+        event_name: str = "ready",
     ) -> None:
         self._connection = self._get_state()
         coro = MisskeyWebSocket.from_client(
@@ -248,17 +254,20 @@ class Client:
             await self.ws.poll_event()
 
     async def connect(
-        self, *, reconnect: bool = True, timeout: int = 60,
+        self,
+        *,
+        reconnect: bool = True,
+        timeout: int = 60,
     ) -> None:
         self.should_reconnect = reconnect
-        event_name = 'ready'
+        event_name = "ready"
         while True:
             try:
                 await self._connect(timeout=timeout, event_name=event_name)
             except (WebSocketReconnect, asyncio.exceptions.TimeoutError):
                 if not self.should_reconnect:
                     break
-                event_name = 'reconnect'
+                event_name = "reconnect"
                 await asyncio.sleep(3)
 
     async def disconnect(self):
@@ -284,7 +293,7 @@ class Client:
         reconnect: bool = True,
         timeout: int = 60,
         is_ayuskey: bool = False,
-        log_level: LOGING_LEVEL_TYPE | None = 'INFO',
+        log_level: LOGING_LEVEL_TYPE | None = "INFO",
     ):
         """
         Starting Bot
@@ -305,22 +314,22 @@ class Client:
         if log_level is not None:
             setup_logging(level=log_level)
         self.token = token
-        url = url[:-1] if url[-1] == '/' else url
-        split_url = url.split('/')
+        url = url[:-1] if url[-1] == "/" else url
+        split_url = url.split("/")
 
-        if origin_url := re.search(r'wss?://(.*)', url):
+        if origin_url := re.search(r"wss?://(.*)", url):
             origin_url = (
                 origin_url.group(0)
-                .replace('wss', 'https')
-                .replace('ws', 'http')
-                .replace('/streaming', '')
+                .replace("wss", "https")
+                .replace("ws", "http")
+                .replace("/streaming", "")
             )
         else:
             origin_url = url
-        if 'streaming' not in split_url:
-            split_url.append('streaming')
-            url = '/'.join(split_url)
-        self.url = url.replace('https', 'wss').replace('http', 'ws')
+        if "streaming" not in split_url:
+            split_url.append("streaming")
+            url = "/".join(split_url)
+        self.url = url.replace("https", "wss").replace("http", "ws")
         self.origin_url = origin_url
         await self.login(token, origin_url, log_level)
         await self.connect(reconnect=reconnect, timeout=timeout)

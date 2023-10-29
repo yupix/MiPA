@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Iterable, Literal
 if TYPE_CHECKING:
     from aiohttp.client_ws import ClientWebSocketResponse
 
-__all__ = ['Router']
+__all__ = ["Router"]
 
 
 class Router:
@@ -46,7 +46,7 @@ class Router:
     async def connect_channel(
         self,
         channel_list: Iterable[
-            Literal['global', 'main', 'home', 'local', 'hybrid']
+            Literal["global", "main", "home", "local", "hybrid"]
         ],
     ) -> None:
         """
@@ -61,21 +61,21 @@ class Router:
         """
 
         channel_dict = {
-            'global': 'globalTimeline',
-            'main': 'main',
-            'home': 'homeTimeline',
-            'local': 'localTimeline',
-            'hybrid': 'hybridTimeline',
+            "global": "globalTimeline",
+            "main": "main",
+            "home": "homeTimeline",
+            "local": "localTimeline",
+            "hybrid": "hybridTimeline",
         }
         try:
             for channel in channel_list:
                 get_channel = channel_dict[channel]
                 await self.web_socket.send_json(
                     {
-                        'type': 'connect',
-                        'body': {
-                            'channel': f'{get_channel}',
-                            'id': f'{uuid.uuid4()}',
+                        "type": "connect",
+                        "body": {
+                            "channel": f"{get_channel}",
+                            "id": f"{uuid.uuid4()}",
                         },
                     }
                 )
@@ -93,10 +93,10 @@ class Router:
         """
         if len(self.captured_note) > self.max_capture:
             await self.web_socket.send_json(
-                {'type': 'unsubNote', 'body': {'id': f'{note_id}'}}
+                {"type": "unsubNote", "body": {"id": f"{note_id}"}}
             )
             del self.captured_note[0]
         self.captured_note.append(note_id)
         await self.web_socket.send_json(
-            {'type': 'subNote', 'body': {'id': f'{note_id}'}}
+            {"type": "subNote", "body": {"id": f"{note_id}"}}
         )
