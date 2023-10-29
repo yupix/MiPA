@@ -98,14 +98,14 @@ class ConnectionState:
                 parsers[attr[6:].upper()] = func
 
     async def parse_emoji_added(
-        self, message: Dict[str, Any], channel_id: str
+        self, message: Dict[str, Any]
     ):
         self.__dispatch(
             "emoji_add", CustomEmoji(message["body"]["emoji"], client=self.api)
         )
 
     async def parse_emoji_deleted(
-        self, message: IMessage[list[ICustomEmoji]], channel_id: str
+        self, message: IMessage[list[ICustomEmoji]]
     ):
         self.__dispatch(
             "emoji_deleted",
@@ -116,7 +116,7 @@ class ConnectionState:
         )
 
     async def parse_emoji_updated(
-        self, message: IMessage[list[ICustomEmoji]], channel_id: str
+        self, message: IMessage[list[ICustomEmoji]]
     ):
         self.__dispatch(
             "emoji_updated",
@@ -175,7 +175,7 @@ class ConnectionState:
         """
 
     async def parse_note_updated(
-        self, note_data: INoteUpdated[Any]
+        self, note_data: INoteUpdated[Any], **kwargs  # channel_idがあったり無かったりしてよくわからない
     ):
         message: Dict[str, Any] = upper_to_lower(note_data)
         if func := getattr(self, f'parse_{message["body"]["type"]}', None):
