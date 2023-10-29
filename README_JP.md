@@ -4,18 +4,19 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fyupix%2FMiPA?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fyupix%2FMiPA.svg?type=shield"/></a>
 
-## Overview
+## 概要
 
-[日本語版](./README_JP.md)
+[English](./README.md)
 
-MiPA is a Misskey Bot Framework created to allow for [Discord.py](https://github.com/Rapptz/discord.py)-like coding.
+MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
+ライクな書き方ができるように作っている Misskey Bot Frameworkです。
+
+## MiPACについて
+
+MiPAが提供するApi Wrapperとしての機能は [MiPAC](https://github.com/yupix/mipac) と呼ばれるライブラリで管理されています。MiPAと比較して作業量が非常に多いため一緒に作業をしてくださる方を募集しています。
 
 
-## About MiPAC
-The API wrapper functionality provided by MiPA is managed by a library called [MiPAC](https://github.com/yupix/mipac). Since the amount of work is significantly higher than that of MiPA, we are looking for people to work with us.
-
-
-## Supported Misskey Versions
+## サポートしているMisskey
 
 - [Misskey Official v13](https://github.com/misskey-dev/misskey)
 - [Misskey Official v12](https://github.com/misskey-dev/misskey)
@@ -63,16 +64,13 @@ if __name__ == '__main__':
     asyncio.run(bot.start('wss://example.com/streaming', 'your token here'))
 ```
 
-For more examples, please see the [examples folder](examples). If you don't know how to do what you want in the examples, please feel free to create an issue.
-
-
-
+より多くの例は [examples フォルダ](examples) をご覧ください。もしexamplesであなたのしたいことが分からなかった場合は遠慮なくIssueを作成してください。
 
 ## LICENSE
-This project is provided under the [MIT LICENSE](./LICENSE).
 
-MiPA has been inspired by Discord.py in many ways. Therefore, in places where we use the source code of Discord.py, we specify the license of Discord.py at the beginning of the file. Please check the code for details.
+このプロジェクトは [MIT LICENSE](./LICENSE) で提供されます。
 
+MiPAでは多くの部分においてDiscord.pyを参考にさせていただきました。そのため、Discord.pyのソースコードを利用させていただいている個所ではファイルの初めにDiscord.py側のライセンスを明記しています。詳しくはコードを確認してください。
 
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fyupix%2FMiPA.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fyupix%2FMiPA?ref=badge_large)
@@ -80,7 +78,7 @@ MiPA has been inspired by Discord.py in many ways. Therefore, in places where we
 ## Special Thanks
 
 - [Discord.py](https://github.com/Rapptz/discord.py)
-    - We have been inspired by many aspects of Discord.py, such as the mechanism of Cogs and the management of tasks and states.
+    - Cogの仕組みやtask,stateの管理等多くの部分で参考にさせていただきました。
 
 <p align="center">
     <a href="https://mipa.akarinext.org">Documentation</a>
