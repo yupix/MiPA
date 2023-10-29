@@ -135,7 +135,9 @@ class ConnectionState:
         _log.debug(f"ChannelType: {channel_type}")
         _log.debug(f"recv event type: {channel_type}")
         if func := getattr(self, f"parse_{channel_type}", None):
-            await func(base_msg["body"])
+            await func(
+                base_msg["body"], base_msg["id"]
+            )  # parse_note意外が呼ばれたらエラー出るかも
         else:
             _log.debug(f"Unknown event type: {channel_type}")
 
@@ -319,10 +321,13 @@ class ConnectionState:
         # notification_type = str_lower(message['type'])
         # getattr(self, f'parse_{notification_type}')(message)
 
-    async def parse_note(self, message: INote) -> None:
+    async def parse_note(self, message: INote, channel_id: str) -> None:
         """
         ノートイベントを解析する関数
         """
         note = Note(message, self.api)
         await self.__client.router.capture_message(note.id)
+        handler = self.__client.router.channel_handlers.get(channel_id)
+        if handler:
+            await handler.on_note(note)
         self.__dispatch("note", note)
