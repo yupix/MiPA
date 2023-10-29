@@ -1,27 +1,24 @@
 # MiPA
 
 <a href="https://discord.gg/CcT997U"><img src="https://img.shields.io/discord/530299114387406860?style=flat-square&color=5865f2&logo=discord&logoColor=ffffff&label=discord" alt="Discord server invite" /></a>
-<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-axblack-8bd124.svg"></a>
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fyupix%2FMiPA?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fyupix%2FMiPA.svg?type=shield"/></a>
 
 ## 概要
 
 MiPA は[Discord.py](https://github.com/Rapptz/discord.py)
-ライクな書き方ができるように作っている MisskeyApi wrapper です
+ライクな書き方ができるように作っている Misskey Bot Frameworkです。
 
-## 注意
+## MiPACについて
 
-### MiPACとの関係性について
+MiPAが提供するApi Wrapperとしての機能は [MiPAC](https://github.com/yupix/mipac) と呼ばれるライブラリで管理されています。MiPAと比較して作業量が非常に多いため一緒に作業をしてくださる方を募集しています。
 
-MiPAはMiPACというライブラリに依存しています。これはMiPAのCore部分をまとめた物であり、基本的にはApiへのアクセス用メソッドなどを提供します。MiPAではMiPACのメソッド群をそのまま公開している為、MiPAC側で大きな変更が入るとMiPAを使用しているプロジェクトでもその影響を受ける可能性があります。そのため、[CHANGELOG.md](./CHANGELOG.md) で MiPACのバージョンが変更された際はそのリリースノートへのリンクを添付しています。予めMiPAC側での変更を確認したうえでアップデートをお願いします。
-
-- このプロジェクトは開発中です。仕様が定まっていないため、破壊的変更が多いです。
-- `master` ブランチで使用しているmipacは`GitHub`にあるmipacの`develop`ブランチの物です。
 
 ## サポートしているMisskey
 
+- [Misskey Official v13](https://github.com/misskey-dev/misskey)
 - [Misskey Official v12](https://github.com/misskey-dev/misskey)
-- [Ayuskey latest](https://github.com/teamblackcrystal/misskey)
+- [Misskey Official v11](https://github.com/misskey-dev/misskey)
 
 ### Examples
 
@@ -65,24 +62,7 @@ if __name__ == '__main__':
     asyncio.run(bot.start('wss://example.com/streaming', 'your token here'))
 ```
 
-Want more examples? Go to the [examples folder](examples)! Want to know how to use a feature that isn't even here?
-Submit a request in an Issue!
-
-
-### 使用者の方へ
-
-MiPAで作ったBotなどをGitHubなどで公開している場合は、Issueなどに送信してくだされば、MiPAで作られている物に追加します。また、良ければBotのプロフィールなどにこのBotはMiPAで作成されているとの旨を記載してくださると嬉しいです。
-
-### MiPAで作られているもの
-
-#### Bot
-
-- [akari](https://github.com/teamblackcrystal/akari)
-    - 作者の yupix が作成しているBotです。クリーンアーキテクチャを用いているため、部分的に分かりにくい所があるかもしれません。
-
-### 開発者向け情報
-
-このプロジェクトでは [black](https://github.com/psf/black)のforkである、[axblack](https://github.com/axiros/axblack)を利用しています。主な違いはダブルクォートがデフォルトではなく、シングルクォートになっている点です
+より多くの例は [examples フォルダ](examples) をご覧ください。もしexamplesであなたのしたいことが分からなかった場合は遠慮なくIssueを作成してください。
 
 ## LICENSE
 
