@@ -97,12 +97,16 @@ class ConnectionState:
             if attr.startswith("parse"):
                 parsers[attr[6:].upper()] = func
 
-    async def parse_emoji_added(self, message: Dict[str, Any]):
+    async def parse_emoji_added(
+        self, message: Dict[str, Any], channel_id: str
+    ):
         self.__dispatch(
             "emoji_add", CustomEmoji(message["body"]["emoji"], client=self.api)
         )
 
-    async def parse_emoji_deleted(self, message: IMessage[list[ICustomEmoji]]):
+    async def parse_emoji_deleted(
+        self, message: IMessage[list[ICustomEmoji]], channel_id: str
+    ):
         self.__dispatch(
             "emoji_deleted",
             [
@@ -111,7 +115,9 @@ class ConnectionState:
             ],
         )
 
-    async def parse_emoji_updated(self, message: IMessage[list[ICustomEmoji]]):
+    async def parse_emoji_updated(
+        self, message: IMessage[list[ICustomEmoji]], channel_id: str
+    ):
         self.__dispatch(
             "emoji_updated",
             [
@@ -141,7 +147,9 @@ class ConnectionState:
         else:
             _log.debug(f"Unknown event type: {channel_type}")
 
-    async def parse_follow(self, message: IUserDetailed) -> None:
+    async def parse_follow(
+        self, message: IUserDetailed, channel_id: str
+    ) -> None:
         """
         When you follow someone, this event will be called
         """
@@ -151,7 +159,7 @@ class ConnectionState:
         )
         self.__dispatch("user_follow", user)
 
-    async def parse_unfollow(self, message: IUserDetailed):
+    async def parse_unfollow(self, message: IUserDetailed, channel_id: str):
         """
         When you unfollow someone, this event will be called
         """
@@ -161,12 +169,14 @@ class ConnectionState:
         )
         self.__dispatch("user_unfollow", user)
 
-    async def parse_signin(self, message: Dict[str, Any]):
+    async def parse_signin(self, message: Dict[str, Any], channel_id: str):
         """
         ログインが発生した際のイベント
         """
 
-    async def parse_note_updated(self, note_data: INoteUpdated[Any]):
+    async def parse_note_updated(
+        self, note_data: INoteUpdated[Any], channel_id: str
+    ):
         message: Dict[str, Any] = upper_to_lower(note_data)
         if func := getattr(self, f'parse_{message["body"]["type"]}', None):
             await func(message)
@@ -175,67 +185,79 @@ class ConnectionState:
                 f'Unknown note_updated event type: {message["body"]["type"]}'
             )
 
-    async def parse_deleted(self, note: INoteUpdated[INoteUpdatedDelete]):
+    async def parse_deleted(
+        self, note: INoteUpdated[INoteUpdatedDelete], channel_id: str
+    ):
         self.__dispatch("note_deleted", NoteDeleted(note))
 
     async def parse_unreacted(
-        self, reaction: INoteUpdated[INoteUpdatedReaction]
+        self, reaction: INoteUpdated[INoteUpdatedReaction], channel_id: str
     ):
         self.__dispatch(
             "unreacted", PartialReaction(reaction, client=self.api)
         )
 
     async def parse_reacted(
-        self, reaction: INoteUpdated[INoteUpdatedReaction]
+        self, reaction: INoteUpdated[INoteUpdatedReaction], channel_id: str
     ):
         self.__dispatch("reacted", PartialReaction(reaction, client=self.api))
 
-    async def parse_me_updated(self, user: IUserDetailed):
+    async def parse_me_updated(self, user: IUserDetailed, channel_id: str):
         self.__dispatch("me_updated", UserDetailed(user, client=self.api))
 
     async def parse_read_all_announcements(
-        self, message: Dict[str, Any]
+        self, message: Dict[str, Any], channel_id: str
     ) -> None:
         pass  # TODO: 実装
 
-    async def parse_drive_file_created(self, message: Dict[str, Any]) -> None:
+    async def parse_drive_file_created(
+        self, message: Dict[str, Any], channel_id: str
+    ) -> None:
         self.__dispatch("drive_file_created", message)
 
     async def parse_read_all_unread_mentions(
-        self, message: Dict[str, Any]
+        self, message: Dict[str, Any], channel_id: str
     ) -> None:
         pass  # TODO:実装
 
     async def parse_read_all_unread_specified_notes(
-        self, message: Dict[str, Any]
+        self, message: Dict[str, Any], channel_id: str
     ) -> None:
         pass  # TODO:実装
 
-    async def parse_read_all_channels(self, message: Dict[str, Any]) -> None:
+    async def parse_read_all_channels(
+        self, message: Dict[str, Any], channel_id: str
+    ) -> None:
         pass  # TODO:実装
 
     async def parse_read_all_notifications(
-        self, message: Dict[str, Any]
+        self, message: Dict[str, Any], channel_id: str
     ) -> None:
         pass  # TODO:実装
 
-    async def parse_url_upload_finished(self, message: Dict[str, Any]) -> None:
+    async def parse_url_upload_finished(
+        self, message: Dict[str, Any], channel_id: str
+    ) -> None:
         pass  # TODO:実装
 
-    async def parse_unread_mention(self, message: Dict[str, Any]) -> None:
+    async def parse_unread_mention(
+        self, message: Dict[str, Any], channel_id: str
+    ) -> None:
         pass
 
     async def parse_unread_specified_note(
-        self, message: Dict[str, Any]
+        self, message: Dict[str, Any], channel_id: str
     ) -> None:
         pass
 
     async def parse_read_all_messaging_messages(
-        self, message: Dict[str, Any]
+        self, message: Dict[str, Any], channel_id: str
     ) -> None:
         pass
 
-    async def parse_messaging_message(self, message: IChatMessage) -> None:
+    async def parse_messaging_message(
+        self, message: IChatMessage, channel_id: str
+    ) -> None:
         """
         チャットが来た際のデータを処理する関数
         """
@@ -245,7 +267,7 @@ class ConnectionState:
         )
 
     async def parse_unread_messaging_message(
-        self, message: IChatMessage
+        self, message: IChatMessage, channel_id: str
     ) -> None:
         """
         チャットが既読になっていない場合のデータを処理する関数
@@ -256,7 +278,7 @@ class ConnectionState:
         )
 
     async def parse_notification(
-        self, notification_data: Dict[str, Any]
+        self, notification_data: Dict[str, Any], channel_id: str
     ) -> None:
         """
         Parse notification event
@@ -309,7 +331,9 @@ class ConnectionState:
                 dispatch_path, parse_class(message, client=self.api)
             )
 
-    async def parse_unread_notification(self, message: Dict[str, Any]) -> None:
+    async def parse_unread_notification(
+        self, message: Dict[str, Any], channel_id: str
+    ) -> None:
         """
         未読の通知を解析する関数
 
