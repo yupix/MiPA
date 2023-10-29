@@ -175,7 +175,7 @@ class ConnectionState:
         """
 
     async def parse_note_updated(
-        self, note_data: INoteUpdated[Any], channel_id: str
+        self, note_data: INoteUpdated[Any]
     ):
         message: Dict[str, Any] = upper_to_lower(note_data)
         if func := getattr(self, f'parse_{message["body"]["type"]}', None):
