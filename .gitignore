@@ -4,4 +4,4 @@ __pycache__
 *.egg-info
 build
 dist
-!examples/use_cog/main.py
+!examples/**/main.py
