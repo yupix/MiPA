@@ -1,3 +1,8 @@
-[tool.black]
+[tool.ruff]
 line-length = 79
-exclude = 'mipac/_version.py'
+
+[tool.ruff.lint]
+exclude = ["mipa/**/__init__.py"]
+
+[tool.ruff.format]
+exclude = ["mipa/_version.py"]

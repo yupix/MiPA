@@ -12,7 +12,7 @@ with open('requirements.txt', 'r') as f:
     requirements = f.read().splitlines()
 
 extras_require = {
-    'dev': ['axblack', 'isort', 'mypy', 'flake8'],
+    'dev': ['ruff', 'isort', 'mypy', 'flake8'],
     'ci': ['flake8', 'mypy'],
 }
 
