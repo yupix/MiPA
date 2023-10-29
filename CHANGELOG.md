@@ -1,7 +1,67 @@
 # Change Log
 
 
-<!-- ## [Unreleased] -->
+## [Unreleased]
+
+### Added
+
+#### チャンネルに接続した際、チャンネル名とUUIDのdictが帰ってくるように
+
+例としては以下のような物が返ってきます。
+
+```python
+await self.router.connect_channel(['main', 'home'])
+>>> {'main': 'ce9b318b-3f7b-4227-b843-1b694112567e', 'home': '934b460d-50c5-463e-b975-9db7bf6ba42d'}
+```
+
+このIDは `connect_channel` を実行した際にのみ `チャンネル名: UUID` という形式になっており他の場所で取得したい場合は `router.channel_ids` プロパティを使用する必要があります。この場合は `UUID: チャンネル名` というキーと値が逆の状態で取得されるため注意してください。
+
+#### チャンネルを切断できるように
+
+最初に紹介した チャンネル名とUUIDのdictを用いて特定のチャンネルから切断できるようになりました。
+
+```python
+channel_ids = await self.router.connect_channel(['main', 'home'])
+await self.router.disconnect_channel(channel_ids['main'])
+```
+
+#### チャンネルごとに専用のクラスを使用できるように
+
+以下のように グローバルタイムラインに対して `AbstractTimeline` を継承した `GlobalTimeline` を実装することで作成が可能です。 `on_note` メソッドを抽象クラスに沿って作成する必要もあります。また、別にクラスを渡したくないけど、チャンネルには接続したいという場合は `None` を値として渡してください。
+
+注意点として、チャンネル専用のクラスを渡したからと言って、今回の場合でいう `MyBot` クラスにある `on_note` が発火されなくなるわけではありません。この機能の追加は多くのチャンネルに接続したいが、それぞれに別々の処理を実行したい場合を想定しています。そのため、`MyBot` 側の `on_note` には今までと変わらず**全ての**チャンネルのノートが流れてきます。
+
+```python
+from aiohttp import ClientWebSocketResponse
+from loguru import logger
+from mipac import Note
+
+from mipa.ext.commands.bot import Bot
+from mipa.ext.timelines.core import AbstractTimeline
+
+
+class GlobalTimeline(AbstractTimeline):
+    async def on_note(self, note: Note):
+        logger.info(f'{note.author.username}: {note.content}')
+
+class MyBot(Bot):
+    def __init__(self):
+        super().__init__()
+
+    async def _connect_channel(self):
+      await self.router.connect_channel({'global': GlobalTimeline(), 'main': None, 'home': None})
+
+    async def on_ready(self, ws: ClientWebSocketResponse):
+        await self._connect_channel()
+        logger.info('Logged in ', self.user.username)
+```
+
+また、この機能が追加されたからと言って、今までのコードに特別な変更は必要ありません。今まで通りの `list` 形式の引数も引き続きサポートしています。
+
+```python
+await self.router.connect_channel(['global', 'main', 'home'])
+```
+
 
 ## [0.3.0] 2023-04-25 
 
