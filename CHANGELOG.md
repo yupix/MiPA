@@ -1,7 +1,9 @@
 # Change Log
 
 
-## [Unreleased]
+<!-- ## [Unreleased] -->
+
+## [0.3.1] 2023-10-30
 
 ### Added
 
