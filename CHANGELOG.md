@@ -1,9 +1,14 @@
 # Change Log
 
-
 <!-- ## [Unreleased]
 
 このバージョンから developブランチは v13以降のみをサポートします。今まで通りの全てのイベントがあるのは shared のみとなります -->
+
+## [0.3.5] 2023-11-18
+
+### Fixed
+
+- 0.3.4 では直しきれなかった一部の不具合を修正しました
 
 ## [0.3.4] 2023-11-01
 
@@ -11,12 +16,11 @@
 
 - ほとんどのイベントで引数エラーが発生する
 
-
 ## [0.3.1] 2023-10-30
 
 ### Added
 
-#### チャンネルに接続した際、チャンネル名とUUIDのdictが帰ってくるように
+#### チャンネルに接続した際、チャンネル名と UUID の dict が帰ってくるように
 
 例としては以下のような物が返ってきます。
 
@@ -25,11 +29,11 @@ await self.router.connect_channel(['main', 'home'])
 >>> {'main': 'ce9b318b-3f7b-4227-b843-1b694112567e', 'home': '934b460d-50c5-463e-b975-9db7bf6ba42d'}
 ```
 
-このIDは `connect_channel` を実行した際にのみ `チャンネル名: UUID` という形式になっており他の場所で取得したい場合は `router.channel_ids` プロパティを使用する必要があります。この場合は `UUID: チャンネル名` というキーと値が逆の状態で取得されるため注意してください。
+この ID は `connect_channel` を実行した際にのみ `チャンネル名: UUID` という形式になっており他の場所で取得したい場合は `router.channel_ids` プロパティを使用する必要があります。この場合は `UUID: チャンネル名` というキーと値が逆の状態で取得されるため注意してください。
 
 #### チャンネルを切断できるように
 
-最初に紹介した チャンネル名とUUIDのdictを用いて特定のチャンネルから切断できるようになりました。
+最初に紹介した チャンネル名と UUID の dict を用いて特定のチャンネルから切断できるようになりました。
 
 ```python
 channel_ids = await self.router.connect_channel(['main', 'home'])
@@ -73,12 +77,11 @@ class MyBot(Bot):
 await self.router.connect_channel(['global', 'main', 'home'])
 ```
 
-
-## [0.3.0] 2023-04-25 
+## [0.3.0] 2023-04-25
 
 ### Changes by Package 📦
 
-MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOGを読むことを推奨します。
+MiPAC に破壊的変更を含む更新があるため、よく MiPAC の CHANGELOG を読むことを推奨します。
 
 - [MiPAC](https://github.com/yupix/MiPAC/releases)
 
@@ -95,7 +98,7 @@ MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOG�
 
 ### Changed
 
-- 使用するMiPACのバージョンを`0.4.3`に
+- 使用する MiPAC のバージョンを`0.4.3`に
   - 詳しい変更点は[こちらをご覧ください](https://github.com/yupix/MiPAC/releases)
 
 ### Fixed
@@ -106,7 +109,7 @@ MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOG�
 
 ### Changed
 
-- 使用するMiPACのバージョンを`0.4.2`に
+- 使用する MiPAC のバージョンを`0.4.2`に
 
 ## [0.2.0] 2023-03-20
 
@@ -119,7 +122,7 @@ MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOG�
 ### Changed
 
 - **BREAKING CHANGES** 以下のメソッドが非同期になります
-  - Cogs内の `setup` 関数
+  - Cogs 内の `setup` 関数
   - `add_cog`
   - `remove_cog`
   - `load_extension`
@@ -141,7 +144,7 @@ MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOG�
 
 ### Changed
 
-- 使用するMiPACのバージョンを`0.4.1`に
+- 使用する MiPAC のバージョンを`0.4.1`に
 
 ## [0.1.1] 2023-01-18
 
@@ -163,7 +166,7 @@ MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOG�
 
 ### Changed
 
-- 使用するMiPACのバージョンを`0.4.0`に
+- 使用する MiPAC のバージョンを`0.4.0`に
 
 ### Fixed
 
@@ -180,9 +183,8 @@ MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOG�
 - ✨ added event `on_reacted`.
 - ✨ added event `on_unreacted`.
 - ✨ added `router` property a `Client` class attributes.
-    - 💡 Direct instantiation of the `Router` class is deprecated.
+  - 💡 Direct instantiation of the `Router` class is deprecated.
 - [@omg-xtao](https://github.com/omg-xtao) ✨ feat: added `hybridTimeline` channel [#9](https://github.com/yupix/MiPA/pull/9).
-
 
 ### Changed
 
@@ -195,4 +197,4 @@ MiPACに破壊的変更を含む更新があるため、よくMiPACのCHANGELOG�
 
 - 🐛 fix: not working command Framework.
 - 🐛 fix: Chat related stuff is flowing `on_message`.
-    - 💡 Please use `on_chat` in the future!
+  - 💡 Please use `on_chat` in the future!
