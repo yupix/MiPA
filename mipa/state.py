@@ -140,7 +140,7 @@ class ConnectionState:
         _log.debug(f"recv event type: {channel_type}")
         if func := getattr(self, f"parse_{channel_type}", None):
             await func(
-                base_msg["body"], base_msg["id"]
+                base_msg["body"], channel_id=base_msg["id"]
             )  # parse_note意外が呼ばれたらエラー出るかも
         else:
             _log.debug(f"Unknown event type: {channel_type}")
