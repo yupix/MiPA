@@ -29,7 +29,7 @@ from __future__ import annotations
 
 import asyncio
 import functools
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List
 
 from mipa.ext.commands._types import _BaseCommand
 
@@ -102,7 +102,7 @@ class Command(_BaseCommand):
         await self.callback(*ctx.args, **ctx.kwargs)
 
 
-def mention_command(regex: Optional[str] = None, text: Optional[str] = None):
+def mention_command(regex: str | None = None, text: str | None = None):
     def decorator(func, **kwargs):
         return Command(func, regex=regex, text=text, **kwargs)
 

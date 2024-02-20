@@ -224,7 +224,7 @@ class BotBase(CommandManager):
     @staticmethod
     def _resolve_name(name: str, package: Optional[str]) -> str:
         try:
-            return importlib.util.resolve_name(name, package)
+            return importlib.util.resolve_name(name, package)  # pyright: ignore
         except ImportError as e:
             raise InvalidCogPath(name) from e
 
@@ -286,7 +286,7 @@ class BotBase(CommandManager):
     async def on_error(self, err):
         await self.event_dispatch("error", err)
 
-    def get_cog(self, name: str) -> Optional[str]:
+    def get_cog(self, name: str) -> Cog | None:
         return self.__cogs.get(name)
 
     async def get_context(self, message, cmd, cls=Context) -> Context:

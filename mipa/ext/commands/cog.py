@@ -32,7 +32,6 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    ClassVar,
     Dict,
     List,
     Optional,
@@ -51,8 +50,11 @@ FuncT = TypeVar("FuncT", bound=Callable[..., Any])
 
 class CogMeta(type):
     __cog_name__: str
+    __cog_settings__: dict[str, Any] = {}
+    __cog_listeners__: list[Tuple[str, str]]
+    __cog_commands__: list[Command] = []
 
-    def __new__(cls, *args: Tuple[Any], **kwargs: Dict[str, Any]):
+    def __new__(cls, *args: Any, **kwargs: Dict[str, Any]):
         name, bases, attrs = args
         attrs["__cog_name__"] = kwargs.pop("name", name)
         attrs["__cog_settings__"] = kwargs.pop("command_attrs", {})
@@ -107,10 +109,10 @@ class CogMeta(type):
 
 
 class Cog(metaclass=CogMeta):
-    __cog_name__ = ClassVar[str]
-    __cog_settings__: Dict[str, Any] = {}
-    __cog_listeners__: ClassVar[List[Tuple[str, str]]]
-    __cog_commands__: List[Command] = []
+    __cog_name__: str
+    __cog_settings__: dict[str, Any] = {}
+    __cog_listeners__: list[Tuple[str, str]]
+    __cog_commands__: list[Command] = []
 
     def __new__(cls, *args: Any, **kwargs: Any):
         self = super().__new__(cls)
