@@ -1,8 +1,26 @@
 # Change Log
 
-<!-- ## [Unreleased]
 
-このバージョンから developブランチは v13以降のみをサポートします。今まで通りの全てのイベントがあるのは shared のみとなります -->
+
+## v0.4.0
+
+このバージョンから developブランチは v13以降のみをサポートします。今まで通りの全てのイベントがあるのは shared ブランチのみとなります
+
+[compare changes](https://github.com/yupix/MiPA/compare/0.3.5...v0.4.0)
+
+### 🚀 Enhancements
+
+- MiPAC v0.6.0への対応 ([36494ef](https://github.com/yupix/MiPA/commit/36494ef))
+- Python3.12を必須に ([2abd5ed](https://github.com/yupix/MiPA/commit/2abd5ed))
+
+### 🩹 Fixes
+
+- Timelinesがpackagesに含まれていない ([d0caa63](https://github.com/yupix/MiPA/commit/d0caa63))
+- 直せる範囲で型エラーを修正 ([8e5a58d](https://github.com/yupix/MiPA/commit/8e5a58d))
+
+### ❤️ Contributors
+
+- Yupix ([@yupix](http://github.com/yupix))
 
 ## [0.3.5] 2023-11-18
 

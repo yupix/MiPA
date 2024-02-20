@@ -1,0 +1,20 @@
+{
+  "name": "mipa",
+  "version": "0.4.0",
+  "description": "Python Misskey Bot Framework",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yupix/MiPA.git"
+  },
+  "keywords": [
+    "python",
+    "misskey",
+    "bot-framework"
+  ],
+  "author": "yupix <yupi0982@outlook.jp>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/yupix/MiPA/issues"
+  },
+  "homepage": "https://github.com/yupix/MiPA#readme"
+}
