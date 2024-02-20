@@ -16,7 +16,7 @@ extras_require = {
     'ci': ['flake8', 'mypy'],
 }
 
-packages = ['mipa', 'mipa.ext', 'mipa.ext.commands', 'mipa.ext.tasks']
+packages = ['mipa', 'mipa.ext', 'mipa.ext.commands', 'mipa.ext.tasks', 'mipa.ext.timelines']
 
 setup(
     name='mipa',
