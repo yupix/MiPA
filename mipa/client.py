@@ -41,7 +41,7 @@ from typing import Any, Callable, Coroutine, Dict, Optional, Tuple, Union
 from aiohttp import ClientWebSocketResponse
 from mipac.client import Client as API
 from mipac.manager.client import ClientManager
-from mipac.models.user import UserDetailed
+from mipac.models.user import MeDetailed
 
 from mipa.exception import WebSocketNotConnected, WebSocketReconnect
 from mipa.gateway import MisskeyWebSocket
@@ -70,7 +70,7 @@ class Client:
         self.loop = asyncio.get_event_loop() if loop is None else loop
         self.core: API
         self._connection: ConnectionState
-        self.user: UserDetailed
+        self.user: MeDetailed
         self.ws: Optional[MisskeyWebSocket] = None
         self.should_reconnect = True
 

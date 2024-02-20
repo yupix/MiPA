@@ -47,9 +47,8 @@ from typing import (
     Union,
 )
 
-from mipac.models.chat import ChatMessage
 from mipac.models.emoji import CustomEmoji
-from mipac.models.user import UserDetailed
+from mipac.models.user import MeDetailed, UserDetailedNotMe
 
 from mipa import Client
 from mipa.exception import (
@@ -90,7 +89,7 @@ class BotBase(CommandManager):
         self.token: Optional[str] = None
         self.origin_uri: Optional[str] = None
         self.__extensions: dict[str, Any] = {}
-        self.user: UserDetailed
+        self.user: MeDetailed
         self.__cogs: dict[str, Cog] = {}
         self.strip_after_prefix = options.get("strip_after_prefix", False)
         # self.logger = get_module_logger(__name__) TODO: 直す
@@ -313,7 +312,7 @@ class BotBase(CommandManager):
             else:
                 continue
 
-    async def on_user_follow(self, user: UserDetailed):
+    async def on_user_follow(self, user: UserDetailedNotMe):
         """
         When you follow a user
 
@@ -322,7 +321,7 @@ class BotBase(CommandManager):
         user : UserDetailed
         """
 
-    async def on_user_unfollow(self, user: UserDetailed):
+    async def on_user_unfollow(self, user: UserDetailedNotMe):
         """
         When you unfollow a user
 
@@ -422,24 +421,6 @@ class BotBase(CommandManager):
         notice : NotificationFollow
         """
 
-    async def on_chat(self, message: ChatMessage):
-        """
-        When someone send you a chat message
-
-        Parameters
-        ----------
-        message : ChatMessage
-        """
-
-    async def on_chat_unread_message(self, message: ChatMessage):
-        """
-        When someone send you a chat message,
-        and you have not connected to that chat.
-
-        Parameters
-        ----------
-        message : ChatMessage
-        """
 
     async def on_achievement_earned(self, notice: NotificationAchievement):
         """

@@ -30,7 +30,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from mipac import Note
-from mipac.models.lite.user import LiteUser
+from mipac.models.lite.user import PartialUser
 
 if TYPE_CHECKING:
     from mipa.ext.commands import CMD, BotBase
@@ -60,7 +60,7 @@ class Context:
         return self.__message
 
     @property
-    def author(self) -> LiteUser:
+    def author(self) -> PartialUser:
         return self.__message.author
 
     @property
