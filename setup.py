@@ -3,7 +3,7 @@ import pathlib
 from setuptools import setup
 import versioneer
 
-description = 'A Python wrapper for the Misskey API'
+description = 'Python Misskey Bot Framework'
 readme_file = pathlib.Path(__file__).parent / 'README.md'
 with readme_file.open(encoding='utf-8') as fh:
     long_description = fh.read()
