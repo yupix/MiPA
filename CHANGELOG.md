@@ -2,6 +2,18 @@
 
 
 
+## v0.4.1
+
+[compare changes](https://github.com/yupix/MiPA/compare/0.4.0...v0.4.1)
+
+### 🏡 Chore
+
+- MiPACのバージョンを0.7.0までは許可するように ([4bc8aec](https://github.com/yupix/MiPA/commit/4bc8aec))
+
+### ❤️ Contributors
+
+- Yupix ([@yupix](http://github.com/yupix))
+
 ## v0.4.0
 
 このバージョンから developブランチは v13以降のみをサポートします。今まで通りの全てのイベントがあるのは shared ブランチのみとなります
