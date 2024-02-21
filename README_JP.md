@@ -28,8 +28,7 @@ MiPAが提供するApi Wrapperとしての機能は [MiPAC](https://github.com/y
 import asyncio
 
 from aiohttp import ClientWebSocketResponse
-from mipac import Note
-from mipac.models import ChatMessage
+from mipac.models.note import Note
 
 from mipa.ext.commands.bot import Bot
 
@@ -51,13 +50,6 @@ class MyBot(Bot):
     async def on_note(self, note: Note):
         print(note.author.username, note.content)
 
-    async def on_chat(self, message: ChatMessage):
-        print(message.user.username, message.text)
-        if message.text == 'hello':
-            await self.client.chat.action.send(
-                f'hello! {message.user.username}',
-                user_id=message.user.id
-            )
 
 if __name__ == '__main__':
     bot = MyBot()
