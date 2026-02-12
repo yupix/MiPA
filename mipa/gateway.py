@@ -63,7 +63,8 @@ class MisskeyWebSocket:
     ):
         try:
             socket = await client.core.http.session.ws_connect(
-                f"{client.url}?i={client.token}"
+                f"{client.url}?i={client.token}",
+                heartbeat=timeout,
             )
             ws = cls(socket, client)
             ws._dispatch = client.dispatch
@@ -79,15 +80,13 @@ class MisskeyWebSocket:
                     client, timeout=timeout, event_name=event_name
                 )
 
-        # await ws.poll_event(timeout=timeout)
-
     async def received_message(self, msg, /):
         if isinstance(msg, bytes):
             msg = msg.decode()
 
         await self._misskey_parsers[str_lower(msg["type"]).upper()](msg)
 
-    async def poll_event(self, *, timeout: int = 60):
+    async def poll_event(self, *, timeout: Optional[int] = None):
         msg = await self.socket.receive(timeout=timeout)
 
         if msg is aiohttp.http.WS_CLOSED_MESSAGE:
