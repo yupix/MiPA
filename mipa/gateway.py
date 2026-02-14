@@ -86,7 +86,7 @@ class MisskeyWebSocket:
 
         await self._misskey_parsers[str_lower(msg["type"]).upper()](msg)
 
-    async def poll_event(self, *, timeout: Optional[int] = None):
+    async def poll_event(self, *, timeout: int | None = None):
         msg = await self.socket.receive(timeout=timeout)
 
         if msg is aiohttp.http.WS_CLOSED_MESSAGE:
