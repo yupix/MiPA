@@ -1,5 +1,22 @@
 # Change Log
 
+## v0.5.1
+
+[compare changes](https://github.com/yupix/MiPA/compare/0.5.0...0.5.1)
+
+### 🩹 Fixes
+
+- use_cogのサンプルでprogress_commandに通知を渡していたのをノートを渡すように ([b2dde53](https://github.com/yupix/MiPA/commit/b2dde53))
+
+### 🏡 Chore
+
+- 通知で処理するメインチャンネルのイベントを明示的に無視するように ([da0102d](https://github.com/yupix/MiPA/commit/da0102d))
+  - `mention` / `reply` / `renote` / `followed` / `receiveFollowRequest` は notification として届いたものから `on_mention` などを発火させるため、メインチャンネルのイベント側では何もしません
+
+### ❤️ Contributors
+
+- Yupix ([@yupix](http://github.com/yupix))
+
 ## v0.5.0
 
 [compare changes](https://github.com/yupix/MiPA/compare/0.4.6...0.5.0)
