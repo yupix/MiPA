@@ -30,9 +30,9 @@ class MyBot(commands.Bot):
         print(f'{note.user.username}: {note.text}')
     
     async def on_mention(self, notice: NotificationNote):
-
-        # When using this event, if you use MENTION_COMMAND, you must call this method for it to work.
-        await self.progress_command(notice)
+        # When overriding this event, you must call progress_command
+        # with the mentioned note for mention_command to work.
+        await self.progress_command(notice.note)
 
 
 if __name__ == '__main__':
