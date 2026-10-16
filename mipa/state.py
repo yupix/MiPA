@@ -145,6 +145,43 @@ class ConnectionState:
         else:
             _log.debug(f"Unknown event type: {channel_type}")
 
+    async def parse_mention(self, message: INote, **kwargs) -> None:
+        """メインチャンネルの mention イベント
+
+        同じ内容が notification (type: mention) としても届き、
+        そちらで ``on_mention`` を発火させるためここでは何もしない
+        """
+
+    async def parse_reply(self, message: INote, **kwargs) -> None:
+        """メインチャンネルの reply イベント
+
+        notification (type: reply) で ``on_reply`` を発火させるため何もしない
+        """
+
+    async def parse_renote(self, message: INote, **kwargs) -> None:
+        """メインチャンネルの renote イベント
+
+        notification (type: renote) で ``on_renote`` を発火させるため何もしない
+        """
+
+    async def parse_followed(
+        self, message: IUserDetailedNotMeSchema, **kwargs
+    ) -> None:
+        """メインチャンネルの followed イベント
+
+        notification (type: follow) で ``on_user_followed`` を発火させるため
+        何もしない
+        """
+
+    async def parse_receive_follow_request(
+        self, message: IUserDetailedNotMeSchema, **kwargs
+    ) -> None:
+        """メインチャンネルの receiveFollowRequest イベント
+
+        notification (type: receiveFollowRequest) で ``on_follow_request`` を
+        発火させるため何もしない
+        """
+
     async def parse_follow(
         self, message: IUserDetailedNotMeSchema, **kwargs
     ) -> None:
