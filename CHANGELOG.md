@@ -1,5 +1,64 @@
 # Change Log
 
+## v0.5.0
+
+[compare changes](https://github.com/yupix/MiPA/compare/0.4.6...0.5.0)
+
+### 🏡 Chore
+
+- MiPACのバージョンを0.8.1以上0.9.0未満に ([64d0cb5](https://github.com/yupix/MiPA/commit/64d0cb5))
+  - MiPACの最低バージョンが0.8.1に変更されています。MiPAC 0.8.0 には破壊的変更が含まれるため、詳細は [MiPACのリリースノート](https://github.com/yupix/MiPAC/releases/tag/0.8.0) をご覧ください。
+
+### ❤️ Contributors
+
+- Yupix ([@yupix](http://github.com/yupix))
+
+## v0.4.6
+
+[compare changes](https://github.com/yupix/MiPA/compare/0.4.5...0.4.6)
+
+### 🚀 Enhancements
+
+- Note.contentを使わずにNote.textを使うように ([df7d6c2](https://github.com/yupix/MiPA/commit/df7d6c2))
+
+### 🩹 Fixes
+
+- Note.authorを使わないように ([539ec26](https://github.com/yupix/MiPA/commit/539ec26))
+- Ws heartbeat ([4159c6b](https://github.com/yupix/MiPA/commit/4159c6b))
+
+### ❤️ Contributors
+
+- Yupix ([@yupix](http://github.com/yupix))
+- Xtaodada ([@omg-xtao](http://github.com/omg-xtao))
+
+## v0.4.5
+
+[compare changes](https://github.com/yupix/MiPA/compare/0.4.4...0.4.5)
+
+### 🩹 Fixes
+
+- Typo ([5aab376](https://github.com/yupix/MiPA/commit/5aab376))
+
+## v0.4.4
+
+[compare changes](https://github.com/yupix/MiPA/compare/0.4.3...0.4.4)
+
+### 🚀 Enhancements
+
+- On_reconnectを記載 ([266f887](https://github.com/yupix/MiPA/commit/266f887))
+
+### 🏡 Chore
+
+- Client.pyからon_readyイベントの定義を削除 ([a6327eb](https://github.com/yupix/MiPA/commit/a6327eb))
+
+## v0.4.3
+
+[compare changes](https://github.com/yupix/MiPA/compare/0.4.2...0.4.3)
+
+### 🏡 Chore
+
+- MiPACで非推奨になったloginメソッドを使用しないように ([d5ae338](https://github.com/yupix/MiPA/commit/d5ae338))
+
 ## v0.4.2
 
 [compare changes](https://github.com/yupix/MiPA/compare/0.4.1...v0.4.2)
